@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2022-12-14T20:48:35.000Z">
-<meta property="article:modified_time" content="2022-12-15T10:31:29.380Z">
+<meta property="article:modified_time" content="2022-12-15T16:19:44.802Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Deserialization">
@@ -35,6 +35,8 @@
   
   <!-- 站点验证相关 -->
   
+    
+      <meta name="google-site-verification" content="<meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA" />" />
     
     
     
@@ -176,13 +178,13 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1671100289380"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1671121184802"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
             
                 <div class="kratos-post-inner-toc toc-div-class" >
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Phan-tich"><span class="toc-number">1.</span> <span class="toc-text">Phân tích</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokeTransformer"><span class="toc-number">1.1.</span> <span class="toc-text">InvokeTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnnotationInvocationHandler-invoke"><span class="toc-number">1.2.</span> <span class="toc-text">AnnotationInvocationHandler.invoke()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Proxy"><span class="toc-number">1.3.</span> <span class="toc-text">Dynamic Proxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chuoi-hoan-chinh"><span class="toc-number">1.4.</span> <span class="toc-text">Chuỗi hoàn chỉnh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Loi-ket"><span class="toc-number">1.5.</span> <span class="toc-text">Lời kết</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Phan-tich"><span class="toc-number">1.</span> <span class="toc-text">Phân tích</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokeTransformer"><span class="toc-number">1.1.</span> <span class="toc-text">InvokeTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnnotationInvocationHandler-invoke"><span class="toc-number">1.2.</span> <span class="toc-text">AnnotationInvocationHandler.invoke()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Proxy"><span class="toc-number">1.3.</span> <span class="toc-text">Dynamic Proxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chuoi-hoan-chinh"><span class="toc-number">1.4.</span> <span class="toc-text">Chuỗi hoàn chỉnh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Loi-ket"><span class="toc-number">2.</span> <span class="toc-text">Lời kết</span></a></li></ol>
                 </div>
             
             <hr />
@@ -225,7 +227,7 @@
 
 <p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/12/15/CommonsCollections1-LazyMap/ChuoiHoanChinh.png"></p>
 <p>Máy tính đã bật lên và chuỗi của chúng ta đã được xây dựng thành công~</p>
-<h3 id="Loi-ket"><a href="#Loi-ket" class="headerlink" title="Lời kết"></a>Lời kết</h3><p>Proxy động là một kiến thức khá phức tạp với những bạn mới bắt đầu, mình khuyên các bạn chỉ cần học và hiểu cách sử dụng, đừng đào sâu vào code gốc bởi vì đó là một lượng kiến thức lớn do những người đi trước đã viết ra. Khởi tạo Proxy động cần đến class loader các bạn chỉ cần biết tải lớp nào cần class loader nào là đủ hoặc cứ chi đại null, không đúng thì abc.class.getClassLoader(), không cần tìm hiểu sâu vào nó.</p>
+<h2 id="Loi-ket"><a href="#Loi-ket" class="headerlink" title="Lời kết"></a>Lời kết</h2><p>Proxy động là một kiến thức khá phức tạp với những bạn mới bắt đầu, mình khuyên các bạn chỉ cần học và hiểu cách sử dụng, đừng đào sâu vào code gốc bởi vì đó là một lượng kiến thức lớn do những người đi trước đã viết ra. Khởi tạo Proxy động cần đến class loader các bạn chỉ cần biết tải lớp nào cần class loader nào là đủ hoặc cứ cho đại null, không đúng thì abc.class.getClassLoader(), không cần tìm hiểu sâu vào nó.</p>
 <blockquote>
 <p>Chúc các bạn học tốt~</p>
 </blockquote>
@@ -314,7 +316,7 @@
                     <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2022-12-15T10:31:29.380Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2022-12-15</time>
+                    <time datetime="2022-12-15T16:19:44.802Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2022-12-15</time>
                 </div>
             </div>
         </footer>
@@ -326,6 +328,10 @@
                 <a title=" Một bản ghi chép nhỏ về Docker" href="/2022/12/03/docker-learning/">&lt; Bài đăng cũ hơn</a>
             </div>
             
+            
+            <div class="nav-next clearfix">
+                <a title=" Phân tích chuỗi Commons Collections 2" href="/2022/12/16/CommonsCollections2/">Bài đăng mới hơn &gt;</a>
+            </div>
             
         </nav>
     
@@ -361,7 +367,7 @@
                 Bài đăng
             </span>
             <span class="count">
-                7
+                11
             </span>
         </a>
         <a class="meta-item" href="/categories/">
@@ -369,7 +375,7 @@
                 Thể loại
             </span>
             <span class="count">
-                8
+                10
             </span>
         </a>
         <a class="meta-item" href="/tags/">
@@ -377,7 +383,7 @@
                 Thẻ
             </span>
             <span class="count">
-                9
+                11
             </span>
         </a>
     </div>
@@ -393,14 +399,14 @@
         <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
     </h4>
     <div class="textwidget">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Phan-tich"><span class="toc-text">Phân tích</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokeTransformer"><span class="toc-text">InvokeTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnnotationInvocationHandler-invoke"><span class="toc-text">AnnotationInvocationHandler.invoke()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Proxy"><span class="toc-text">Dynamic Proxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chuoi-hoan-chinh"><span class="toc-text">Chuỗi hoàn chỉnh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Loi-ket"><span class="toc-text">Lời kết</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Phan-tich"><span class="toc-text">Phân tích</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokeTransformer"><span class="toc-text">InvokeTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnnotationInvocationHandler-invoke"><span class="toc-text">AnnotationInvocationHandler.invoke()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Proxy"><span class="toc-text">Dynamic Proxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chuoi-hoan-chinh"><span class="toc-text">Chuỗi hoàn chỉnh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Loi-ket"><span class="toc-text">Lời kết</span></a></li></ol>
     </div>
 </aside>
                 
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/Javassist/">Javassist</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a><span class="category-list-count">1</span></li></ul>
   </aside>
 
 
@@ -409,7 +415,7 @@
   <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
     <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
       <div class="tag-clouds">
-        <a href="/tags/Commons-Collections/" style="font-size: 0.67em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.73em;">Deserialization</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+        <a href="/tags/Commons-Collections/" style="font-size: 0.7em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.75em;">Deserialization</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Javassist/" style="font-size: 0.6em;">Javassist</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Programming/" style="font-size: 0.65em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQL/" style="font-size: 0.6em;">SQL</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
       </div>
   </aside>
 
@@ -423,34 +429,42 @@
         
           
           
+            <a class="list-group-item" href="/2023/02/02/database/"><i class="fa  fa-book"></i> database</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/01/12/flask/"><i class="fa  fa-book"></i> flask</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/24/a/"><i class="fa  fa-book"></i> Javassist trong Java.</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/16/CommonsCollections2/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 2</a>
+            
+          
+        
+          
+          
             <a class="list-group-item" href="/2022/12/15/CommonsCollections1-LazyMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với LazyMap</a>
             
           
         
           
-          
-            <a class="list-group-item" href="/2022/12/03/docker-learning/"><i class="fa  fa-book"></i> Một bản ghi chép nhỏ về Docker</a>
             
           
-        
-          
-          
-            <a class="list-group-item" href="/2022/11/30/http-request-smuggling-HTTP-1.1/"><i class="fa  fa-book"></i> Khái niệm cơ bản về HTTP request smuggling với HTTP/1.1</a>
             
           
-        
-          
-          
-            <a class="list-group-item" href="/2022/11/27/sqli-mysql8/"><i class="fa  fa-book"></i> Tính năng mới của Mysql 8</a>
             
           
-        
-          
-          
-            <a class="list-group-item" href="/2022/11/04/Commons-Collections1-TransformedMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với TransformedMap</a>
             
-          
-        
           
             
           
@@ -484,7 +498,7 @@
                     </ul>
                     <ul class="kratos-copyright">
                         <div>
-                            <li>&copy; 2022 Rayinaw All rights reserved.</li>
+                            <li>&copy; 2023 Rayinaw All rights reserved.</li>
                             <li>This site has been running for<span id="span_dt">Loading...</span></li>
                         </div>
                         <div>

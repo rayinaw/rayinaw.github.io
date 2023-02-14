@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>Javassist trong Java. | Rayinaw</title>
+  <meta name="author" content="Rayinaw" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="Java, Javassist, Programming" />
+  
+  <meta name="description" content="Để chạy một chương trình Java chúng ta cần trải qua hai bước:  Bước một: compile file text format(.java) sang file Java bytecode(.class) bằng câu lệnh javac myHelloWorld.java Bước hai: chạy file .clas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javassist trong Java.">
+<meta property="og:url" content="https://rayinaw.github.io/2022/12/24/a/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Để chạy một chương trình Java chúng ta cần trải qua hai bước:  Bước một: compile file text format(.java) sang file Java bytecode(.class) bằng câu lệnh javac myHelloWorld.java Bước hai: chạy file .clas">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2022-12-23T22:02:40.000Z">
+<meta property="article:modified_time" content="2022-12-30T16:17:35.224Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Javassist">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+      <meta name="google-site-verification" content="<meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA" />" />
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                    
+                                        
+                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
+                                        
+                                    
+                                        
+                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
+                                        
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>Rayinaw</h2> <br />
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2022/12/24/a/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Javassist trong Java.</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-12-23T22:02:40.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-12-24</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~15.37K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1672417055224"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class" >
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mot-so-lop-va-phuong-thuc-co-ban"><span class="toc-number">1.</span> <span class="toc-text">Một số lớp và phương thức cơ bản</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ClassPool"><span class="toc-number">1.1.</span> <span class="toc-text">ClassPool</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ClassPool-get"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. ClassPool.get()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CtClass"><span class="toc-number">1.2.</span> <span class="toc-text">CtClass</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CtClass-writeFile"><span class="toc-number">1.2.1.</span> <span class="toc-text">CtClass.writeFile()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ctClass-toBytecode"><span class="toc-number">1.2.2.</span> <span class="toc-text">ctClass.toBytecode()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thao-tac-voi-javassist"><span class="toc-number">2.</span> <span class="toc-text">Thao tác với javassist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tao-mot-class-file-cua-mot-file"><span class="toc-number">2.1.</span> <span class="toc-text">Tạo một .class file của một file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-lop-cha-vao-class"><span class="toc-number">2.2.</span> <span class="toc-text">Thêm lớp cha vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tao-class-moi"><span class="toc-number">2.3.</span> <span class="toc-text">Tạo class mới</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-fields-vao-class"><span class="toc-number">2.4.</span> <span class="toc-text">Thêm fields vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-non-primitive-fields-vao-class"><span class="toc-number">2.5.</span> <span class="toc-text">Thêm non-primitive fields vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-list-vao-class"><span class="toc-number">2.6.</span> <span class="toc-text">Thêm list vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-field-tu-class"><span class="toc-number">2.7.</span> <span class="toc-text">Gỡ field từ class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-phuong-thuc-vao-class"><span class="toc-number">2.8.</span> <span class="toc-text">Thêm phương thức vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-method-va-goi-method-tu-mot-class"><span class="toc-number">2.9.</span> <span class="toc-text">Thêm method và gọi method từ một class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tao-mot-interface"><span class="toc-number">2.10.</span> <span class="toc-text">Tạo một interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#insertClassPath"><span class="toc-number">2.11.</span> <span class="toc-text">insertClassPath</span></a></li></ol></li></ol>
+                </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>Để chạy một chương trình Java chúng ta cần trải qua hai bước:</p>
+<ul>
+<li>Bước một: compile file text format(.java) sang file Java bytecode(.class) bằng câu lệnh <code>javac myHelloWorld.java</code></li>
+<li>Bước hai: chạy file .class thông qua JVM để máy ảo JVM chuyển file .class thành bytecode mà OS có thể hiểu được bằng câu lệnh <code>java myHelloWorld.class</code></li>
+</ul>
+<p>Javassist là một thư viện dùng để xử lý Java bytecode trong file <code>.class</code>. Chúng ta cùng đi sâu vào cách sử dụng nhé~</p>
+<h2 id="Mot-so-lop-va-phuong-thuc-co-ban"><a href="#Mot-so-lop-va-phuong-thuc-co-ban" class="headerlink" title="Một số lớp và phương thức cơ bản"></a>Một số lớp và phương thức cơ bản</h2><h3 id="ClassPool"><a href="#ClassPool" class="headerlink" title="ClassPool"></a>ClassPool</h3><p>ClassPool là lớp gốc kiểm soát việc sửa đổi bytecode. Nó là nơi chứa các CtClass object (CtClass object đại diện cho một file class).</p>
+<h4 id="1-ClassPool-get"><a href="#1-ClassPool-get" class="headerlink" title="1. ClassPool.get()"></a>1. ClassPool.get()</h4><p>Mã nguồn:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> CtClass[] get(String[] classnames) <span class="keyword">throws</span> NotFoundException &#123;</span><br><span class="line">        <span class="keyword">if</span> (classnames == <span class="literal">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CtClass</span>[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> classnames.length;</span><br><span class="line">        CtClass[] result = <span class="keyword">new</span> <span class="title class_">CtClass</span>[num];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; num; ++i)</span><br><span class="line">            result[i] = get(classnames[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Phương thức này thực hiện đọc và dịch sang class file từ file gốc rồi trả về một CtClass đại diện cho một class file.<br>Tham số classnames là một system path đến lớp cần đọc.<br>####</p>
+<h3 id="CtClass"><a href="#CtClass" class="headerlink" title="CtClass"></a>CtClass</h3><h4 id="CtClass-writeFile"><a href="#CtClass-writeFile" class="headerlink" title="CtClass.writeFile()"></a>CtClass.writeFile()</h4><p>Viết class file CtClass vào file trong hệ thống.</p>
+<h4 id="ctClass-toBytecode"><a href="#ctClass-toBytecode" class="headerlink" title="ctClass.toBytecode()"></a>ctClass.toBytecode()</h4><p>Chuyển CtClass object thành bytecode.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.get(<span class="string">&quot;org.example.Employee&quot;</span>);</span><br><span class="line"><span class="type">byte</span>[] byteCode = ctClass.toBytecode();</span><br><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(byteCode);</span><br><span class="line">System.out.println(str);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Thao-tac-voi-javassist"><a href="#Thao-tac-voi-javassist" class="headerlink" title="Thao tác với javassist"></a>Thao tác với javassist</h2><h3 id="Tao-mot-class-file-cua-mot-file"><a href="#Tao-mot-class-file-cua-mot-file" class="headerlink" title="Tạo một .class file của một file"></a>Tạo một .class file của một file</h3><p>Giả sử chúng ta có lớp Animal.java sau:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> vegetarian;</span><br><span class="line">    <span class="keyword">private</span> String eats;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> noOfLegs;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Animal</span><span class="params">()</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Animal</span><span class="params">(<span class="type">boolean</span> veg, String food)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.vegetarian = veg;</span><br><span class="line">        <span class="built_in">this</span>.eats = food;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isVegetarian</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> vegetarian;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setVegetarian</span><span class="params">(<span class="type">boolean</span> vegetarian)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.vegetarian = vegetarian;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getEats</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> eats;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEats</span><span class="params">(String eats)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.eats = eats;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Để tạo file bytecode của lớp này chúng ta sẽ thực hiện những bước như sau:</p>
+<ul>
+<li>Bước 1: Lấy một instance của lớp ClassPool<br><code>ClassPool pool = ClassPool.getDefault();</code></li>
+<li>Bước 2: Đọc class file từ tệp nguồn<br><code>CtClass cc = pool.get(&quot;org.example.Animal&quot;);</code></li>
+<li>Bước 3: Viết class file CtClass vào directory<br><code>cc.writeFile(&quot;/Users/rayin_awarf/Desktop/work&quot;);</code></li>
+</ul>
+<p>File name <code>main.java</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> NotFoundException, CannotCompileException, IOException &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">cc</span> <span class="operator">=</span> pool.get(<span class="string">&quot;org.example.Employee&quot;</span>);</span><br><span class="line">        cc.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop/work&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Chạy file main.java chúng ta thấy file Employee.class xuất hiện ở thư mục chỉ định.</p>
+<h3 id="Them-lop-cha-vao-class"><a href="#Them-lop-cha-vao-class" class="headerlink" title="Thêm lớp cha vào class"></a>Thêm lớp cha vào class</h3><p>Bước 1: Lấy một instance của ClassPool<br><code>ClassPool pool = ClassPool.getDefault();</code><br>Bước 2: Đọc file rồi dịch sang bytecode lưu vào object CtClass<br><code>CtClass cc = pool.get(&quot;org.example.Employee&quot;);</code><br>Bước 3: Set super class<br><code>cc.setSuperclass(pool.get(&quot;org.example.BaseEntity&quot;));</code><br>Bước 4:<br><code>cc.writeFile(&quot;/Users/rayin_awarf/Desktop&quot;);</code><br>Lớp Employee.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.sample.app.model;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Employee</span> &#123;</span><br><span class="line"> <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line"> <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> id;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">  <span class="built_in">this</span>.id = id;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> name;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Lớp BaseEntity.java dùng để làm lớp cha.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseEntity</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String createdBy;</span><br><span class="line">    <span class="keyword">private</span> String updatedBy;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getCreatedBy</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> createdBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCreatedBy</span><span class="params">(String createdBy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.createdBy = createdBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUpdatedBy</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> updatedBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUpdatedBy</span><span class="params">(String updatedBy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.updatedBy = updatedBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>File name: Main.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"></span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">cc</span> <span class="operator">=</span> pool.get(<span class="string">&quot;org.example.Employee&quot;</span>);</span><br><span class="line">        cc.setSuperclass(pool.get(<span class="string">&quot;org.example.BaseEntity&quot;</span>));</span><br><span class="line"></span><br><span class="line">        cc.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop/&quot;</span>);</span><br><span class="line">  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Chạy Main.java, một tệp mới được tạo ở thư mục được chỉ định. Mở file Employee.class bằng decompiler chúng ta thấy lớp Employee đã kế thừa lớp BaseEntity thành công.</p>
+<h3 id="Tao-class-moi"><a href="#Tao-class-moi" class="headerlink" title="Tạo class mới"></a>Tạo class mới</h3><p>Bước 1: Lấy một instance của lớp ClassPool<br><code>ClassPool pool = ClassPool.getDefault();</code><br>Bước 2: Sử dụng <code>makeClass</code> method để define class.<br><code>CtClass ctClass = pool.makeClass(&quot;Point&quot;);</code><br>Chạy file dưới đây, một file mới được tạo ở Desktop:<br>Bước 3: Ghi file xuống thư mục bằng <code>writeFile</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.ClassPool;</span><br><span class="line"><span class="keyword">import</span> javassist.CtClass;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">  <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"></span><br><span class="line">  <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">  <span class="comment">//Sử dụng class vừa tạo</span></span><br><span class="line">  <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ctClass.toClass().newInstance();</span><br><span class="line">  System.out.println(<span class="string">&quot;Class Name : &quot;</span> + obj.getClass());</span><br><span class="line">  </span><br><span class="line">  ctClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Them-fields-vao-class"><a href="#Them-fields-vao-class" class="headerlink" title="Thêm fields vào class"></a>Thêm fields vào class</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> javassist.Modifier;</span><br><span class="line"><span class="comment">//Hoặc import java.lang.reflect.Modifier;</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"></span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">testField</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtField</span>(CtClass.intType, <span class="string">&quot;TestField&quot;</span>, ctClass);</span><br><span class="line">        testField.setModifiers(Modifier.PRIVATE);</span><br><span class="line">        ctClass.addField(testField);</span><br><span class="line">        <span class="comment">//Chúng ta có thể set dữ liệu cho field bằng cách thêm tham số cho phương thức addField.</span></span><br><span class="line">        <span class="comment">//ctClass.addField(testField, &quot;999&quot;);</span></span><br><span class="line">        ctClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Chạy file và mở file class, TestField đã được thêm vào class.<br>Chúng ta có thể thêm nhiều Modifier bằng cách: <code>testField.setModifiers(Modifier.STATIC | Modifier.FINAL | Modifier.PUBLIC);</code></p>
+<h3 id="Them-non-primitive-fields-vao-class"><a href="#Them-non-primitive-fields-vao-class" class="headerlink" title="Thêm non-primitive fields vào class"></a>Thêm non-primitive fields vào class</h3><p>Thêm fields Point vào class.<br>Filename: Point.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> x;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getX</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setX</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.x = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getY</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setY</span><span class="params">(<span class="type">int</span> y)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Filename: App.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"></span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.get(<span class="string">&quot;org.example.Point&quot;</span>);</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">testClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">CtField</span> <span class="variable">ctField</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtField</span>(ctClass, <span class="string">&quot;abc&quot;</span>, testClass);</span><br><span class="line">        ctField.setModifiers(Modifier.PRIVATE);</span><br><span class="line">        testClass.addField(ctField);</span><br><span class="line">        testClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Them-list-vao-class"><a href="#Them-list-vao-class" class="headerlink" title="Thêm list vào class"></a>Thêm list vào class</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">classPool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"></span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">demoClass</span> <span class="operator">=</span> classPool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">arrListClazz</span> <span class="operator">=</span> classPool.get(<span class="string">&quot;java.util.List&quot;</span>);</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">ctField</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtField</span>(arrListClazz, <span class="string">&quot;myList&quot;</span>, demoClass);</span><br><span class="line">        ctField.setModifiers(Modifier.PRIVATE);</span><br><span class="line">        demoClass.addField(ctField);</span><br><span class="line"></span><br><span class="line">        demoClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Go-field-tu-class"><a href="#Go-field-tu-class" class="headerlink" title="Gỡ field từ class"></a>Gỡ field từ class</h3><p>Tạo field TestField trong Test.class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> javassist.Modifier;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"></span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">testField</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtField</span>(CtClass.intType, <span class="string">&quot;TestField&quot;</span>, ctClass);</span><br><span class="line">        testField.setModifiers(Modifier.PRIVATE);</span><br><span class="line">        ctClass.addField(testField);</span><br><span class="line">        ctClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Để gỡ TestField trong Test.class chúng ta thực hiện như sau:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">/*ClassPool pool = ClassPool.getDefault();</span></span><br><span class="line"><span class="comment">        CtClass ctClass = pool.makeClass(&quot;Test&quot;);</span></span><br><span class="line"><span class="comment">        CtField testField = new CtField(CtClass.intType, &quot;TestField&quot;, ctClass);</span></span><br><span class="line"><span class="comment">        testField.setModifiers(Modifier.PRIVATE);</span></span><br><span class="line"><span class="comment">        ctClass.addField(testField);</span></span><br><span class="line"><span class="comment">        ctClass.writeFile(&quot;/Users/rayin_awarf/Desktop&quot;);*/</span></span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">TestClass</span> <span class="operator">=</span> pool.makeClass(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;/Users/rayin_awarf/Desktop/Test.class&quot;</span>));</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">toBeDeleted</span> <span class="operator">=</span> TestClass.getField(<span class="string">&quot;TestField&quot;</span>);</span><br><span class="line">        TestClass.removeField(toBeDeleted);</span><br><span class="line">        TestClass.toClass();</span><br><span class="line">        TestClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop/test&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Phương thức này sẽ không thay đổi file hệ thống nếu như không sử dụng writeFile, tuy nhiên nó sẽ có tác dụng trong quá trình chạy:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">/*ClassPool pool = ClassPool.getDefault();</span></span><br><span class="line"><span class="comment">        CtClass ctClass = pool.makeClass(&quot;Test&quot;);</span></span><br><span class="line"><span class="comment">        CtField x = new CtField(CtClass.intType, &quot;x&quot;, ctClass);</span></span><br><span class="line"><span class="comment">        ctClass.addField(x);</span></span><br><span class="line"><span class="comment">        ctClass.writeFile(&quot;/Users/rayin_awarf/Desktop&quot;);*/</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        ClassPool pool = ClassPool.getDefault();</span></span><br><span class="line"><span class="comment">        CtClass TestClass = pool.makeClass(new FileInputStream(&quot;/Users/rayin_awarf/Desktop/Test.class&quot;));</span></span><br><span class="line"><span class="comment">        CtField toBeDeleted = TestClass.getField(&quot;TestField&quot;);</span></span><br><span class="line"><span class="comment">        TestClass.removeField(toBeDeleted);</span></span><br><span class="line"><span class="comment">        TestClass.toClass();</span></span><br><span class="line"><span class="comment">        TestClass.writeFile(&quot;/Users/rayin_awarf/Desktop/test&quot;);/*</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">//Point point = new Point();</span></span><br><span class="line">        <span class="comment">//System.out.println(point.x);</span></span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">TestClass</span> <span class="operator">=</span> pool.get(<span class="string">&quot;org.example.Point&quot;</span>);</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">toBeDeleted</span> <span class="operator">=</span> TestClass.getField(<span class="string">&quot;x&quot;</span>);</span><br><span class="line">        TestClass.removeField(toBeDeleted);</span><br><span class="line">        TestClass.toClass();</span><br><span class="line">        <span class="type">Point</span> <span class="variable">pointAfterRemove</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Point</span>();</span><br><span class="line">        System.out.println(pointAfterRemove.x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Tuy file Point.java của chúng ta không mất trường x, tuy nhiên khi chúng ta sử dụng nó trong quá trình chạy file App.java, lớp Point trong thời gian chạy không tồn tại biến x nên lỗi <code>Exception in thread &quot;main&quot; java.lang.NoSuchFieldError: x</code> xuất hiện.</p>
+<h3 id="Them-phuong-thuc-vao-class"><a href="#Them-phuong-thuc-vao-class" class="headerlink" title="Thêm phương thức vào class"></a>Thêm phương thức vào class</h3><p>Ta có thể tạo phương thức bằng <code>new CtMethod()</code> hoặc <code>CtNewMethod.make()</code> rồi thực hiện <code>addMethod</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Point&quot;</span>);</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">xField</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtField</span>(CtClass.intType, <span class="string">&quot;x&quot;</span>, ctClass);</span><br><span class="line">        xField.setModifiers(Modifier.PRIVATE);</span><br><span class="line">        <span class="type">CtField</span> <span class="variable">yField</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtField</span>(CtClass.intType, <span class="string">&quot;y&quot;</span>, ctClass);</span><br><span class="line">        yField.setModifiers(Modifier.PRIVATE);</span><br><span class="line">        ctClass.addField(xField);</span><br><span class="line">        ctClass.addField(yField);</span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">getX</span> <span class="operator">=</span> CtNewMethod.make(Modifier.PUBLIC, CtClass.intType, <span class="string">&quot;getX&quot;</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="string">&quot;return x;&quot;</span>, ctClass);</span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">getY</span> <span class="operator">=</span> CtNewMethod.make(Modifier.PUBLIC, CtClass.intType, <span class="string">&quot;getY&quot;</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="string">&quot;return y;&quot;</span>, ctClass);</span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">setX</span> <span class="operator">=</span> CtNewMethod.make(Modifier.PUBLIC, CtClass.voidType, <span class="string">&quot;setX&quot;</span>, <span class="keyword">new</span> <span class="title class_">CtClass</span>[] &#123; CtClass.intType &#125;, <span class="literal">null</span>, <span class="string">&quot;x = $1;&quot;</span>, ctClass);</span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">setY</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtMethod</span>(CtClass.voidType, <span class="string">&quot;setY&quot;</span>, <span class="keyword">new</span> <span class="title class_">CtClass</span>[] &#123; CtClass.intType &#125;, ctClass);</span><br><span class="line">        setY.setBody(<span class="string">&quot;&#123; y = $1; &#125;&quot;</span>);</span><br><span class="line">        ctClass.addMethod(getX);</span><br><span class="line">        ctClass.addMethod(getY);</span><br><span class="line">        ctClass.addMethod(setX);</span><br><span class="line">        ctClass.addMethod(setY);</span><br><span class="line">        <span class="comment">//Object obj = ctClass.toClass().newInstance();</span></span><br><span class="line">        <span class="comment">//System.out.println(&quot;Class Name : &quot; + obj.getClass());</span></span><br><span class="line">        ctClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Them-method-va-goi-method-tu-mot-class"><a href="#Them-method-va-goi-method-tu-mot-class" class="headerlink" title="Thêm method và gọi method từ một class"></a>Thêm method và gọi method từ một class</h3><p>Chúng ta không thể gọi trực tiếp sau khi thêm vào mà phải gọi thông qua reflection.</p>
+<p><em>Point.java</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>App.java</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.get(<span class="string">&quot;org.example.Point&quot;</span>);</span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">helloWorld</span> <span class="operator">=</span> CtNewMethod.make(Modifier.PUBLIC, CtClass.voidType, <span class="string">&quot;helloWorld&quot;</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="string">&quot;System.out.println(\&quot;Hello world!\&quot;);&quot;</span>, ctClass);</span><br><span class="line">        ctClass.addMethod(helloWorld);</span><br><span class="line">        ctClass.toClass();</span><br><span class="line">        System.out.println(<span class="string">&quot;Greeting: &quot;</span>);</span><br><span class="line">        <span class="type">Point</span> <span class="variable">point</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Point</span>();</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> point.getClass().getMethod(<span class="string">&quot;helloWorld&quot;</span>);</span><br><span class="line">        method.invoke(point);</span><br><span class="line">        <span class="comment">//ctClass.writeFile(&quot;/Users/rayin_awarf/Desktop&quot;);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Tao-mot-interface"><a href="#Tao-mot-interface" class="headerlink" title="Tạo một interface"></a>Tạo một interface</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeInterface(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtMethod</span>(CtClass.intType, <span class="string">&quot;sum&quot;</span>, <span class="keyword">new</span> <span class="title class_">CtClass</span>[] &#123; CtClass.intType, CtClass.intType &#125;,</span><br><span class="line">                ctClass);</span><br><span class="line">        sum.setBody(<span class="string">&quot;return $1 + $2;&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">CtMethod</span> <span class="variable">areaOfCircle</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CtMethod</span>(CtClass.doubleType, <span class="string">&quot;areaOfCircle&quot;</span>, <span class="keyword">new</span> <span class="title class_">CtClass</span>[] &#123; CtClass.doubleType &#125;,</span><br><span class="line">                ctClass);</span><br><span class="line">        ctClass.addMethod(sum);</span><br><span class="line">        ctClass.addMethod(areaOfCircle);</span><br><span class="line">        ctClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="insertClassPath"><a href="#insertClassPath" class="headerlink" title="insertClassPath"></a>insertClassPath</h3><p>ClassPool.insertClassPath(new ClassClassPath(AbstractTranslet.class))<br>Hàm này dùng để điều chỉnh CLASSPATH</p>
+</div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2022/12/24/a/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2022/12/24/a/";
+            const title         = "「Javassist trong Java.」";
+            const excerpt       = `Để chạy một chương trình Java chúng ta cần trải qua hai bước:
+
+Bước một: compile file text format(.java) sang file Ja...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>, <a class="tag-none-link" href="/tags/Javassist/" rel="tag">Javassist</a>, <a class="tag-none-link" href="/tags/Programming/" rel="tag">Programming</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2022-12-30T16:17:35.224Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2022-12-30</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Phân tích chuỗi Commons Collections 2" href="/2022/12/16/CommonsCollections2/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" flask" href="/2023/01/12/flask/">Bài đăng mới hơn &gt;</a>
+            </div>
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                11
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                10
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                11
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        Thư mục bài viết
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mot-so-lop-va-phuong-thuc-co-ban"><span class="toc-text">Một số lớp và phương thức cơ bản</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ClassPool"><span class="toc-text">ClassPool</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ClassPool-get"><span class="toc-text">1. ClassPool.get()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CtClass"><span class="toc-text">CtClass</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CtClass-writeFile"><span class="toc-text">CtClass.writeFile()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ctClass-toBytecode"><span class="toc-text">ctClass.toBytecode()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thao-tac-voi-javassist"><span class="toc-text">Thao tác với javassist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tao-mot-class-file-cua-mot-file"><span class="toc-text">Tạo một .class file của một file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-lop-cha-vao-class"><span class="toc-text">Thêm lớp cha vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tao-class-moi"><span class="toc-text">Tạo class mới</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-fields-vao-class"><span class="toc-text">Thêm fields vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-non-primitive-fields-vao-class"><span class="toc-text">Thêm non-primitive fields vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-list-vao-class"><span class="toc-text">Thêm list vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-field-tu-class"><span class="toc-text">Gỡ field từ class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-phuong-thuc-vao-class"><span class="toc-text">Thêm phương thức vào class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Them-method-va-goi-method-tu-mot-class"><span class="toc-text">Thêm method và gọi method từ một class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tao-mot-interface"><span class="toc-text">Tạo một interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#insertClassPath"><span class="toc-text">insertClassPath</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/Javassist/">Javassist</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a><span class="category-list-count">1</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Commons-Collections/" style="font-size: 0.7em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.75em;">Deserialization</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Javassist/" style="font-size: 0.6em;">Javassist</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Programming/" style="font-size: 0.65em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQL/" style="font-size: 0.6em;">SQL</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2023/02/02/database/"><i class="fa  fa-book"></i> database</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/01/12/flask/"><i class="fa  fa-book"></i> flask</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/24/a/"><i class="fa  fa-book"></i> Javassist trong Java.</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/16/CommonsCollections2/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 2</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/15/CommonsCollections1-LazyMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với LazyMap</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  class="ap-lrc"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2023 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js
+        server="netease"
+        type="playlist"
+        id="3204190542"
+        order="random"
+        fixed="true"
+    >
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
