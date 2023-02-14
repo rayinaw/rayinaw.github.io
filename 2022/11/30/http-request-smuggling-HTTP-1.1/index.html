@@ -3,18 +3,19 @@
     <head>
   <!-- 元数据 -->
   <meta charset="utf-8">
+  <link rel="canonical" href="https://rayinaw.github.io/2022/11/30/http-request-smuggling-http-1.1/">
   <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
   
   <title>Khái niệm cơ bản về HTTP request smuggling với HTTP/1.1 | Rayinaw</title>
-  <meta name="author" content="Rayinaw" />
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="robots" content="index,follow" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="format-detection" content="telphone=no, email=no" />
+  <meta name="author" content="Rayinaw">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="format-detection" content="telphone=no, email=no">
   
-    <meta name="keywords" content="HRS" />
+    <meta name="keywords" content="HRS">
   
   <meta name="description" content="Lời nói đầu:Bài viết này là về khái niệm và cách HRS xảy ra đối với HTTP&#x2F;1.1, với HTTP&#x2F;2.0 và thực hành các bạn có thể xem ở bài viết sau. Một vài kiến thức cần nắm:Keep-Alive và Pipelining:">
 <meta property="og:type" content="article">
@@ -34,29 +35,29 @@
   <!-- 站点验证相关 -->
   
     
-      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA" />
+      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA">
     
     
     
   
   <!-- 样式表文件 -->
-  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all">
   
-    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)">
     <script src="/js/kr-dark.min.js"></script>
   
   
-    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all">
   
   
-  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
-  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all">
   
   
-    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css">
   
   
-    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
   
   <!-- 不得不预先加载的一些JS文件 -->
   <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -79,7 +80,7 @@
     
   </style>
   
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="Rayinaw" type="application/rss+xml">
 </head>
 
 
@@ -93,21 +94,33 @@
                         <nav id="kratos-menu-wrap">
                             <ul id="kratos-primary-menu" class="sf-menu">
                                 
-                                    
-                                    
-                                        
-                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
-                                        
-                                    
-                                        
-                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
-                                        
-                                    
-                                        
-                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
-                                        
-                                    
-                                
+                                                
+                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="fa fa-home"></i>Trang chủ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/archives/">
+                                                                        <i class="fa fa-book"></i>Kho lưu trữ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/about/">
+                                                                        <i class="fa fa-paper-plane"></i>Về mình
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                                        
                             </ul>
                         </nav>
                     </div>
@@ -115,7 +128,11 @@
             </header>
             <header id="kratos-mobile-topnav" class="kratos-topnav">
                 <div class="container">
-                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="color-logo">
+                        <a href="/">
+                            Rayinaw
+                        </a>
+                    </div>
                     <div class="nav-toggle">
                         <a class="kratos-nav-toggle js-kratos-nav-toggle">
                             <i></i>
@@ -129,7 +146,9 @@
             <div class="kratos-cover kratos-cover-2 text-center">
                 <div class="desc desc2 animate-box">
                     <a href="/">
-                        <h2>Rayinaw</h2> <br />
+                        <h2>
+                            Rayinaw
+                        </h2> <br>
                         <span>Nơi mình ghi chú lại những thứ đã học.</span>
                     </a>
                 </div>
@@ -181,11 +200,11 @@
             
             
             
-                <div class="kratos-post-inner-toc toc-div-class" >
+                <div class="kratos-post-inner-toc toc-div-class">
                     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Loi-noi-dau"><span class="toc-number">1.</span> <span class="toc-text">Lời nói đầu:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mot-vai-kien-thuc-can-nam"><span class="toc-number">2.</span> <span class="toc-text">Một vài kiến thức cần nắm:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Keep-Alive-va-Pipelining"><span class="toc-number">2.1.</span> <span class="toc-text">Keep-Alive và Pipelining:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Content-Length-va-Transfer-Encoding"><span class="toc-number">2.2.</span> <span class="toc-text">Content-Length và Transfer-Encoding:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Content-Length"><span class="toc-number">2.2.1.</span> <span class="toc-text">Content-Length:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transfer-Encoding"><span class="toc-number">2.2.2.</span> <span class="toc-text">Transfer-Encoding:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse-proxy"><span class="toc-number">2.3.</span> <span class="toc-text">Reverse proxy:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Khai-niem-web-cache"><span class="toc-number">2.4.</span> <span class="toc-text">Khái niệm web cache:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Co-mot-so-loai-web-cache-nhu-sau"><span class="toc-number">2.4.1.</span> <span class="toc-text">Có một số loại web cache như sau:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Yeu-cau-cua-loi-HRS"><span class="toc-number">2.5.</span> <span class="toc-text">Yêu cầu của lỗi HRS:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-request-smuggling-o-HTTP-x2F-1-1"><span class="toc-number">3.</span> <span class="toc-text">HTTP request smuggling ở HTTP&#x2F;1.1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CL-Content-Length-khong-bang-0"><span class="toc-number">3.1.</span> <span class="toc-text">CL(Content-Length) không bằng 0:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CL-CL"><span class="toc-number">3.2.</span> <span class="toc-text">CL-CL:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CL-TE"><span class="toc-number">3.3.</span> <span class="toc-text">CL-TE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TE-CL"><span class="toc-number">3.4.</span> <span class="toc-text">TE-CL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TE-TE"><span class="toc-number">3.5.</span> <span class="toc-text">TE-TE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-cache-poisoning-thong-qua-HRS"><span class="toc-number">3.6.</span> <span class="toc-text">Web cache poisoning thông qua HRS:</span></a></li></ol></li></ol>
                 </div>
             
-            <hr />
+            <hr>
             <div itemprop="articleBody"><h1 id="Loi-noi-dau"><a href="#Loi-noi-dau" class="headerlink" title="Lời nói đầu:"></a>Lời nói đầu:</h1><p>Bài viết này là về khái niệm và cách HRS xảy ra đối với HTTP&#x2F;1.1, với HTTP&#x2F;2.0 và thực hành các bạn có thể xem ở bài viết sau.</p>
 <h1 id="Mot-vai-kien-thuc-can-nam"><a href="#Mot-vai-kien-thuc-can-nam" class="headerlink" title="Một vài kiến thức cần nắm:"></a>Một vài kiến thức cần nắm:</h1><h2 id="Keep-Alive-va-Pipelining"><a href="#Keep-Alive-va-Pipelining" class="headerlink" title="Keep-Alive và Pipelining:"></a>Keep-Alive và Pipelining:</h2><p>Keep-Alive và Pipelining được giới thiệu trong RFC-2616:<br><code>Keep-Alive</code> cho phép một kết nối TCP giữa Client và Server được tiếp tục gửi và nhận HTTP requests và responses thay vì mở lại kết nối sau mỗi lần Client yêu cầu. Theo như mình thấy thì một số server sẽ set out timeout cho một kết nối keep-alive, sau khi user 1 yêu cầu đến server và server gửi response về, kết nối vẫn được mở và user khác có thể sử dụng kết nối này. Để bật mode Keep-Alive chúng ta cần thêm trường <code>Connection: Keep-Alive</code> vào request.</p>
 <p><code>Pipelining</code> cho phép client gửi nhiều yêu cầu HTTP một lúc mà không cần đợi phản hồi của server thông qua một kết nối TCP được mở, server sẽ phản hồi theo thứ tự mà request được gửi đi. Để bật mode Pipeline chúng ta cần thêm trường <code>Connection: Pipelining</code> vào request.</p>
@@ -202,7 +221,7 @@
 </ul>
 <h2 id="Reverse-proxy"><a href="#Reverse-proxy" class="headerlink" title="Reverse proxy:"></a>Reverse proxy:</h2><p>Reverse Proxy là một loại proxy server, nó đóng vai trò như một server bình thường. Nó tiếp nhận yêu cầu từ user, rồi chuyển tiếp đến các máy chủ khác xử lý yêu cầu đó rồi trả về cho người dùng. Người dùng ở đây chỉ giao tiếp với reverse proxy server mà không biết về sự tồn tại của máy chủ khác.<br>Cấu trúc của một request từ user đến một máy chủ có tồn tại reverse proxy như sau:<br>user —request—&gt; reverse proxy —request—&gt; back-end server<br>user &lt;–response— reverse proxy &lt;–response— back-end server</p>
 <h2 id="Khai-niem-web-cache"><a href="#Khai-niem-web-cache" class="headerlink" title="Khái niệm web cache:"></a>Khái niệm web cache:</h2><p>Web cache sinh ra để nâng cao trải nghiệm người dùng. Khi người dùng yêu cầu như những dữ liệu như HTML, CSS, Javascript, image,…, server có thể sẽ lưu vào web cache để không phải thực hiện lại những truy vấn để lấy những dữ liệu đó, giúp cho việc lấy dữ liệu nhanh hơn, đỡ tốn tài nguyên hơn cho người dùng.</p>
-<h3 id="Co-mot-so-loai-web-cache-nhu-sau"><a href="#Co-mot-so-loai-web-cache-nhu-sau" class="headerlink" title="Có một số loại web cache như sau:"></a>Có một số loại web cache như sau:</h3><p>Web cache ở phía browser: Sau khi người dùng thực hiện request lần đầu tiên đến server, nếu server hỗ trợ cache ở browser người dùng, dữ liệu sẽ được lưu vào cache ở browser của người dùng (nên xóa lịch sử web hay có mục cache). Khi người dùng request những lần tiếp theo tương tự như yêu cầu đầu tiên, browser chỉ cần lấy từ cache của browser để render ra cho người dùng.<br>Web cache phía Proxy Server: Nó thường là CDN caching. Nó hoạt động tương tự như browser caching tuy nhiên nơi lưu trữ cache ở đây là CDN server trên toàn thế giới. Ở đây nhiều user có thể dùng chung cache từ server gửi đến máy chủ CDN. Cách hoạt động các bạn có thể tham khảo thêm ở <a target="_blank" rel="noopener" href="https://viblo.asia/p/cdn-content-delivery-network-caching-Qpmle2O75rd">đây</a>.<br>Web cache phía Reverse Proxy server: Cũng hoạt động tương tự như hai kiểu trên, tuy nhiên cache được lưu trữ ở phía Reverse Proxy.<br>Video tham khảo thêm về web cache:</p>
+<h3 id="Co-mot-so-loai-web-cache-nhu-sau"><a href="#Co-mot-so-loai-web-cache-nhu-sau" class="headerlink" title="Có một số loại web cache như sau:"></a>Có một số loại web cache như sau:</h3><p>Web cache ở phía browser: Sau khi người dùng thực hiện request lần đầu tiên đến server, nếu server hỗ trợ cache ở browser người dùng, dữ liệu sẽ được lưu vào cache ở browser của người dùng (nên xóa lịch sử web hay có mục cache). Khi người dùng request những lần tiếp theo tương tự như yêu cầu đầu tiên, browser chỉ cần lấy từ cache của browser để render ra cho người dùng.<br>Web cache phía Proxy Server: Nó thường là CDN caching. Nó hoạt động tương tự như browser caching tuy nhiên nơi lưu trữ cache ở đây là CDN server trên toàn thế giới. Ở đây nhiều user có thể dùng chung cache từ server gửi đến máy chủ CDN. Cách hoạt động các bạn có thể tham khảo thêm ở <a target="_blank" rel="external nofollow noopener noreferrer" href="https://viblo.asia/p/cdn-content-delivery-network-caching-Qpmle2O75rd">đây</a>.<br>Web cache phía Reverse Proxy server: Cũng hoạt động tương tự như hai kiểu trên, tuy nhiên cache được lưu trữ ở phía Reverse Proxy.<br>Video tham khảo thêm về web cache:</p>
 <div class="video-container"><iframe src="https://www.youtube.com/embed/HiBDZgTNpXY" frameborder="0" loading="lazy" allowfullscreen></iframe></div> 
 <h2 id="Yeu-cau-cua-loi-HRS"><a href="#Yeu-cau-cua-loi-HRS" class="headerlink" title="Yêu cầu của lỗi HRS:"></a>Yêu cầu của lỗi HRS:</h2><p>Để một lỗi HRS xảy ra, trang web cần đáp ứng những yêu cầu sau:</p>
 <ul>
@@ -257,9 +276,9 @@ Yêu cầu thứ hai:<figure class="highlight h"><table><tr><td class="gutter"><
 <p>Máy chủ Proxy nhận <code>Transfer-Encoding: chunked\r\n</code>, thấy yêu cầu hợp lệ nó gửi đến máy chủ back-end.<br>Máy chủ back-end: Lúc này do tồn tại hai trường <code>Transfer-Encoding: chunked\r\n</code> và <code>Transfer-encoding: cow\r\n</code> nên khiến máy chủ bị rối, nó không biết nhận cái nào nên có thể bây giờ nó sẽ nhận <code>Content-length: 4\r\n</code>. <code>5c\r\n = 4bytes</code> nên phần sau được xem như là một yêu cầu khác, và do máy chủ tồn tại pipelining nên nó được coi như là một yêu cầu khác biệt. Lúc này một lỗi <code>Unrecognized method aPOST</code> sẽ được trả về.</p>
 <h2 id="Web-cache-poisoning-thong-qua-HRS"><a href="#Web-cache-poisoning-thong-qua-HRS" class="headerlink" title="Web cache poisoning thông qua HRS:"></a>Web cache poisoning thông qua HRS:</h2><p>Tham khảo:</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://brightsec.com/blog/http-request-smuggling-hrs/#how-hrs-works">https://brightsec.com/blog/http-request-smuggling-hrs/#how-hrs-works</a></li>
-<li><a target="_blank" rel="noopener" href="https://paper.seebug.org/1048/">https://paper.seebug.org/1048/</a></li>
-<li><a target="_blank" rel="noopener" href="https://crashtest-security.com/http-request-smuggling/">https://crashtest-security.com/http-request-smuggling/</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://brightsec.com/blog/http-request-smuggling-hrs/#how-hrs-works">https://brightsec.com/blog/http-request-smuggling-hrs/#how-hrs-works</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://paper.seebug.org/1048/">https://paper.seebug.org/1048/</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://crashtest-security.com/http-request-smuggling/">https://crashtest-security.com/http-request-smuggling/</a></li>
 </ul>
 </div>
         </div>
@@ -385,7 +404,7 @@ Yêu cầu thứ hai:<figure class="highlight h"><table><tr><td class="gutter"><
     <div class="photo-background"></div>
     <div class="photo-wrapper clearfix">
         <div class="photo-wrapper-tip text-center">
-            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto">
         </div>
     </div>
     <div class="textwidget">
@@ -421,7 +440,7 @@ Yêu cầu thứ hai:<figure class="highlight h"><table><tr><td class="gutter"><
             
                     <div class="sticky-area">
                 
-                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class">
     <div class="photo-background"></div>
     <h4 class="widget-title no-after">
         <i class="fa fa-compass"></i>
@@ -505,19 +524,19 @@ Yêu cầu thứ hai:<figure class="highlight h"><table><tr><td class="gutter"><
     </div>
 </div>
 <footer>
-    <div id="footer"  class="ap-lrc"  >
+    <div id="footer" class="ap-lrc">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 footer-list text-center">
                     <ul class="kratos-social-icons">
                         
-                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
-                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        <li><a href="mailto:rayin.awarf@gmail.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
                         
                         
                         
                         
-                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
                         
                     </ul>
                     <ul class="kratos-copyright">
@@ -526,12 +545,12 @@ Yêu cầu thứ hai:<figure class="highlight h"><table><tr><td class="gutter"><
                             <li>This site has been running for<span id="span_dt">Loading...</span></li>
                         </div>
                         <div>
-                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank" rel="external nofollow noopener noreferrer">Kratos:Rebirth</a></li>
                             <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
                         </div>
                         <div>
-                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
-                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank" rel="external nofollow noopener noreferrer">Github Pages</a></li>
                         </div>
                         <div>
                             
@@ -589,13 +608,7 @@ Yêu cầu thứ hai:<figure class="highlight h"><table><tr><td class="gutter"><
     <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
     
     <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
-    <meting-js
-        server="netease"
-        type="playlist"
-        id="3204190542"
-        order="random"
-        fixed="true"
-    >
+    <meting-js server="netease" type="playlist" id="3204190542" order="random" fixed="true">
     </meting-js>
 
 

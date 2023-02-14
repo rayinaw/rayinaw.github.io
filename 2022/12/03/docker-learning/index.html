@@ -3,18 +3,19 @@
     <head>
   <!-- 元数据 -->
   <meta charset="utf-8">
+  <link rel="canonical" href="https://rayinaw.github.io/2022/12/03/docker-learning/">
   <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
   
   <title>Một bản ghi chép nhỏ về Docker | Rayinaw</title>
-  <meta name="author" content="Rayinaw" />
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="robots" content="index,follow" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="format-detection" content="telphone=no, email=no" />
+  <meta name="author" content="Rayinaw">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="format-detection" content="telphone=no, email=no">
   
-    <meta name="keywords" content="Docker" />
+    <meta name="keywords" content="Docker">
   
   <meta name="description" content="Docker Command LineThao tác với mỗi lần chạy:123docker run busybox:1.24 echo &quot;hello world!&quot;docker run busybox:1.24 ls &#x2F;  -i và -t flag:Flag -i dùng để mở một tương tác với container, giữ cho">
 <meta property="og:type" content="article">
@@ -34,29 +35,29 @@
   <!-- 站点验证相关 -->
   
     
-      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA" />
+      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA">
     
     
     
   
   <!-- 样式表文件 -->
-  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all">
   
-    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)">
     <script src="/js/kr-dark.min.js"></script>
   
   
-    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all">
   
   
-  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
-  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all">
   
   
-    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css">
   
   
-    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
   
   <!-- 不得不预先加载的一些JS文件 -->
   <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -79,7 +80,7 @@
     
   </style>
   
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="Rayinaw" type="application/rss+xml">
 </head>
 
 
@@ -93,21 +94,33 @@
                         <nav id="kratos-menu-wrap">
                             <ul id="kratos-primary-menu" class="sf-menu">
                                 
-                                    
-                                    
-                                        
-                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
-                                        
-                                    
-                                        
-                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
-                                        
-                                    
-                                        
-                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
-                                        
-                                    
-                                
+                                                
+                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="fa fa-home"></i>Trang chủ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/archives/">
+                                                                        <i class="fa fa-book"></i>Kho lưu trữ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/about/">
+                                                                        <i class="fa fa-paper-plane"></i>Về mình
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                                        
                             </ul>
                         </nav>
                     </div>
@@ -115,7 +128,11 @@
             </header>
             <header id="kratos-mobile-topnav" class="kratos-topnav">
                 <div class="container">
-                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="color-logo">
+                        <a href="/">
+                            Rayinaw
+                        </a>
+                    </div>
                     <div class="nav-toggle">
                         <a class="kratos-nav-toggle js-kratos-nav-toggle">
                             <i></i>
@@ -129,7 +146,9 @@
             <div class="kratos-cover kratos-cover-2 text-center">
                 <div class="desc desc2 animate-box">
                     <a href="/">
-                        <h2>Rayinaw</h2> <br />
+                        <h2>
+                            Rayinaw
+                        </h2> <br>
                         <span>Nơi mình ghi chú lại những thứ đã học.</span>
                     </a>
                 </div>
@@ -181,11 +200,11 @@
             
             
             
-                <div class="kratos-post-inner-toc toc-div-class" >
+                <div class="kratos-post-inner-toc toc-div-class">
                     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Command-Line"><span class="toc-number">1.</span> <span class="toc-text">Docker Command Line</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Thao-tac-voi-moi-lan-chay"><span class="toc-number">1.1.</span> <span class="toc-text">Thao tác với mỗi lần chạy:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#i-va-t-flag"><span class="toc-number">1.2.</span> <span class="toc-text">-i và -t flag:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-container-va-d-flag"><span class="toc-number">1.3.</span> <span class="toc-text">Docker container và -d flag:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%93name-flag"><span class="toc-number">1.4.</span> <span class="toc-text">–name flag:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#p-flag"><span class="toc-number">1.5.</span> <span class="toc-text">-p flag:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-log"><span class="toc-number">1.6.</span> <span class="toc-text">Docker log:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-pull"><span class="toc-number">1.7.</span> <span class="toc-text">Docker pull:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-commit"><span class="toc-number">1.8.</span> <span class="toc-text">Docker commit:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-build-command"><span class="toc-number">1.9.</span> <span class="toc-text">Docker build command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-inspect"><span class="toc-number">1.10.</span> <span class="toc-text">Docker inspect:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-Image-va-Container"><span class="toc-number">1.11.</span> <span class="toc-text">Gỡ Image và Container:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-container"><span class="toc-number">1.11.1.</span> <span class="toc-text">Gỡ container:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-image"><span class="toc-number">1.11.2.</span> <span class="toc-text">Gỡ image:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Container%E2%80%99s-Filesystem"><span class="toc-number">2.</span> <span class="toc-text">Docker Container’s Filesystem</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-images-va-layers"><span class="toc-number">2.1.</span> <span class="toc-text">Docker images và layers:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-container-va-writable-layer"><span class="toc-number">2.2.</span> <span class="toc-text">Docker container và writable layer:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cach-build-mot-Docker-image"><span class="toc-number">3.</span> <span class="toc-text">Cách build một Docker image:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-Docker-Images-by-using-Docker-Commit-Command"><span class="toc-number">3.1.</span> <span class="toc-text">Build Docker Images by using Docker Commit Command:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-Docker-Images-by-writing-DockerFile"><span class="toc-number">3.2.</span> <span class="toc-text">Build Docker Images by writing DockerFile:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile-la-gi"><span class="toc-number">3.2.1.</span> <span class="toc-text">Dockerfile là gì?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Viet-mot-Dockerfile"><span class="toc-number">3.2.2.</span> <span class="toc-text">Viết một Dockerfile:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cau-lenh-RUN"><span class="toc-number">3.2.2.1.</span> <span class="toc-text">Câu lệnh RUN:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cau-lenh-CMD"><span class="toc-number">3.2.2.2.</span> <span class="toc-text">Câu lệnh CMD:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Docker-cache"><span class="toc-number">3.2.2.3.</span> <span class="toc-text">Docker cache:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cau-lenh-COPY"><span class="toc-number">3.2.2.4.</span> <span class="toc-text">Câu lệnh COPY:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cau-lenh-ADD"><span class="toc-number">3.2.2.5.</span> <span class="toc-text">Câu lệnh ADD:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cau-lenh-WORKDIR"><span class="toc-number">3.2.2.6.</span> <span class="toc-text">Câu lệnh WORKDIR:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Xay-dung-Flask-web-don-gian-qua-Dockerfile"><span class="toc-number">3.2.2.7.</span> <span class="toc-text">Xây dựng Flask web đơn giản qua Dockerfile:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Docker-Container-Links"><span class="toc-number">3.2.2.8.</span> <span class="toc-text">Docker Container Links:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Docker-compose"><span class="toc-number">3.2.2.9.</span> <span class="toc-text">Docker compose</span></a></li></ol></li></ol></li></ol></li></ol>
                 </div>
             
-            <hr />
+            <hr>
             <div itemprop="articleBody"><h1 id="Docker-Command-Line"><a href="#Docker-Command-Line" class="headerlink" title="Docker Command Line"></a>Docker Command Line</h1><h2 id="Thao-tac-voi-moi-lan-chay"><a href="#Thao-tac-voi-moi-lan-chay" class="headerlink" title="Thao tác với mỗi lần chạy:"></a>Thao tác với mỗi lần chạy:</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run busybox:1.24 echo &quot;hello world!&quot;</span><br><span class="line"></span><br><span class="line">docker run busybox:1.24 ls /</span><br></pre></td></tr></table></figure>
 
 <h2 id="i-va-t-flag"><a href="#i-va-t-flag" class="headerlink" title="-i và -t flag:"></a>-i và -t flag:</h2><p>Flag -i dùng để mở một tương tác với container, giữ cho nó tiếp tục được mở để thực thi những tác vụ tiếp.<br>Flag -t dùng để tạo một pseudo-TTY(TTY tương tự như shell command trong linux), có nghĩa là tạo một shell của image rồi gắn vào terminal của mình.</p>
@@ -287,7 +306,7 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
 <p>Nội dung Dockerfile:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.8-alpine</span><br><span class="line">RUN pip install Flask==2.0.2</span><br><span class="line">WORKDIR /app</span><br><span class="line">COPY app /app</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br></pre></td></tr></table></figure>
 
-<p>Build image: <code>docker build -t flaskweb .</code><br>Chạy web: <code>docker run -d -p 5000:5000 flaskweb</code><br>Bây giờ trên browser gõ <a target="_blank" rel="noopener" href="http://localhost:5000/">http://localhost:5000</a> để truy cập web vừa chạy.</p>
+<p>Build image: <code>docker build -t flaskweb .</code><br>Chạy web: <code>docker run -d -p 5000:5000 flaskweb</code><br>Bây giờ trên browser gõ <a target="_blank" rel="external nofollow noopener noreferrer" href="http://localhost:5000/">http://localhost:5000</a> để truy cập web vừa chạy.</p>
 <h4 id="Docker-Container-Links"><a href="#Docker-Container-Links" class="headerlink" title="Docker Container Links:"></a>Docker Container Links:</h4><p>Container links cho phép các container tìm ra nhau và trao đổi thông tin một cách bảo mật với nhau.<br>Khi set up một cái link, chúng ta tạo ra một ống dẫn giữa source container và recipient container. Recipient container có thể truy cập, lấy dữ liệu và thêm dữ liệu từ source container.<br>Links được thành lập bằng cách sử dụng container name. Lợi ích của việc này là chúng ta có thể thấy một cách rõ ràng hơn, không cần phải thông qua localhost.<br>Ví dụ xây dựng một web app từ flask và redis (api để lưu trữ dữ liệu):</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Cây thư mục như sau:</span><br><span class="line">Dockerfile      </span><br><span class="line">app       --------&gt;app.py</span><br><span class="line">               |</span><br><span class="line">               ---&gt;templates-----&gt;index.html </span><br></pre></td></tr></table></figure>
 <p>index.html</p>
@@ -437,7 +456,7 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
     <div class="photo-background"></div>
     <div class="photo-wrapper clearfix">
         <div class="photo-wrapper-tip text-center">
-            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto">
         </div>
     </div>
     <div class="textwidget">
@@ -473,7 +492,7 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
             
                     <div class="sticky-area">
                 
-                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class">
     <div class="photo-background"></div>
     <h4 class="widget-title no-after">
         <i class="fa fa-compass"></i>
@@ -557,19 +576,19 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
     </div>
 </div>
 <footer>
-    <div id="footer"  class="ap-lrc"  >
+    <div id="footer" class="ap-lrc">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 footer-list text-center">
                     <ul class="kratos-social-icons">
                         
-                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
-                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        <li><a href="mailto:rayin.awarf@gmail.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
                         
                         
                         
                         
-                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
                         
                     </ul>
                     <ul class="kratos-copyright">
@@ -578,12 +597,12 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
                             <li>This site has been running for<span id="span_dt">Loading...</span></li>
                         </div>
                         <div>
-                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank" rel="external nofollow noopener noreferrer">Kratos:Rebirth</a></li>
                             <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
                         </div>
                         <div>
-                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
-                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank" rel="external nofollow noopener noreferrer">Github Pages</a></li>
                         </div>
                         <div>
                             
@@ -641,13 +660,7 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
     <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
     
     <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
-    <meting-js
-        server="netease"
-        type="playlist"
-        id="3204190542"
-        order="random"
-        fixed="true"
-    >
+    <meting-js server="netease" type="playlist" id="3204190542" order="random" fixed="true">
     </meting-js>
 
 

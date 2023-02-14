@@ -3,18 +3,19 @@
     <head>
   <!-- 元数据 -->
   <meta charset="utf-8">
+  <link rel="canonical" href="https://rayinaw.github.io/2022/11/03/javadeserializationbasic/">
   <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
   
   <title>Introduction to Java Deserialization | Rayinaw</title>
-  <meta name="author" content="Rayinaw" />
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="robots" content="index,follow" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="format-detection" content="telphone=no, email=no" />
+  <meta name="author" content="Rayinaw">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="format-detection" content="telphone=no, email=no">
   
-    <meta name="keywords" content="Deserialization, Java" />
+    <meta name="keywords" content="Deserialization, Java">
   
   <meta name="description" content="Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deserialization được thực thi. Serialization và Deserialization1. Serialization và deseri">
 <meta property="og:type" content="article">
@@ -35,29 +36,29 @@
   <!-- 站点验证相关 -->
   
     
-      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA" />
+      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA">
     
     
     
   
   <!-- 样式表文件 -->
-  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all">
   
-    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)">
     <script src="/js/kr-dark.min.js"></script>
   
   
-    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all"></script>
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all">
   
   
-  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
-  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all">
   
   
-    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css">
   
   
-    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
   
   <!-- 不得不预先加载的一些JS文件 -->
   <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -80,7 +81,7 @@
     
   </style>
   
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Rayinaw" type="application/atom+xml">
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="Rayinaw" type="application/rss+xml">
 </head>
 
 
@@ -94,21 +95,33 @@
                         <nav id="kratos-menu-wrap">
                             <ul id="kratos-primary-menu" class="sf-menu">
                                 
-                                    
-                                    
-                                        
-                                            <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
-                                        
-                                    
-                                        
-                                            <li><a href="/archives/"><i class="fa fa-book"></i>Kho lưu trữ</a></li>
-                                        
-                                    
-                                        
-                                            <li><a href="/about/"><i class="fa fa-paper-plane"></i>Về mình</a></li>
-                                        
-                                    
-                                
+                                                
+                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="fa fa-home"></i>Trang chủ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/archives/">
+                                                                        <i class="fa fa-book"></i>Kho lưu trữ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/about/">
+                                                                        <i class="fa fa-paper-plane"></i>Về mình
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                                        
                             </ul>
                         </nav>
                     </div>
@@ -116,7 +129,11 @@
             </header>
             <header id="kratos-mobile-topnav" class="kratos-topnav">
                 <div class="container">
-                    <div class="color-logo"><a href="/">Rayinaw</a></div>
+                    <div class="color-logo">
+                        <a href="/">
+                            Rayinaw
+                        </a>
+                    </div>
                     <div class="nav-toggle">
                         <a class="kratos-nav-toggle js-kratos-nav-toggle">
                             <i></i>
@@ -130,7 +147,9 @@
             <div class="kratos-cover kratos-cover-2 text-center">
                 <div class="desc desc2 animate-box">
                     <a href="/">
-                        <h2>Rayinaw</h2> <br />
+                        <h2>
+                            Rayinaw
+                        </h2> <br>
                         <span>Nơi mình ghi chú lại những thứ đã học.</span>
                     </a>
                 </div>
@@ -182,11 +201,11 @@
             
             
             
-                <div class="kratos-post-inner-toc toc-div-class" >
+                <div class="kratos-post-inner-toc toc-div-class">
                     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Serialization-va-Deserialization"><span class="toc-number">1.</span> <span class="toc-text">Serialization và Deserialization</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Serialization-va-deserialization-la-gi"><span class="toc-number">1.1.</span> <span class="toc-text">1. Serialization và deserialization là gì?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Nhung-qua-trinh-can-su-dung-den-Serialization"><span class="toc-number">1.2.</span> <span class="toc-text">2. Những quá trình cần sử dụng đến Serialization:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Trien-khai-qua-trinh-Ser-va-Deser-co-ban"><span class="toc-number">1.3.</span> <span class="toc-text">3. Triển khai quá trình Ser và Deser cơ bản:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cach-ma-lo-hong-Deserialization-xay-ra"><span class="toc-number">2.</span> <span class="toc-text">Cách mà lỗ hổng Deserialization xảy ra:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HashMap-va-cach-no-gay-ra-lo-hong-Deserialization"><span class="toc-number">2.1.</span> <span class="toc-text">1. HashMap và cách nó gây ra lỗ hổng Deserialization:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Phan-tich-chuoi-URLDNS"><span class="toc-number">2.2.</span> <span class="toc-text">2. Phân tích chuỗi URLDNS:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-POC-cho-chuoi-URLDNS"><span class="toc-number">2.3.</span> <span class="toc-text">3. POC cho chuỗi URLDNS:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap"><span class="toc-number">2.3.1.</span> <span class="toc-text">Chú ý khi thực hiện serialize object của lớp HashMap:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-hoan-thien-cua-chuoi-URLDNS"><span class="toc-number">2.3.2.</span> <span class="toc-text">POC hoàn thiện của chuỗi URLDNS:</span></a></li></ol></li></ol></li></ol>
                 </div>
             
-            <hr />
+            <hr>
             <div itemprop="articleBody"><p>Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deserialization được thực thi.</p>
 <h1 id="Serialization-va-Deserialization"><a href="#Serialization-va-Deserialization" class="headerlink" title="Serialization và Deserialization"></a>Serialization và Deserialization</h1><h2 id="1-Serialization-va-deserialization-la-gi"><a href="#1-Serialization-va-deserialization-la-gi" class="headerlink" title="1. Serialization và deserialization là gì?"></a>1. Serialization và deserialization là gì?</h2><p>Hiểu một cách đơn giản hai quá trình này là:</p>
 <ul>
@@ -244,7 +263,7 @@ Biến handler ở đây là một object của lớp <code>URLStreamHandler</co
 </ul>
 <p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashCodeOfURLStreamHandler.webp"></p>
 <p>Trong phương thức này chúng ta thấy dòng <code>InetAddress addr = getHostAddress(u);</code> có nghĩa là nó sẽ thực hiện một yêu cầu DNS đến địa chỉ URL để thực hiện getHostAddress. Đến đây ta đạt được mục đích của Chain này đó là request đến địa chỉ URL mà ta cung cấp. Còn lại phần sau và việc nó thực hiện request thế nào thì chúng ta không cần quan tâm, chỉ vậy là đã đủ (Đương nhiên bạn nào thích thì cứ tìm hiểu nhé ^^).</p>
-<h2 id="3-POC-cho-chuoi-URLDNS"><a href="#3-POC-cho-chuoi-URLDNS" class="headerlink" title="3. POC cho chuỗi URLDNS:"></a>3. POC cho chuỗi URLDNS:</h2><p>Link nhận DNS request: <a target="_blank" rel="noopener" href="http://dnslog.cn/">http://dnslog.cn/</a></p>
+<h2 id="3-POC-cho-chuoi-URLDNS"><a href="#3-POC-cho-chuoi-URLDNS" class="headerlink" title="3. POC cho chuỗi URLDNS:"></a>3. POC cho chuỗi URLDNS:</h2><p>Link nhận DNS request: <a target="_blank" rel="external nofollow noopener noreferrer" href="http://dnslog.cn/">http://dnslog.cn/</a></p>
 <h3 id="Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap"><a href="#Chu-y-khi-thuc-hien-serialize-object-cua-lop-HashMap" class="headerlink" title="Chú ý khi thực hiện serialize object của lớp HashMap:"></a>Chú ý khi thực hiện serialize object của lớp HashMap:</h3><p>Filename: SerializeTest.java</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> BasicChain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializeTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;Ser2.txt&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line">        hashmap.put(<span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://0tvykt.dnslog.cn&quot;</span>), <span class="number">1</span>);</span><br><span class="line">        serialize(hashmap);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Sau khi chạy file này, dù chưa thực hiện deserialize file <code>Ser2.txt</code> mà chúng ta đã nhận được request đến. Nguyên nhân là do khi thực hiện gán giá trị vào object hashmap bằng hashmap.put(), hàm hash trong phương thức này đã được thực hiện và sẽ request đến địa chỉ URL mà ta cung cấp.<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashMapPutMethod.webp"><br>Sau khi request đến URL, biến hashcode bây giờ đã không còn là -1 nữa, khi đó trong quá trình deserialize request sẽ không được gửi đến. Vậy nên sau khi thực hiện deserialize, chúng ta cần thực hiện set lại giá trị cho hashcode là -1. Tuy nhiên vấn đề ở đây là biến hashcode là private, để gán lại giá trị cho biến private chúng ta cần sử dụng đến Reflection mà mình đã có bài viết về nó.<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/images/post/IntroduceToDeser/HashCodeOfURLObject.webp"></p>
@@ -384,7 +403,7 @@ Biến handler ở đây là một object của lớp <code>URLStreamHandler</co
     <div class="photo-background"></div>
     <div class="photo-wrapper clearfix">
         <div class="photo-wrapper-tip text-center">
-            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto" />
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto">
         </div>
     </div>
     <div class="textwidget">
@@ -420,7 +439,7 @@ Biến handler ở đây là một object của lớp <code>URLStreamHandler</co
             
                     <div class="sticky-area">
                 
-                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class">
     <div class="photo-background"></div>
     <h4 class="widget-title no-after">
         <i class="fa fa-compass"></i>
@@ -504,19 +523,19 @@ Biến handler ở đây là một object của lớp <code>URLStreamHandler</co
     </div>
 </div>
 <footer>
-    <div id="footer"  class="ap-lrc"  >
+    <div id="footer" class="ap-lrc">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 footer-list text-center">
                     <ul class="kratos-social-icons">
                         
-                        <li><a href="mailto:rayin.awarf@gmail.com"><i class="fa fa-envelope"></i></a></li>
-                        <li><a target="_blank" rel="nofollow" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        <li><a href="mailto:rayin.awarf@gmail.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
                         
                         
                         
                         
-                        <li><a target="_blank" rel="nofollow" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
                         
                     </ul>
                     <ul class="kratos-copyright">
@@ -525,12 +544,12 @@ Biến handler ở đây là một object của lớp <code>URLStreamHandler</co
                             <li>This site has been running for<span id="span_dt">Loading...</span></li>
                         </div>
                         <div>
-                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank" rel="external nofollow noopener noreferrer">Kratos:Rebirth</a></li>
                             <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
                         </div>
                         <div>
-                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
-                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank" rel="external nofollow noopener noreferrer">Github Pages</a></li>
                         </div>
                         <div>
                             
@@ -588,13 +607,7 @@ Biến handler ở đây là một object của lớp <code>URLStreamHandler</co
     <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
     
     <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
-    <meting-js
-        server="netease"
-        type="playlist"
-        id="3204190542"
-        order="random"
-        fixed="true"
-    >
+    <meting-js server="netease" type="playlist" id="3204190542" order="random" fixed="true">
     </meting-js>
 
 
