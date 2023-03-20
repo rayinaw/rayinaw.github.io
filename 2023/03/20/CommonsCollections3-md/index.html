@@ -3,10 +3,10 @@
     <head>
   <!-- 元数据 -->
   <meta charset="utf-8">
-  <link rel="canonical" href="https://rayinaw.github.io/tags/deserialization/">
+  <link rel="canonical" href="https://rayinaw.github.io/2023/03/20/commonscollections3-md/">
   <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
   
-  <title>Tag: Deserialization | Rayinaw</title>
+  <title>Phân tích chuỗi Commons Collections 3 | Rayinaw</title>
   <meta name="author" content="Rayinaw">
   <meta http-equiv="Cache-Control" content="no-transform">
   <meta http-equiv="Cache-Control" content="no-siteapp">
@@ -15,17 +15,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="format-detection" content="telphone=no, email=no">
   
-    <meta name="keywords" content>
+    <meta name="keywords" content="Commons Collections, Deserialization, Java">
   
-  <meta name="description" content="来年の事を言えば鬼が笑う">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Tag: Deserialization">
-<meta property="og:url" content="https://rayinaw.github.io/tags/Deserialization/index.html">
+  <meta name="description" content="Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:  javassist ChainedTransformer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Phân tích chuỗi Commons Collections 3">
+<meta property="og:url" content="https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/index.html">
 <meta property="og:site_name" content="Rayinaw">
-<meta property="og:description" content="来年の事を言えば鬼が笑う">
+<meta property="og:description" content="Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:  javassist ChainedTransformer">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2023-03-20T14:46:42.000Z">
+<meta property="article:modified_time" content="2023-03-20T14:47:41.501Z">
 <meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Deserialization">
+<meta property="article:tag" content="Commons Collections">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
   
@@ -163,314 +168,157 @@
 
         
 
-            <!-- Breadcrumb for tag & category page -->
-
-    <article class="kratos-hentry kratos-entry-border-new clearfix">
-        <div class="kratos-breadcrumb">
-            <a href="/">
-                <i class="fa fa-home"></i>
-            </a>
-            <i class="fa fa-angle-right"></i>
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
             
-                <a href="/tags/">
-                    Thẻ
-                </a>
-                <i class="fa fa-angle-right"></i>
-                <a href="/tags/Deserialization">
-                    Deserialization
-                </a>
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Phân tích chuỗi Commons Collections 3</h1>
             
             
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2023-03-20T14:46:42.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2023-03-20</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        118
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679323661501"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mot-vai-kien-thuc-can-nam"><span class="toc-number">1.</span> <span class="toc-text">Một vài kiến thức cần nắm</span></a></li></ol>
+                </div>
+            
+            <hr>
+            <div itemprop="articleBody"><h2 id="Mot-vai-kien-thuc-can-nam"><a href="#Mot-vai-kien-thuc-can-nam" class="headerlink" title="Một vài kiến thức cần nắm"></a>Một vài kiến thức cần nắm</h2><p>Trước khi vào bài viết chúng ta cần nắm một số kiến thức sau:</p>
+<ul>
+<li>javassist</li>
+<li>ChainedTransformer</li>
+</ul>
+</div>
         </div>
-    </article>
-
-
-
-
-    
-    
-        <article class="kratos-hentry clearfix" itemscope itemtype="https://schema.org/Article">
-            <div class="kratos-entry-border-new clearfix">
-                
-                <div class="kratos-entry-thumb-new">
-                    <a href="/2023/03/20/CommonsCollections3-md/">
-                        
-                            <img class="kratos-entry-thumb-new-img" alt>
-                        
-                    </a>
-                </div>
-                <div class="kratos-post-inner-new">
-                    <header class="kratos-entry-header-new">
-                            <a class="label-link" href="/categories/Java/">Java</a> <a class="label-link" href="/categories/Java/Deserialization/">Deserialization</a>
-                        <h2 class="kratos-entry-title-new"><a href="/2023/03/20/CommonsCollections3-md/" itemprop="mainEntityOfPage"><span itemprop="name headline">Phân tích chuỗi Commons Collections 3</span></a>
-                    </h2></header>
-                    <div class="kratos-entry-content-new">
-                        <p itemprop="description">
-                            
-                                Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:
-
-javassist
-ChainedTransformer
-
-
-                            
-                        </p>
-                    </div>
-                </div>
-                <footer class="kratos-post-meta-new">
-                    <span class="pull-left">
-                        <time datetime="2023-03-20T14:46:42.000Z" itemprop="datePublished">
-                            <a><i class="fa fa-calendar"></i> 2023-03-20</a>
-                        </time>
-                        <a>
-                            
-                                <i class="fa fa-tags"></i>
-                                <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
-                            
-                        </a>
-                        
-                            <!-- 当前仅支持valine/waline自带的统计功能 -->
-                            
-                        
-                        
-                            <!-- 当前仅支持waline自带的统计功能 -->
-                            
-                        
-                    </span>
-                    <span class="pull-right">
-                        <a class="read-more" href="/2023/03/20/CommonsCollections3-md/" title="Đọc toàn bộ bài viết">Đọc toàn bộ bài viết<i class="fa fa-chevron-circle-right"></i></a>
-                    </span>
-                </footer>
-            </div>
-        </article>
-    
-
-    
-    
-        <article class="kratos-hentry clearfix" itemscope itemtype="https://schema.org/Article">
-            <div class="kratos-entry-border-new clearfix">
-                
-                <div class="kratos-entry-thumb-new">
-                    <a href="/2022/12/16/CommonsCollections2/">
-                        
-                            <img class="kratos-entry-thumb-new-img" alt>
-                        
-                    </a>
-                </div>
-                <div class="kratos-post-inner-new">
-                    <header class="kratos-entry-header-new">
-                            <a class="label-link" href="/categories/Java/">Java</a> <a class="label-link" href="/categories/Java/Deserialization/">Deserialization</a>
-                        <h2 class="kratos-entry-title-new"><a href="/2022/12/16/CommonsCollections2/" itemprop="mainEntityOfPage"><span itemprop="name headline">Phân tích chuỗi Commons Collections 2</span></a>
-                    </h2></header>
-                    <div class="kratos-entry-content-new">
-                        <p itemprop="description">
-                            
-                                Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:
-
-javassist
-ChainedTransformer
-...
-                            
-                        </p>
-                    </div>
-                </div>
-                <footer class="kratos-post-meta-new">
-                    <span class="pull-left">
-                        <time datetime="2022-12-16T03:05:45.000Z" itemprop="datePublished">
-                            <a><i class="fa fa-calendar"></i> 2022-12-16</a>
-                        </time>
-                        <a>
-                            
-                                <i class="fa fa-tags"></i>
-                                <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
-                            
-                        </a>
-                        
-                            <!-- 当前仅支持valine/waline自带的统计功能 -->
-                            
-                        
-                        
-                            <!-- 当前仅支持waline自带的统计功能 -->
-                            
-                        
-                    </span>
-                    <span class="pull-right">
-                        <a class="read-more" href="/2022/12/16/CommonsCollections2/" title="Đọc toàn bộ bài viết">Đọc toàn bộ bài viết<i class="fa fa-chevron-circle-right"></i></a>
-                    </span>
-                </footer>
-            </div>
-        </article>
-    
-
-    
-    
-        <article class="kratos-hentry clearfix" itemscope itemtype="https://schema.org/Article">
-            <div class="kratos-entry-border-new clearfix">
-                
-                <div class="kratos-entry-thumb-new">
-                    <a href="/2022/12/15/CommonsCollections1-LazyMap/">
-                        
-                            <img class="kratos-entry-thumb-new-img" alt>
-                        
-                    </a>
-                </div>
-                <div class="kratos-post-inner-new">
-                    <header class="kratos-entry-header-new">
-                            <a class="label-link" href="/categories/Java/">Java</a> <a class="label-link" href="/categories/Java/Deserialization/">Deserialization</a>
-                        <h2 class="kratos-entry-title-new"><a href="/2022/12/15/CommonsCollections1-LazyMap/" itemprop="mainEntityOfPage"><span itemprop="name headline">Phân tích chuỗi Commons Collections 1 với LazyMap</span></a>
-                    </h2></header>
-                    <div class="kratos-entry-content-new">
-                        <p itemprop="description">
-                            
-                                Trong bài viết trước mình đã phân tích lỗ hổng deserialization của TransformMap trong chuỗi CC1, và trong bài viết nà...
-                            
-                        </p>
-                    </div>
-                </div>
-                <footer class="kratos-post-meta-new">
-                    <span class="pull-left">
-                        <time datetime="2022-12-14T20:48:35.000Z" itemprop="datePublished">
-                            <a><i class="fa fa-calendar"></i> 2022-12-15</a>
-                        </time>
-                        <a>
-                            
-                                <i class="fa fa-tags"></i>
-                                <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
-                            
-                        </a>
-                        
-                            <!-- 当前仅支持valine/waline自带的统计功能 -->
-                            
-                        
-                        
-                            <!-- 当前仅支持waline自带的统计功能 -->
-                            
-                        
-                    </span>
-                    <span class="pull-right">
-                        <a class="read-more" href="/2022/12/15/CommonsCollections1-LazyMap/" title="Đọc toàn bộ bài viết">Đọc toàn bộ bài viết<i class="fa fa-chevron-circle-right"></i></a>
-                    </span>
-                </footer>
-            </div>
-        </article>
-    
-
-    
-    
-        <article class="kratos-hentry clearfix" itemscope itemtype="https://schema.org/Article">
-            <div class="kratos-entry-border-new clearfix">
-                
-                <div class="kratos-entry-thumb-new">
-                    <a href="/2022/11/04/Commons-Collections1-TransformedMap/">
-                        
-                            <img class="kratos-entry-thumb-new-img" alt>
-                        
-                    </a>
-                </div>
-                <div class="kratos-post-inner-new">
-                    <header class="kratos-entry-header-new">
-                            <a class="label-link" href="/categories/Java/">Java</a> <a class="label-link" href="/categories/Java/Deserialization/">Deserialization</a>
-                        <h2 class="kratos-entry-title-new"><a href="/2022/11/04/Commons-Collections1-TransformedMap/" itemprop="mainEntityOfPage"><span itemprop="name headline">Phân tích chuỗi Commons Collections 1 với TransformedMap</span></a>
-                    </h2></header>
-                    <div class="kratos-entry-content-new">
-                        <p itemprop="description">
-                            
-                                Một vài khái niệm cần nắmTrước tiên chúng ta cần hình dung lớp Runtime sẽ exec câu lệnh như nào, ở đây mình có sử dụn...
-                            
-                        </p>
-                    </div>
-                </div>
-                <footer class="kratos-post-meta-new">
-                    <span class="pull-left">
-                        <time datetime="2022-11-04T11:00:38.000Z" itemprop="datePublished">
-                            <a><i class="fa fa-calendar"></i> 2022-11-04</a>
-                        </time>
-                        <a>
-                            
-                                <i class="fa fa-tags"></i>
-                                <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
-                            
-                        </a>
-                        
-                            <!-- 当前仅支持valine/waline自带的统计功能 -->
-                            
-                        
-                        
-                            <!-- 当前仅支持waline自带的统计功能 -->
-                            
-                        
-                    </span>
-                    <span class="pull-right">
-                        <a class="read-more" href="/2022/11/04/Commons-Collections1-TransformedMap/" title="Đọc toàn bộ bài viết">Đọc toàn bộ bài viết<i class="fa fa-chevron-circle-right"></i></a>
-                    </span>
-                </footer>
-            </div>
-        </article>
-    
-
-    
-    
-        <article class="kratos-hentry clearfix" itemscope itemtype="https://schema.org/Article">
-            <div class="kratos-entry-border-new clearfix">
-                
-                <div class="kratos-entry-thumb-new">
-                    <a href="/2022/11/03/JavaDeserializationBasic/">
-                        
-                            <img class="kratos-entry-thumb-new-img" alt>
-                        
-                    </a>
-                </div>
-                <div class="kratos-post-inner-new">
-                    <header class="kratos-entry-header-new">
-                            <a class="label-link" href="/categories/Java/">Java</a> <a class="label-link" href="/categories/Java/Deserialization/">Deserialization</a>
-                        <h2 class="kratos-entry-title-new"><a href="/2022/11/03/JavaDeserializationBasic/" itemprop="mainEntityOfPage"><span itemprop="name headline">Introduction to Java Deserialization</span></a>
-                    </h2></header>
-                    <div class="kratos-entry-content-new">
-                        <p itemprop="description">
-                            
-                                Bài viết này là về những concept cơ bản của quá trình Serialization và Deserialization và cách mà lỗ hổng Java Deseri...
-                            
-                        </p>
-                    </div>
-                </div>
-                <footer class="kratos-post-meta-new">
-                    <span class="pull-left">
-                        <time datetime="2022-11-02T19:50:28.000Z" itemprop="datePublished">
-                            <a><i class="fa fa-calendar"></i> 2022-11-03</a>
-                        </time>
-                        <a>
-                            
-                                <i class="fa fa-tags"></i>
-                                <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
-                            
-                        </a>
-                        
-                            <!-- 当前仅支持valine/waline自带的统计功能 -->
-                            
-                        
-                        
-                            <!-- 当前仅支持waline自带的统计功能 -->
-                            
-                        
-                    </span>
-                    <span class="pull-right">
-                        <a class="read-more" href="/2022/11/03/JavaDeserializationBasic/" title="Đọc toàn bộ bài viết">Đọc toàn bộ bài viết<i class="fa fa-chevron-circle-right"></i></a>
-                    </span>
-                </footer>
-            </div>
-        </article>
-    
-
-
-
-
-
-    <div class="hidden">
-        <!-- 加载文章阅读对应的统计功能，评论自带的那种 -->
         
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
     </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/";
+            const title         = "「Phân tích chuỗi Commons Collections 3」";
+            const excerpt       = `Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:
 
+javassist
+ChainedTransformer
 
+`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2023-03-20T14:47:41.501Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-20</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Phân tích chuỗi Commons Collections 2" href="/2022/12/16/CommonsCollections2/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+</article>
 
         
 
@@ -483,8 +331,6 @@ ChainedTransformer
 
 <section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
     <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
-    
-        <div class="sticky-area">
     
     
                 <aside id="krw-about" class="widget widget-kratos-about clearfix">
@@ -525,6 +371,20 @@ ChainedTransformer
     </div>
 </aside>
             
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class">
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        Thư mục bài viết
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mot-vai-kien-thuc-can-nam"><span class="toc-text">Một vài kiến thức cần nắm</span></a></li></ol>
+    </div>
+</aside>
+                
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
