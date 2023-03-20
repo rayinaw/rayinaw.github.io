@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2022-11-04T11:00:38.000Z">
-<meta property="article:modified_time" content="2023-02-18T12:25:55.098Z">
+<meta property="article:modified_time" content="2023-03-20T13:13:44.406Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Deserialization">
@@ -186,7 +186,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~28.17K
+                        ~28.33K
                     
                     từ
                 </li>
@@ -197,7 +197,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1676723155098"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679318024406"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
@@ -287,7 +287,7 @@
 <li>Chúng ta chưa làm thõa mãn hai điều kiện dẫn đến hàm setValue trong AnnotationInvocationHandler.readObject.</li>
 <li>Đối tượng Runtime không thể serialize và cần được chuyển đổi thành dạng có thể serialize thông qua reflection.</li>
 </ul>
-<h3 id="Giai-quyet-van-de-Runtime-khong-the-serialize"><a href="#Giai-quyet-van-de-Runtime-khong-the-serialize" class="headerlink" title="Giải quyết vấn đề Runtime không thể serialize"></a>Giải quyết vấn đề Runtime không thể serialize</h3><p>Runtime không thể serialize nhưng Runtime.class thì có thể.</p>
+<h3 id="Giai-quyet-van-de-Runtime-khong-the-serialize"><a href="#Giai-quyet-van-de-Runtime-khong-the-serialize" class="headerlink" title="Giải quyết vấn đề Runtime không thể serialize"></a>Giải quyết vấn đề Runtime không thể serialize</h3><p>Để thõa mãn được điều kiện serialize, mọi thứ trong nó đều phải serialize được. Tuy nhiên Runtime không thể serialize được, vậy nên chúng ta cần dùng Runtime.class để lúc deser, nó sẽ tạo một đối tượng Runtime cho chúng ta.</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">runtimeClass</span> <span class="operator">=</span> Runtime.class;</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> runtimeClass.getDeclaredMethod(<span class="string">&quot;getRuntime&quot;</span>);</span><br><span class="line">        <span class="type">Runtime</span> <span class="variable">runtime</span> <span class="operator">=</span> (Runtime) method.invoke(<span class="literal">null</span>);<span class="comment">//method getRuntime() không cần tham số</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">exec</span> <span class="operator">=</span> runtimeClass.getDeclaredMethod(<span class="string">&quot;exec&quot;</span>, String.class);</span><br><span class="line">        exec.invoke(runtime, <span class="string">&quot;calc&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Thay vì invoke trực tiếp, chúng ta có thể lợi dụng lớp InvokerTransformer để invoke hàm getRuntime hay invoke method và invoke exec của lớp runtime. Mình sẽ đi từng bước cho các bạn dễ hiểu.<br>Đầu tiên là invoke method <code>getDeclaredMethod</code> để lấy ra method getRuntime.</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">runtimeClass</span> <span class="operator">=</span> Runtime.class;</span><br><span class="line">        String[] cmd = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="comment">//Tương đương với Method getRuntimeMethod = runtimeClass.getDeclaredMethod(&quot;getRuntime&quot;);</span></span><br><span class="line">        <span class="type">InvokerTransformer</span> <span class="variable">InvokerGetMethod</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InvokerTransformer</span>(<span class="string">&quot;getDeclaredMethod&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;String.class, Class[].class&#125;, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;<span class="string">&quot;getRuntime&quot;</span>, <span class="literal">null</span>&#125;);</span><br><span class="line">        <span class="type">Method</span> <span class="variable">getRuntimeMethod</span> <span class="operator">=</span> (Method) InvokerGetMethod.transform(Runtime.class);</span><br><span class="line">        <span class="comment">// Tương đương với Method method = runtimeClass.getDeclaredMethod(&quot;getRuntime&quot;);</span></span><br><span class="line">        <span class="type">Runtime</span> <span class="variable">runtime</span> <span class="operator">=</span> (Runtime) getMethod.invoke(<span class="literal">null</span>);</span><br><span class="line">        runtime.exec(<span class="string">&quot;calc&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -406,7 +406,7 @@
                     <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-02-18T12:25:55.098Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-02-18</time>
+                    <time datetime="2023-03-20T13:13:44.406Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-20</time>
                 </div>
             </div>
         </footer>
