@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2023-03-20T14:46:42.000Z">
-<meta property="article:modified_time" content="2023-03-22T12:37:34.449Z">
+<meta property="article:modified_time" content="2023-03-22T12:49:27.527Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Deserialization">
@@ -197,7 +197,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679488654449"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679489367527"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
@@ -228,8 +228,8 @@
 <li><code>_templates</code> là một instance của interface <code>Templates</code> -&gt; <code>_templates</code> có thể là những lớp implements <code>Templates</code> (VD TemplatesImpl)</li>
 <li><code>_transformer</code> là một instance của class <code>TransformerImpl</code> và ở đây nó có thực thi <code>_transformer = (TransformerImpl) templates.newTransformer();</code> -&gt; Tìm class tạo ra TrAXFilter để nó thực thi hàm tạo.</li>
 </ul>
-<h3 id="InstaniateTransformer"><a href="#InstaniateTransformer" class="headerlink" title="InstaniateTransformer"></a>InstaniateTransformer</h3><p>Theo chain này, chúng ta sẽ dùng lớp <code>InstaniateTransformer</code> để tạo <code>TrAXFilter</code> ở hàm transform.</p>
-<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2023/03/20/CommonsCollections3/InstaniateTransformerTransform.png"></p>
+<h3 id="InstaniateTransformer"><a href="#InstaniateTransformer" class="headerlink" title="InstaniateTransformer"></a>InstaniateTransformer</h3><p>Theo chain này, chúng ta sẽ dùng lớp <code>InstantiateTransformer</code> để tạo <code>TrAXFilter</code> ở hàm transform.</p>
+<p><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2023/03/20/CommonsCollections3/InstantiateTransformerTransform.png"></p>
 <p>Ở đây thì cũng khá dễ hiểu, trước tiên nó check Object mình truyền vào có phải là instance Class hay không, vậy thì chúng ta phải truyền Object loại khác với Class.</p>
 <p>Tiếp theo hàm này sử dụng reflection để tạo instance của một lớp nào đó. Mình sẽ phân tích rõ như sau:</p>
 <ul>
@@ -359,7 +359,7 @@
                     <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-03-22T12:37:34.449Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-22</time>
+                    <time datetime="2023-03-22T12:49:27.527Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-22</time>
                 </div>
             </div>
         </footer>
