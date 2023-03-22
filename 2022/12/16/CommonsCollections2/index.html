@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2022-12-16T03:05:45.000Z">
-<meta property="article:modified_time" content="2023-03-21T05:32:52.261Z">
+<meta property="article:modified_time" content="2023-03-22T11:55:01.899Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Deserialization">
@@ -186,7 +186,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~40.21K
+                        ~40.42K
                     
                     từ
                 </li>
@@ -197,7 +197,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679376772261"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1679486101899"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
@@ -209,12 +209,12 @@
             <hr>
             <div itemprop="articleBody"><h2 id="Mot-vai-kien-thuc-can-nam"><a href="#Mot-vai-kien-thuc-can-nam" class="headerlink" title="Một vài kiến thức cần nắm"></a>Một vài kiến thức cần nắm</h2><p>Trước khi vào bài viết chúng ta cần nắm một số kiến thức sau:</p>
 <ul>
-<li>javassist</li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://self-learning-java-tutorial.blogspot.com/2020/04/javassist-tutorial.html">javassist</a></li>
 <li>ChainedTransformer</li>
 </ul>
 <h2 id="Moi-truong"><a href="#Moi-truong" class="headerlink" title="Môi trường"></a>Môi trường</h2><ul>
 <li>JDK8u65</li>
-<li>Commons-Collections 4.0<br>Thêm Commons-Collections 4.0 vào project bằng dependencies:<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-collections4<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>Commons-Collections 4.0<br>Thêm Commons-Collections 4.0 vào project bằng dependencies:<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-collections4<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.javassist<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javassist<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.25.0-GA<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="Phan-tich"><a href="#Phan-tich" class="headerlink" title="Phân tích"></a>Phân tích</h2><p>Sơ đồ tóm tắt chuỗi.<br><img src="https://raw.githubusercontent.com/rayinaw/rayinaw.github.io/main/2022/11/04/Commons-Collections1-TransformedMap/mindmap.png"></p>
 <p>Từ TemplateImpl đến OS Command</p>
@@ -247,7 +247,7 @@
 <p>Nó thực hiện _class[_transletIndex].newInstance(). Điểm hay là ở chổ này, khi một class được khởi tạo (<code>Class.newInstance()</code>) thì nó sẽ tự động thực thi constructor hoặc hàm static. </p>
 <p>Cái này thuộc về kiến thức OOP, mình sẽ nói kĩ hơn như sau:</p>
 <ul>
-<li>Khi tạo một instance của Class bằng phương thức newInstance, nó sẽ bao gồm hai bước:<br>  Load class: Khi một class được load lên bộ nhớ, các block static sẽ được thực thi. Các bạn chỉ cần hiểu vậy là đủ, còn nếu muốn hiểu sâu hơn thì tìm hiểu về ClassLoader (tốn thời gian lắm nhé!).<br>  Tạo object: Sau khi class được load lên, constructor sẽ đưuọc thực thi để khởi tạo một đối tượng.</li>
+<li>Khi tạo một instance của Class bằng phương thức newInstance, nó sẽ bao gồm hai bước:<br>  Load class: Khi một class được load lên bộ nhớ, các block static sẽ được thực thi. Các bạn chỉ cần hiểu vậy là đủ, còn nếu muốn hiểu sâu hơn thì tìm hiểu về ClassLoader (tốn thời gian lắm nhé!).<br>  Tạo object: Sau khi class được load lên, constructor sẽ được thực thi để khởi tạo một đối tượng.</li>
 </ul>
 <p>Ví dụ:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"><span class="keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;</span><br><span class="line"><span class="keyword">import</span> javassist.*;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.net.URLClassLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">ctClass</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        ctClass.makeClassInitializer().setBody(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;calc.exe\&quot;);&quot;</span>);</span><br><span class="line">        ctClass.writeFile(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);<span class="comment">//Viết class Test xuống thư mục này</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/Users/rayin_awarf/Desktop&quot;</span>);</span><br><span class="line">        URL[] cp = &#123;f.toURI().toURL()&#125;;</span><br><span class="line">        <span class="type">URLClassLoader</span> <span class="variable">urlcl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URLClassLoader</span>(cp);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> urlcl.loadClass(<span class="string">&quot;Test&quot;</span>);</span><br><span class="line">        <span class="comment">//Đoạn trên là lấy class Test ra, không quan trọng lắm. Nếu các bạn có cách hay hơn thì có thể sử dụng.</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> clazz.newInstance();</span><br><span class="line">        <span class="comment">//Sau khi thực hiện newInstance() calc.exe đã được thực thi.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -421,7 +421,7 @@ ChainedTransformer
                     <a class="tag-none-link" href="/tags/Commons-Collections/" rel="tag">Commons Collections</a>, <a class="tag-none-link" href="/tags/Deserialization/" rel="tag">Deserialization</a>, <a class="tag-none-link" href="/tags/Java/" rel="tag">Java</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-03-21T05:32:52.261Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-21</time>
+                    <time datetime="2023-03-22T11:55:01.899Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-03-22</time>
                 </div>
             </div>
         </footer>
@@ -433,6 +433,10 @@ ChainedTransformer
                 <a title=" Phân tích chuỗi Commons Collections 1 với LazyMap" href="/2022/12/15/CommonsCollections1-LazyMap/">&lt; Bài đăng cũ hơn</a>
             </div>
             
+            
+            <div class="nav-next clearfix">
+                <a title=" Phân tích chuỗi Commons Collections 3" href="/2023/03/20/CommonsCollections3-md/">Bài đăng mới hơn &gt;</a>
+            </div>
             
         </nav>
     
@@ -468,7 +472,7 @@ ChainedTransformer
                 Bài đăng
             </span>
             <span class="count">
-                8
+                9
             </span>
         </a>
         <a class="meta-item" href="/categories/">
@@ -507,7 +511,7 @@ ChainedTransformer
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
   </aside>
 
 
@@ -527,6 +531,12 @@ ChainedTransformer
   <div class="tab-content">
       <ul class="list-group">
         
+        
+          
+          
+            <a class="list-group-item" href="/2023/03/20/CommonsCollections3-md/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 3</a>
+            
+          
         
           
           
@@ -553,11 +563,7 @@ ChainedTransformer
           
         
           
-          
-            <a class="list-group-item" href="/2022/11/27/sqli-mysql8/"><i class="fa  fa-book"></i> Tính năng mới của Mysql 8</a>
             
-          
-        
           
             
           
