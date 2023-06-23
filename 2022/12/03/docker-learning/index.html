@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2022-12-02T18:13:09.000Z">
-<meta property="article:modified_time" content="2023-06-23T12:38:30.148Z">
+<meta property="article:modified_time" content="2023-06-23T12:50:06.482Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary">
@@ -184,7 +184,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~18.18K
+                        ~18.45K
                     
                     từ
                 </li>
@@ -195,7 +195,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1687523910148"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1687524606482"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
@@ -334,16 +334,26 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
 <li>version: chỉ ra phiên bản docker-compose đã sử dụng.</li>
 <li>services: thiết lập các services(containers) muốn cài đặt và chạy.</li>
 <li>image: chỉ ra image được sử dụng trong lúc tạo ra container.</li>
-<li>build: dùng để tạo container.</li>
+<li>build: định nghĩa một môi trường xây dựng (build context) cho Docker image và các tham số liên quan đến quá trình xây dựng. Các trường con:<ul>
+<li>Nếu muốn chỉ rõ, ta có thể sử dụng đến trường con <code>context</code></li>
+<li>dockerfile: Xác định đường dẫn đến Dockerfile trong build context</li>
+</ul>
+</li>
 <li>ports: thiết lập ports chạy tại máy host và trong container.</li>
 <li>restart: tự động khởi chạy khi container bị tắt.</li>
 <li>environment: thiết lập biến môi trường ( thường sử dụng trong lúc config các thông số của db).</li>
 <li>depends_on: chỉ ra sự phụ thuộc. Tức là services nào phải được cài đặt và chạy trước thì service được config tại đó mới được chạy.</li>
 <li>volumes: dùng để mount hai thư mục trên host và container với nhau.</li>
 </ul>
-<p>Cũng như ví dụ ở trên, thay vì chúng ta pull, build image rồi khởi chạy rườm rà. Chúng ta có thể viết một <code>docker compose</code> rồi khởi chạy chỉ với một câu lệnh <code>docker-compose up</code>. Docker compose file cần tuân thủ nghiêm ngặt thụt lề, mỗi lần thụt là 2 khoảng trắng.<br>File name: docker-compose.yml, nó phải nằm chung thư mục với Dockerfile.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">dockerapp:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:3.2.0</span></span><br></pre></td></tr></table></figure>
-<p>Khởi chạy gõ <code>docker-compose up</code> hoặc thêm cờ -d <code>docker-compose up -d</code> để treo trong container.<br>Docker compose sẽ không build lại image nếu image đó đã tồn tại, vì vậy khi ta thay đổi một vài lệnh trong Dockerfile docker-compose vẫn lấy image cũ để thao tác. Để build lại một image mới, chúng ta cần sử dụng lệnh <code>docker-compose build</code>.</p>
+<p>Cũng như ví dụ ở trên, thay vì chúng ta pull, build image rồi khởi chạy rườm rà. Chúng ta có thể viết một <code>docker compose</code> rồi khởi chạy chỉ với một câu lệnh <code>docker-compose up</code>. </p>
+<p>Docker compose file cần tuân thủ nghiêm ngặt thụt lề, mỗi lần thụt là 2 khoảng trắng.</p>
+<p>File name: docker-compose.yml</p>
+<ul>
+<li>Dockerfile phải đặt chung với context của trường build (ở đây là <code>.</code>)<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">dockerapp:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:3.2.0</span></span><br></pre></td></tr></table></figure>
+Khởi chạy gõ <code>docker-compose up</code> hoặc thêm cờ -d <code>docker-compose up -d</code> để treo trong container.</li>
+</ul>
+<p>Docker compose sẽ không build lại image nếu image đó đã tồn tại, vì vậy khi ta thay đổi một vài lệnh trong Dockerfile docker-compose vẫn lấy image cũ để thao tác. </p>
+<p>Để build lại một image mới, chúng ta cần sử dụng lệnh <code>docker-compose build</code>.</p>
 </div>
         </div>
         
@@ -429,7 +439,7 @@ Bây giờ truy cập vào folder chứa Dockerfile rồi gõ lệnh <code>docke
                     <a class="tag-none-link" href="/tags/Docker/" rel="tag">Docker</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-06-23T12:38:30.148Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-06-23</time>
+                    <time datetime="2023-06-23T12:50:06.482Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-06-23</time>
                 </div>
             </div>
         </footer>
