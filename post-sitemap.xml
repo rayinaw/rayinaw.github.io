@@ -9,6 +9,30 @@
 
 
     <url>
+        <loc>https://rayinaw.github.io/2022/12/03/docker-learning/</loc>
+        <lastmod>2023-06-23T12:38:30.148Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://rayinaw.github.io/2023/04/25/javascript-learning-journey/</loc>
+        <lastmod>2023-04-25T18:08:17.656Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://rayinaw.github.io/2023/04/24/pickle-learning/</loc>
+        <lastmod>2023-04-25T12:11:52.520Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://rayinaw.github.io/2023/04/15/nginx-learning/</loc>
         <lastmod>2023-04-15T11:27:53.350Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -59,14 +83,6 @@
     <url>
         <loc>https://rayinaw.github.io/2022/11/02/Java-reflection/</loc>
         <lastmod>2022-12-15T10:12:23.884Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://rayinaw.github.io/2022/12/03/docker-learning/</loc>
-        <lastmod>2022-12-05T10:06:31.773Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
