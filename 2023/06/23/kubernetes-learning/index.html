@@ -17,16 +17,16 @@
   
     <meta name="keywords" content="DevOps, Docker">
   
-  <meta name="description" content="Kubernetes learningKubernetes là một nền tảng cho cloud hỗ trợ quản lý các container. Ta có thể xem nó như là “Docker của cloud” trong một vài trường hợp. Kubernetes Architecture Kubernetes là một hệ">
+  <meta name="description" content="Kubernetes learningDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.  Trong mô hình Virtual Machine, mỗi VM đều có hệ điều hành riêng (guest OS) và một bản sao">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes learning">
 <meta property="og:url" content="https://rayinaw.github.io/2023/06/23/kubernetes-learning/index.html">
 <meta property="og:site_name" content="Rayinaw">
-<meta property="og:description" content="Kubernetes learningKubernetes là một nền tảng cho cloud hỗ trợ quản lý các container. Ta có thể xem nó như là “Docker của cloud” trong một vài trường hợp. Kubernetes Architecture Kubernetes là một hệ">
+<meta property="og:description" content="Kubernetes learningDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.  Trong mô hình Virtual Machine, mỗi VM đều có hệ điều hành riêng (guest OS) và một bản sao">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2023-06-23T14:53:41.000Z">
-<meta property="article:modified_time" content="2023-06-24T12:00:30.984Z">
+<meta property="article:modified_time" content="2023-10-09T15:02:18.780Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="DevOps">
@@ -185,7 +185,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~1.84K
+                        ~9.40K
                     
                     từ
                 </li>
@@ -196,21 +196,23 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1687608030984"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1696863738780"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
             
             <hr>
-            <div itemprop="articleBody"><h1 id="Kubernetes-learning"><a href="#Kubernetes-learning" class="headerlink" title="Kubernetes learning"></a>Kubernetes learning</h1><p>Kubernetes là một nền tảng cho cloud hỗ trợ quản lý các container. Ta có thể xem nó như là “Docker của cloud” trong một vài trường hợp.</p>
-<h2 id="Kubernetes-Architecture"><a href="#Kubernetes-Architecture" class="headerlink" title="Kubernetes Architecture"></a>Kubernetes Architecture</h2><p><img src="https://devopscube.com/wp-content/uploads/2022/12/k8s-architecture.drawio-1.png"></p>
-<p>Kubernetes là một hệ thống phân tán (distributed system). </p>
-<p>Một cụm Kubernetes (Kubernetes cluster) bao gồm <code>control plane nodes</code> (hay còn gọi là Master nodes quản lý Cluster) và <code>worker nodes</code>.</p>
-<p><img src="https://private-user-images.githubusercontent.com/108481122/248451861-16b8b4af-5bf7-4d89-af00-6e61fa7b51cb.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrZXkxIiwiZXhwIjoxNjg3NTkzNDgyLCJuYmYiOjE2ODc1OTMxODIsInBhdGgiOiIvMTA4NDgxMTIyLzI0ODQ1MTg2MS0xNmI4YjRhZi01YmY3LTRkODktYWYwMC02ZTYxZmE3YjUxY2IucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDYyNCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA2MjRUMDc1MzAyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9YmNmMmQ5Yjg2YjE1ZGM0ZWIwNjhlMDEzYzA1NDdlNWI3M2JmYjc1NWM3ZGUyNTJjZGRmMGVkMDY1OWFmNjQyOSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.NlVg2XY9hN-Pu6K3-B_U_l0DbVTxAc0F_gRWcQFC-2Y"></p>
+            <div itemprop="articleBody"><h1 id="Kubernetes-learning"><a href="#Kubernetes-learning" class="headerlink" title="Kubernetes learning"></a>Kubernetes learning</h1><h2 id="Docker-va-container"><a href="#Docker-va-container" class="headerlink" title="Docker và container"></a>Docker và container</h2><p>Trước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.</p>
+<p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/7bca59e8-7f49-4e8f-8bcc-ba53ff4685e5" alt="image"></p>
+<p>Trong mô hình <code>Virtual Machine</code>, mỗi VM đều có hệ điều hành riêng (guest OS) và một bản sao của kernel của hệ điều hành đó. Khi bạn khởi động một VM, nó sẽ khởi động guest OS, và sau đó các ứng dụng và dịch vụ chạy trên guest OS này. Mỗi VM hoạt động như một máy tính ảo hoàn chỉnh với hệ điều hành độc lập.</p>
+<p>Khác với VM, Containers là một công nghệ ảo hóa mức ứng dụng, nó không cần Guest OS mà trực tiếp chia sẻ với nhau Host OS thông qua Docker Engine.</p>
+<p>Kubernetes là một nền tảng cho cloud hỗ trợ quản lý các container. Ta có thể xem nó như là “Docker của cloud” trong một vài trường hợp.</p>
+<h2 id="Kubernetes-Architecture"><a href="#Kubernetes-Architecture" class="headerlink" title="Kubernetes Architecture"></a>Kubernetes Architecture</h2><p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/cf8b1b7a-270d-419a-ba65-230f8b7a0930" alt="image"></p>
+<h3 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h3><p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/20b5fed6-7a95-4690-ab12-07d899b34ab8" alt="image"></p>
+<p>Cluster (cụm) là một nhóm các Node (là các máy ảo), trên Cluster sẽ có môi trường Kubernetes.</p>
+<p>Một cụm Kubernetes (Kubernetes cluster) bao gồm <code>control plane nodes</code> (hay còn gọi là Master nodes quản lý Cluster) và các <code>worker nodes</code>.</p>
 <p>Master chịu trách nhiệm quản lý cụm và master điều phối tất cả các hoạt động trong cụm.</p>
 <p>Mỗi <code>worker node</code> xem như một máy riêng và có một <code>kubelet</code>, là proxy quản lý node và giao tiếp với <code>Kubernetes Master node</code>.</p>
-<p><img src="https://private-user-images.githubusercontent.com/108481122/248451727-dd1c78ad-5135-43b8-ab02-c858ad67bc22.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrZXkxIiwiZXhwIjoxNjg3NTkzNDUwLCJuYmYiOjE2ODc1OTMxNTAsInBhdGgiOiIvMTA4NDgxMTIyLzI0ODQ1MTcyNy1kZDFjNzhhZC01MTM1LTQzYjgtYWIwMi1jODU4YWQ2N2JjMjIucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDYyNCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA2MjRUMDc1MjMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9Y2Y0Yjg5N2UyNGRkZmU0Y2UwYjNkZWJkMjBiZTQxYzRjNGY0Y2JmYjI0ZjJkMGNmZjE0OGFkMjE4ODZhZWJhNyZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.pRxkhEnNR8CdJq4R_FsWYpKWeBi0gHT6IHmZc8utwL0"></p>
-<p><img src="https://private-user-images.githubusercontent.com/108481122/248451829-90e61388-41b4-475b-b947-a0189bc66481.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrZXkxIiwiZXhwIjoxNjg3NTkzNDgyLCJuYmYiOjE2ODc1OTMxODIsInBhdGgiOiIvMTA4NDgxMTIyLzI0ODQ1MTgyOS05MGU2MTM4OC00MWI0LTQ3NWItYjk0Ny1hMDE4OWJjNjY0ODEucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDYyNCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA2MjRUMDc1MzAyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MWE4YWY3ZGE2ODE0ODE5MWUwODg3Y2Y1ZTM4YmRhMWQ2ZDMzYjdiNDlkYWQyOWIwZjBlOTgwNTVkMzgwYzc5OSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.ZZG3g9F6sxcX6FfskKXboWU_AhKg8C-Qfbr1SPKwYvs"></p>
 <h3 id="Control-Plane"><a href="#Control-Plane" class="headerlink" title="Control Plane"></a>Control Plane</h3><p>Control plane chịu trách nhiệm điều phối vùng chứa và duy trì trạng thái của Cluster. Control plane bao gồm những thành phần sau:</p>
 <ol>
 <li>kube-apiserver</li>
@@ -225,14 +227,106 @@
 <li>kube-proxy</li>
 <li>Container runtime</li>
 </ol>
-<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><h2 id="Kubernetes-Control-Plane-Components"><a href="#Kubernetes-Control-Plane-Components" class="headerlink" title="Kubernetes Control Plane Components"></a>Kubernetes Control Plane Components</h2><h2 id="Tao-mot-ung-dung-don-gian-voi-kuberctl"><a href="#Tao-mot-ung-dung-don-gian-voi-kuberctl" class="headerlink" title="Tạo một ứng dụng đơn giản với kuberctl"></a>Tạo một ứng dụng đơn giản với kuberctl</h2><h3 id="Tao-mot-AKS-Cluster-voi-Azure-cloud-service"><a href="#Tao-mot-AKS-Cluster-voi-Azure-cloud-service" class="headerlink" title="Tạo một AKS Cluster với Azure cloud service"></a>Tạo một AKS Cluster với Azure cloud service</h3><p>Đầu tiên vào <code>https://portal.azure.com/</code> chọn loại Kubernetes service để tạo một AKS Cluster mới. Xem hướng dẫn thêm ở <a target="_blank" rel="external nofollow noopener noreferrer" href="https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli">đây</a>.</p>
+<h3 id="Pods"><a href="#Pods" class="headerlink" title="Pods"></a>Pods</h3><p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/bdab1003-34f4-4964-b285-4c33e604d43c" alt="image"></p>
+<p>Trong Docker, các container là đơn vị nhỏ nhất để triển khai. Tuy nhiên, Kubernetes đưa ra một đơn vị mới là Pod làm đơn vị nhỏ nhất. </p>
+<p>Pod là một tập hợp các containers, chúng chia sẻ một không gian mạng và bộ nhớ. Điều này giúp dễ quản lý các containers hơn.</p>
+<p>Mỗi Pod sẽ có một địa chỉ ip riêng.</p>
+<p>Ví dụ một Pod sẽ bao gồm 2 containers:</p>
+<ul>
+<li>Một server nginx chạy trên port 80</li>
+<li>Một server backend nodejs chạy trên port 3000</li>
+</ul>
+<p>Pod sẽ được mô tả bằng một tệp YAML, và khi triển khai lên Kubernetes, nó sẽ tạo ra một Pod ví dụ như sau:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-app</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">backend</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">web-backend-image:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+<p>Đặt tên file trên và chạy lệnh <code>kubectl apply -f your-file.yaml</code> là ta có thể triển khai một Pod trên kubernetes.</p>
+<h3 id><a href="#" class="headerlink" title></a></h3><h2 id="Kubernetes-Control-Plane-Components"><a href="#Kubernetes-Control-Plane-Components" class="headerlink" title="Kubernetes Control Plane Components"></a>Kubernetes Control Plane Components</h2><h2 id="Tao-mot-ung-dung-don-gian-voi-kuberctl"><a href="#Tao-mot-ung-dung-don-gian-voi-kuberctl" class="headerlink" title="Tạo một ứng dụng đơn giản với kuberctl"></a>Tạo một ứng dụng đơn giản với kuberctl</h2><h3 id="Tao-mot-AKS-Cluster-voi-Azure-cloud-service"><a href="#Tao-mot-AKS-Cluster-voi-Azure-cloud-service" class="headerlink" title="Tạo một AKS Cluster với Azure cloud service"></a>Tạo một AKS Cluster với Azure cloud service</h3><p>Đầu tiên vào <code>https://portal.azure.com/</code> chọn loại Kubernetes service để tạo một AKS Cluster mới. Xem hướng dẫn thêm ở <a target="_blank" rel="external nofollow noopener noreferrer" href="https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli">đây</a>.</p>
 <h3 id="Ket-noi-den-Cluster"><a href="#Ket-noi-den-Cluster" class="headerlink" title="Kết nối đến Cluster"></a>Kết nối đến Cluster</h3><p>Đầu tiên ta cần config <code>kubectl</code> kết nối đến <code>Kubernetes cluster</code>:</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">az aks <span class="built_in">get-credentials</span> <span class="literal">--resource-group</span> &lt;<span class="built_in">group-name</span>&gt; <span class="literal">--name</span> &lt;Cluster<span class="literal">-name</span>&gt;</span><br></pre></td></tr></table></figure>
 <p>Sau khi chạy lệnh xong, ta sẽ nhận được kết quả: <code>Merged &quot;AKSCluster&quot; as current context in /home/azureuser/.kube/config</code></p>
 <p>Chạy lệnh <code>kubectl get nodes</code> để xem trạng thái Cluster.</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line">NAME                                STATUS   ROLES   AGE     VERSION</span><br><span class="line">aks<span class="literal">-agentpool-75533554-vmss000000</span>   Ready    agent   <span class="number">2</span>m29s   v1.<span class="number">25.6</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="Cau-lenh-co-ban"><a href="#Cau-lenh-co-ban" class="headerlink" title="Câu lệnh cơ bản"></a>Câu lệnh cơ bản</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kuberctl create deployment &lt;name&gt; --image=&lt;name&gt;</span><br><span class="line">kubectl expose deployment &lt;name&gt; --<span class="built_in">type</span>=&lt;<span class="built_in">type</span>&gt; --port=8080</span><br></pre></td></tr></table></figure></div>
+<p>Vậy là Azure đã bắt đầu tính phí rồi :D, sử dụng xong nhớ xóa cluster vừa tạo nhé.</p>
+<h2 id="Kubernetes-YAML-File"><a href="#Kubernetes-YAML-File" class="headerlink" title="Kubernetes YAML File"></a>Kubernetes YAML File</h2><p>Mọi Configuration file trong <code>Kubernetes</code> gồm 3 phần:</p>
+<ul>
+<li><code>Header</code>: gồm hai trường như sau:<ul>
+<li><code>apiVersion</code>: Xác định phiên bản API của <code>Kubernetes</code>, thường là <code>v1</code>.</li>
+<li><code>kind</code>: Xác định loại đối tượng mà file YAML định nghĩa.  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span> <span class="comment"># </span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span> <span class="comment"># </span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span> <span class="comment"># đại diện cho một nhóm các container chạy trên cùng một node.</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><code>metadata</code>: chứa thông tin mô tả về dữ liệu, tài nguyên. Bao gồm các trường sau:<ul>
+<li><code>name</code>: Tên của app</li>
+<li><code>labels</code>:</li>
+</ul>
+</li>
+<li><code>specification</code>:</li>
+</ul>
+<h3 id="Kind-Deployment-Service-Pod-la-gi"><a href="#Kind-Deployment-Service-Pod-la-gi" class="headerlink" title="Kind Deployment, Service, Pod là gì?"></a>Kind Deployment, Service, Pod là gì?</h3><h4 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h4><p>Thường ta sử dụng <code>kind: Pod</code> với những ứng dụng đơn lẻ, tác vụ đơn giản như nginx, Redis, các container ghi log,…</p>
+<p>Ví dụ: Tạo file name <code>&lt;name&gt;.yaml</code> ví dụ <code>pod.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-app-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-app-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+<p>Khởi chạy:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS /home/azureuser/test&gt; kubectl apply -f pod.yaml</span><br><span class="line">pod/my-app-pod created</span><br><span class="line">PS /home/azureuser/test&gt; kubectl get pods</span><br><span class="line">NAME         READY   STATUS    RESTARTS   AGE</span><br><span class="line">my-app-pod   1/1     Running   0          2m5s</span><br><span class="line">PS /home/azureuser/test&gt; kubectl describe pod my-app-pod</span><br><span class="line"><span class="comment"># Thông tin pod</span></span><br></pre></td></tr></table></figure>
+<p>Tương tác với container trong pod:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PS /home/azureuser/test&gt; kubectl <span class="built_in">exec</span> my-app-pod -c my-app-container -- nginx -v</span><br><span class="line">nginx version: nginx/1.25.1</span><br><span class="line"><span class="comment"># Kết quả trả về có nghĩa nginx container của ta đang chạy trong pod</span></span><br><span class="line"><span class="comment"># Hoặc tương tự ta có thể sử dụng Pseudo-TTY như docker</span></span><br><span class="line">PS /home/azureuser/test&gt; kubectl <span class="built_in">exec</span> -it my-app-pod -c my-app-container -- /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p><code>kubectl exec -h</code> để xem thêm những câu lệnh khác.</p>
+<p>Xóa pod: <code>PS /home/azureuser/test&gt; kubectl delete pod my-app-pod</code></p>
+<h4 id="Pod-template"><a href="#Pod-template" class="headerlink" title="Pod template"></a>Pod template</h4><p>Ở trên là ta chỉ build riêng pod. Nhưng với một số <code>Kind</code> khác như <code>Deployment</code>, <code>Job</code>, <code>DaemonSet</code> thì để setting cho pod, ta phải định nghĩa thêm Pod template.</p>
+<p>Ví dụ:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">batch/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Job</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">hello</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="comment"># This is the pod template</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">hello</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">busybox:1.28</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;echo &quot;Hello, Kubernetes!&quot; &amp;&amp; sleep 3600&#x27;</span>]</span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">OnFailure</span></span><br><span class="line">    <span class="comment"># The pod template ends here</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PS /home/azureuser/test&gt; kubectl get <span class="built_in">jobs</span></span><br><span class="line">NAME    COMPLETIONS   DURATION   AGE</span><br><span class="line">hello   0/1           13s        13s</span><br><span class="line">PS /home/azureuser/test&gt; kubectl get pods</span><br><span class="line">NAME          READY   STATUS    RESTARTS   AGE</span><br><span class="line">hello-rh9xw   1/1     Running   0          30s</span><br><span class="line">my-app-pod    1/1     Running   0          129m</span><br><span class="line">PS /home/azureuser/test&gt; kubectl <span class="built_in">exec</span> hello-rh9xw -c hello -- <span class="built_in">echo</span> <span class="string">&quot;hello&quot;</span></span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>Xóa jobs: <code>PS /home/azureuser/test&gt; kubectl delete job hello</code></p>
+<h4 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h4><p>Deployment là một tài nguyên trong Kubernetes để quản lý và duy trì một nhóm các Pod .</p>
+<p>Với <code>kind: Pod</code> thì ta chỉ có thể chạy riêng lẻ từng ứng dụng. Nhưng nếu ta muốn tạo nhiều bản sao của Pod và đảm bảo duy trì các Pod, <code>kind: Deployment</code> sẽ giúp ta điều đó.</p>
+<p>Số pod sẽ được định nghĩa ở trường <code>replicas</code> của <code>Deployment</code>.</p>
+<p>Khi tạo một <code>Deployment</code>, bạn chỉ cần xác định mẫu <code>Pod</code> (Pod template) và các nhãn (labels) để <code>Deployment</code> theo dõi. <code>Deployment</code> sẽ sử dụng mẫu <code>Pod</code> để tạo và duy trì các bản sao của Pod.</p>
+<p>Nếu một <code>Pod</code> không phản hồi, <code>Deployment</code> sẽ thay thế nó để đảm bảo số lượng <code>Pod</code>. Cũng như nếu vượt quá thì nó sẽ giảm số Pod.</p>
+<blockquote>
+<p>Lưu ý:<br>Nếu container bị lỗi, Pod vẫn được coi là hoạt động bình thường và không có thay đổi trong Deployment.</p>
+</blockquote>
+<p>Một ví dụ đơn giản:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-app-deployment</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">my-app</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">my-app</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-app-container</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">          <span class="attr">ports:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> /home/azureuser/test&gt;kubectl apply <span class="operator">-f</span> nginx<span class="literal">-deployment</span>.yaml</span><br><span class="line"><span class="built_in">PS</span> /home/azureuser/test&gt; kubectl get deployments</span><br><span class="line">NAME                READY   UP<span class="literal">-TO-DATE</span>   AVAILABLE   AGE</span><br><span class="line">my<span class="literal">-app-deployment</span>   <span class="number">3</span>/<span class="number">3</span>     <span class="number">3</span>            <span class="number">3</span>           <span class="number">17</span>s</span><br><span class="line"><span class="built_in">PS</span> /home/azureuser/test&gt; kubectl get pods</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">hello<span class="literal">-rh9xw</span>                         <span class="number">1</span>/<span class="number">1</span>     Running   <span class="number">0</span>          <span class="number">26</span>m</span><br><span class="line">my<span class="literal">-app-deployment-dc547ddd7-bxbhz</span>   <span class="number">1</span>/<span class="number">1</span>     Running   <span class="number">0</span>          <span class="number">23</span>s</span><br><span class="line">my<span class="literal">-app-deployment-dc547ddd7-cvrjx</span>   <span class="number">1</span>/<span class="number">1</span>     Running   <span class="number">0</span>          <span class="number">23</span>s</span><br><span class="line">my<span class="literal">-app-deployment-dc547ddd7-z9vtz</span>   <span class="number">1</span>/<span class="number">1</span>     Running   <span class="number">0</span>          <span class="number">23</span>s</span><br><span class="line">my<span class="literal">-app-pod</span>                          <span class="number">1</span>/<span class="number">1</span>     Running   <span class="number">0</span>          <span class="number">155</span>m</span><br></pre></td></tr></table></figure>
+
+<p><code>my-app-deployment</code> đã được đưa lên Deployment, và nó tạo ra 3 pods khác nhau. Tuy nhiên các pods vẫn chưa <code>READY</code>.</p>
+<p>Xem trạng thái của Deployment: <code>kubectl rollout status deployment/my-app-deployment</code></p>
+<p>Bây giờ ta thử xóa một pod để xem Deployment làm gì:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS /home/azureuser/test&gt; kubectl delete pod my-app-deployment-dc547ddd7-bxbhz --grace-period=0 --force</span><br><span class="line">Warning: Immediate deletion does not <span class="built_in">wait</span> <span class="keyword">for</span> confirmation that the running resource has been terminated. The resource may <span class="built_in">continue</span> to run on the cluster indefinitely.</span><br><span class="line">pod <span class="string">&quot;my-app-deployment-dc547ddd7-bxbhz&quot;</span> force deleted</span><br><span class="line">PS /home/azureuser/test&gt; kubectl get pods</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">my-app-deployment-dc547ddd7-bjblw   1/1     Running   0          10s</span><br><span class="line">my-app-deployment-dc547ddd7-cvrjx   1/1     Running   0          7m22s</span><br><span class="line">my-app-deployment-dc547ddd7-z9vtz   1/1     Running   0          7m22s</span><br></pre></td></tr></table></figure>
+<p>Như kết quả ở trên, Deployment đã phát hiện pod bị xóa và ngay lập tức tái tạo lại pod.</p>
+<p>Để xóa Deployment vừa tạo, ta dùng lệnh:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete deployment my-app-deployment</span><br></pre></td></tr></table></figure>
+
+<p>Kiểm tra Pod đang sử dụng:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods</span><br><span class="line">kubectl describe pod &lt;name-pod&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="Cau-lenh-co-ban"><a href="#Cau-lenh-co-ban" class="headerlink" title="Câu lệnh cơ bản"></a>Câu lệnh cơ bản</h2><p>Environment variable:<br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container">https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kuberctl create deployment &lt;name&gt; --image=&lt;name&gt;</span><br><span class="line">kubectl expose deployment &lt;name&gt; --<span class="built_in">type</span>=&lt;<span class="built_in">type</span>&gt; --port=8080</span><br></pre></td></tr></table></figure>
+
+<p>Tham khảo:</p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.freecodecamp.org/news/learn-kubernetes-in-under-3-hours-a-detailed-guide-to-orchestrating-containers-114ff420e882/">https://www.freecodecamp.org/news/learn-kubernetes-in-under-3-hours-a-detailed-guide-to-orchestrating-containers-114ff420e882/</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.qikqiak.com/k8s-book/">https://www.qikqiak.com/k8s-book/</a></li>
+</ul>
+</div>
         </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -295,7 +389,9 @@
             const twitterBase   = "https://twitter.com/intent/tweet?";
             const hostUrl       = "https://rayinaw.github.io/2023/06/23/kubernetes-learning/";
             const title         = "「Kubernetes learning」";
-            const excerpt       = `Kubernetes learningKubernetes là một nền tảng cho cloud hỗ trợ quản lý các container. Ta có thể xem nó như là “Docker...`;
+            const excerpt       = `Kubernetes learningDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.
+
+Trong ...`;
             let _URL;
             switch (dest) {
                 case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
@@ -317,7 +413,7 @@
                     <a class="tag-none-link" href="/tags/DevOps/" rel="tag">DevOps</a>, <a class="tag-none-link" href="/tags/Docker/" rel="tag">Docker</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-06-24T12:00:30.984Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-06-24</time>
+                    <time datetime="2023-10-09T15:02:18.780Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-10-09</time>
                 </div>
             </div>
         </footer>
@@ -329,6 +425,10 @@
                 <a title=" Nginx Learning Journey" href="/2023/04/15/nginx-learning/">&lt; Bài đăng cũ hơn</a>
             </div>
             
+            
+            <div class="nav-next clearfix">
+                <a title=" gobuffalo-soda-cli" href="/2023/07/17/gobuffalo-soda-cli/">Bài đăng mới hơn &gt;</a>
+            </div>
             
         </nav>
     
@@ -364,7 +464,7 @@
                 Bài đăng
             </span>
             <span class="count">
-                11
+                13
             </span>
         </a>
         <a class="meta-item" href="/categories/">
@@ -372,7 +472,7 @@
                 Thể loại
             </span>
             <span class="count">
-                10
+                12
             </span>
         </a>
         <a class="meta-item" href="/tags/">
@@ -380,7 +480,7 @@
                 Thẻ
             </span>
             <span class="count">
-                11
+                13
             </span>
         </a>
     </div>
@@ -391,7 +491,7 @@
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/">Nginx</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/">Nginx</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/LFI/">LFI</a><span class="category-list-count">1</span></li></ul></li></ul>
   </aside>
 
 
@@ -400,7 +500,7 @@
   <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
     <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
       <div class="tag-clouds">
-        <a href="/tags/Commons-Collections/" style="font-size: 0.72em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.76em;">Deserialization</a> <a href="/tags/DevOps/" style="font-size: 0.64em;">DevOps</a> <a href="/tags/Docker/" style="font-size: 0.68em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 0.6em;">Nginx</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+        <a href="/tags/Commons-Collections/" style="font-size: 0.72em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.76em;">Deserialization</a> <a href="/tags/DevOps/" style="font-size: 0.64em;">DevOps</a> <a href="/tags/Docker/" style="font-size: 0.68em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/LFI/" style="font-size: 0.6em;">LFI</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 0.6em;">Nginx</a> <a href="/tags/PHP/" style="font-size: 0.6em;">PHP</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
       </div>
   </aside>
 
@@ -411,6 +511,18 @@
   <div class="tab-content">
       <ul class="list-group">
         
+        
+          
+          
+            <a class="list-group-item" href="/2023/08/03/lfi-to-rce-via-pearcmd-or-peclcmd/"><i class="fa  fa-book"></i> lfi-to-rce-via-pearcmd-or-peclcmd</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/07/17/gobuffalo-soda-cli/"><i class="fa  fa-book"></i> gobuffalo-soda-cli</a>
+            
+          
         
           
           
@@ -431,17 +543,9 @@
           
         
           
-          
-            <a class="list-group-item" href="/2022/12/16/CommonsCollections2/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 2</a>
             
           
-        
-          
-          
-            <a class="list-group-item" href="/2022/12/15/CommonsCollections1-LazyMap/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 1 với LazyMap</a>
             
-          
-        
           
             
           
