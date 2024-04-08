@@ -17,16 +17,16 @@
   
     <meta name="keywords" content="DevOps, Docker">
   
-  <meta name="description" content="Kubernetes learningDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.  Trong mô hình Virtual Machine, mỗi VM đều có hệ điều hành riêng (guest OS) và một bản sao">
+  <meta name="description" content="Kubernetes learningDocker vs KubernetesDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.  Trong mô hình Virtual Machine, mỗi VM đều có hệ điều hành riêng (gues">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes learning">
 <meta property="og:url" content="https://rayinaw.github.io/2023/06/23/kubernetes-learning/index.html">
 <meta property="og:site_name" content="Rayinaw">
-<meta property="og:description" content="Kubernetes learningDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.  Trong mô hình Virtual Machine, mỗi VM đều có hệ điều hành riêng (guest OS) và một bản sao">
+<meta property="og:description" content="Kubernetes learningDocker vs KubernetesDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.  Trong mô hình Virtual Machine, mỗi VM đều có hệ điều hành riêng (gues">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
 <meta property="article:published_time" content="2023-06-23T14:53:41.000Z">
-<meta property="article:modified_time" content="2023-10-09T15:02:18.780Z">
+<meta property="article:modified_time" content="2023-10-11T06:04:31.770Z">
 <meta property="article:author" content="Rayinaw">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="DevOps">
@@ -185,7 +185,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~9.40K
+                        ~11.26K
                     
                     từ
                 </li>
@@ -196,24 +196,24 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1696863738780"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1697004271770"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
             
             <hr>
-            <div itemprop="articleBody"><h1 id="Kubernetes-learning"><a href="#Kubernetes-learning" class="headerlink" title="Kubernetes learning"></a>Kubernetes learning</h1><h2 id="Docker-va-container"><a href="#Docker-va-container" class="headerlink" title="Docker và container"></a>Docker và container</h2><p>Trước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.</p>
+            <div itemprop="articleBody"><h1 id="Kubernetes-learning"><a href="#Kubernetes-learning" class="headerlink" title="Kubernetes learning"></a>Kubernetes learning</h1><h2 id="Docker-vs-Kubernetes"><a href="#Docker-vs-Kubernetes" class="headerlink" title="Docker vs Kubernetes"></a>Docker vs Kubernetes</h2><h3 id="Docker-va-container"><a href="#Docker-va-container" class="headerlink" title="Docker và container"></a>Docker và container</h3><p>Trước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.</p>
 <p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/7bca59e8-7f49-4e8f-8bcc-ba53ff4685e5" alt="image"></p>
 <p>Trong mô hình <code>Virtual Machine</code>, mỗi VM đều có hệ điều hành riêng (guest OS) và một bản sao của kernel của hệ điều hành đó. Khi bạn khởi động một VM, nó sẽ khởi động guest OS, và sau đó các ứng dụng và dịch vụ chạy trên guest OS này. Mỗi VM hoạt động như một máy tính ảo hoàn chỉnh với hệ điều hành độc lập.</p>
 <p>Khác với VM, Containers là một công nghệ ảo hóa mức ứng dụng, nó không cần Guest OS mà trực tiếp chia sẻ với nhau Host OS thông qua Docker Engine.</p>
-<p>Kubernetes là một nền tảng cho cloud hỗ trợ quản lý các container. Ta có thể xem nó như là “Docker của cloud” trong một vài trường hợp.</p>
+<h3 id="Kubernetes"><a href="#Kubernetes" class="headerlink" title="Kubernetes"></a>Kubernetes</h3><p>Cũng là ứng dụng quản lý container, nhưng khác với Docker là công cụ tạo và quản lý container độc lập, Kubernetes là hệ thống orkestrasi container mạnh mẽ giúp quản lý, mở rộng, và tự động hóa quá trình triển khai và quản lý ứng dụng container phức tạp.</p>
 <h2 id="Kubernetes-Architecture"><a href="#Kubernetes-Architecture" class="headerlink" title="Kubernetes Architecture"></a>Kubernetes Architecture</h2><p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/cf8b1b7a-270d-419a-ba65-230f8b7a0930" alt="image"></p>
 <h3 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h3><p><img src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/20b5fed6-7a95-4690-ab12-07d899b34ab8" alt="image"></p>
 <p>Cluster (cụm) là một nhóm các Node (là các máy ảo), trên Cluster sẽ có môi trường Kubernetes.</p>
 <p>Một cụm Kubernetes (Kubernetes cluster) bao gồm <code>control plane nodes</code> (hay còn gọi là Master nodes quản lý Cluster) và các <code>worker nodes</code>.</p>
 <p>Master chịu trách nhiệm quản lý cụm và master điều phối tất cả các hoạt động trong cụm.</p>
 <p>Mỗi <code>worker node</code> xem như một máy riêng và có một <code>kubelet</code>, là proxy quản lý node và giao tiếp với <code>Kubernetes Master node</code>.</p>
-<h3 id="Control-Plane"><a href="#Control-Plane" class="headerlink" title="Control Plane"></a>Control Plane</h3><p>Control plane chịu trách nhiệm điều phối vùng chứa và duy trì trạng thái của Cluster. Control plane bao gồm những thành phần sau:</p>
+<h3 id="Control-Plane-Master-node"><a href="#Control-Plane-Master-node" class="headerlink" title="Control Plane (Master node)"></a>Control Plane (Master node)</h3><p>Control plane chịu trách nhiệm điều phối vùng chứa và duy trì trạng thái của Cluster. Control plane bao gồm những thành phần sau:</p>
 <ol>
 <li>kube-apiserver</li>
 <li>etcd</li>
@@ -221,6 +221,10 @@
 <li>kube-controller-manager</li>
 <li>cloud-controller-manager</li>
 </ol>
+<img width="631" alt="image" src="https://github.com/rayinaw/rayinaw.github.io/assets/108481122/0fd1ca6b-6d5b-4185-8c0f-38d34bb1f9a7">
+
+
+
 <h3 id="Worker-nodes"><a href="#Worker-nodes" class="headerlink" title="Worker nodes"></a>Worker nodes</h3><p>Các worker nodes là nơi chạy các ứng dụng containerized. Gồm những thành phần sau:</p>
 <ol>
 <li>kubelet</li>
@@ -239,7 +243,24 @@
 <p>Pod sẽ được mô tả bằng một tệp YAML, và khi triển khai lên Kubernetes, nó sẽ tạo ra một Pod ví dụ như sau:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-app</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">backend</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">web-backend-image:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3000</span></span><br></pre></td></tr></table></figure>
 <p>Đặt tên file trên và chạy lệnh <code>kubectl apply -f your-file.yaml</code> là ta có thể triển khai một Pod trên kubernetes.</p>
-<h3 id><a href="#" class="headerlink" title></a></h3><h2 id="Kubernetes-Control-Plane-Components"><a href="#Kubernetes-Control-Plane-Components" class="headerlink" title="Kubernetes Control Plane Components"></a>Kubernetes Control Plane Components</h2><h2 id="Tao-mot-ung-dung-don-gian-voi-kuberctl"><a href="#Tao-mot-ung-dung-don-gian-voi-kuberctl" class="headerlink" title="Tạo một ứng dụng đơn giản với kuberctl"></a>Tạo một ứng dụng đơn giản với kuberctl</h2><h3 id="Tao-mot-AKS-Cluster-voi-Azure-cloud-service"><a href="#Tao-mot-AKS-Cluster-voi-Azure-cloud-service" class="headerlink" title="Tạo một AKS Cluster với Azure cloud service"></a>Tạo một AKS Cluster với Azure cloud service</h3><p>Đầu tiên vào <code>https://portal.azure.com/</code> chọn loại Kubernetes service để tạo một AKS Cluster mới. Xem hướng dẫn thêm ở <a target="_blank" rel="external nofollow noopener noreferrer" href="https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli">đây</a>.</p>
+<h2 id="Nhung-thanh-phan-va-khai-niem-co-ban"><a href="#Nhung-thanh-phan-va-khai-niem-co-ban" class="headerlink" title="Những thành phần và khái niệm cơ bản"></a>Những thành phần và khái niệm cơ bản</h2><h3 id="Basic-concepts"><a href="#Basic-concepts" class="headerlink" title="Basic concepts"></a>Basic concepts</h3><ul>
+<li>ReplicaSet: Được định nghĩa khi khai báo kind của app, được sử dụng để quản lý và đảm bảo số lượng bản sao (replicas) của Pod. Giúp đảm bảo tính sẵn sàng nếu một trong những bản sao bị lỗi.</li>
+</ul>
+<p>Ví dụ ta có một server nginx. Để đảm bảo tính sẵn sàng và dự phòng cho trường hợp lỗi, ta khai báo ReplicaSet với số lượng replicas là 3 như sau:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicaSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-replicaset</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">my-app</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">my-app</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Deployment: Có nhắc đến ở dưới phần demo.</li>
+<li>Service: <ul>
+<li>Định nghĩa cổng vào dịch vụ (service) và cung cấp một địa chỉ IP và cổng cho ứng dụng khác kết nối tới. </li>
+<li>Nó sử dụng Label Selector để xác định các Pod cụ thể mà nó liên kết và cung cấp một cách thống nhất để truy cập các ứng dụng trên cụm Kubernetes.<br>Ví dụ ta có một ứng dụng web được triển khai trên Kubernetes bằng một số Pod, bây giờ ta muốn nó có thể được truy cập từ bên ngoài cụm Kubernetes, ta sẽ sử dụng service như sau:<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-service</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">my-app</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">targetPort:</span> <span class="number">8080</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>metadata: Xác định tên của Service (ở đây là “my-service”).</li>
+<li>selector: Sử dụng Label Selector để xác định những Pod nào sẽ thuộc về Service (ở đây là các Pod có label “app: my-app”).</li>
+<li>ports: Xác định cổng ngoài (port) và cổng mục tiêu (targetPort) mà Service sẽ sử dụng để chuyển hướng truy cập.</li>
+<li>Bây giờ, ta chỉ cần truy cập bằng ip của cluster <code>http://&lt;cluster-ip&gt;:80</code></li>
+</ul>
+<h2 id="Kubernetes-Control-Plane-Components"><a href="#Kubernetes-Control-Plane-Components" class="headerlink" title="Kubernetes Control Plane Components"></a>Kubernetes Control Plane Components</h2><h2 id="Tao-mot-ung-dung-don-gian-voi-kuberctl"><a href="#Tao-mot-ung-dung-don-gian-voi-kuberctl" class="headerlink" title="Tạo một ứng dụng đơn giản với kuberctl"></a>Tạo một ứng dụng đơn giản với kuberctl</h2><h3 id="Tao-mot-AKS-Cluster-voi-Azure-cloud-service"><a href="#Tao-mot-AKS-Cluster-voi-Azure-cloud-service" class="headerlink" title="Tạo một AKS Cluster với Azure cloud service"></a>Tạo một AKS Cluster với Azure cloud service</h3><p>Đầu tiên vào <code>https://portal.azure.com/</code> chọn loại Kubernetes service để tạo một AKS Cluster mới. Xem hướng dẫn thêm ở <a target="_blank" rel="external nofollow noopener noreferrer" href="https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli">đây</a>.</p>
 <h3 id="Ket-noi-den-Cluster"><a href="#Ket-noi-den-Cluster" class="headerlink" title="Kết nối đến Cluster"></a>Kết nối đến Cluster</h3><p>Đầu tiên ta cần config <code>kubectl</code> kết nối đến <code>Kubernetes cluster</code>:</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">az aks <span class="built_in">get-credentials</span> <span class="literal">--resource-group</span> &lt;<span class="built_in">group-name</span>&gt; <span class="literal">--name</span> &lt;Cluster<span class="literal">-name</span>&gt;</span><br></pre></td></tr></table></figure>
 <p>Sau khi chạy lệnh xong, ta sẽ nhận được kết quả: <code>Merged &quot;AKSCluster&quot; as current context in /home/azureuser/.kube/config</code></p>
@@ -262,7 +283,7 @@
 </li>
 <li><code>specification</code>:</li>
 </ul>
-<h3 id="Kind-Deployment-Service-Pod-la-gi"><a href="#Kind-Deployment-Service-Pod-la-gi" class="headerlink" title="Kind Deployment, Service, Pod là gì?"></a>Kind Deployment, Service, Pod là gì?</h3><h4 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h4><p>Thường ta sử dụng <code>kind: Pod</code> với những ứng dụng đơn lẻ, tác vụ đơn giản như nginx, Redis, các container ghi log,…</p>
+<h3 id="Demo-cho-Kind-Deployment-Service-Pod"><a href="#Demo-cho-Kind-Deployment-Service-Pod" class="headerlink" title="Demo cho Kind Deployment, Service, Pod"></a>Demo cho Kind Deployment, Service, Pod</h3><h4 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h4><p>Thường ta sử dụng <code>kind: Pod</code> với những ứng dụng đơn lẻ, tác vụ đơn giản như nginx, Redis, các container ghi log,…</p>
 <p>Ví dụ: Tạo file name <code>&lt;name&gt;.yaml</code> ví dụ <code>pod.yaml</code></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-app-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-app-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
 <p>Khởi chạy:</p>
@@ -389,9 +410,7 @@
             const twitterBase   = "https://twitter.com/intent/tweet?";
             const hostUrl       = "https://rayinaw.github.io/2023/06/23/kubernetes-learning/";
             const title         = "「Kubernetes learning」";
-            const excerpt       = `Kubernetes learningDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và container trước.
-
-Trong ...`;
+            const excerpt       = `Kubernetes learningDocker vs KubernetesDocker và containerTrước khi đi vào kubernetes thì ta sẽ đi qua docker và cont...`;
             let _URL;
             switch (dest) {
                 case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
@@ -413,7 +432,7 @@ Trong ...`;
                     <a class="tag-none-link" href="/tags/DevOps/" rel="tag">DevOps</a>, <a class="tag-none-link" href="/tags/Docker/" rel="tag">Docker</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-10-09T15:02:18.780Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-10-09</time>
+                    <time datetime="2023-10-11T06:04:31.770Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2023-10-11</time>
                 </div>
             </div>
         </footer>
@@ -472,7 +491,7 @@ Trong ...`;
                 Thể loại
             </span>
             <span class="count">
-                12
+                10
             </span>
         </a>
         <a class="meta-item" href="/tags/">
@@ -480,7 +499,7 @@ Trong ...`;
                 Thẻ
             </span>
             <span class="count">
-                13
+                11
             </span>
         </a>
     </div>
@@ -491,7 +510,7 @@ Trong ...`;
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/">Nginx</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/LFI/">LFI</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/">Nginx</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
   </aside>
 
 
@@ -500,7 +519,7 @@ Trong ...`;
   <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
     <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
       <div class="tag-clouds">
-        <a href="/tags/Commons-Collections/" style="font-size: 0.72em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.76em;">Deserialization</a> <a href="/tags/DevOps/" style="font-size: 0.64em;">DevOps</a> <a href="/tags/Docker/" style="font-size: 0.68em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/LFI/" style="font-size: 0.6em;">LFI</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 0.6em;">Nginx</a> <a href="/tags/PHP/" style="font-size: 0.6em;">PHP</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+        <a href="/tags/Commons-Collections/" style="font-size: 0.72em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.76em;">Deserialization</a> <a href="/tags/DevOps/" style="font-size: 0.64em;">DevOps</a> <a href="/tags/Docker/" style="font-size: 0.68em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.6em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 0.6em;">Nginx</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
       </div>
   </aside>
 
@@ -514,7 +533,7 @@ Trong ...`;
         
           
           
-            <a class="list-group-item" href="/2023/08/03/lfi-to-rce-via-pearcmd-or-peclcmd/"><i class="fa  fa-book"></i> lfi-to-rce-via-pearcmd-or-peclcmd</a>
+            <a class="list-group-item" href="/2023/12/10/writing-a-kubenetes-yaml/"><i class="fa  fa-book"></i> Học cách viết và hiểu một Kubernetes YAML files</a>
             
           
         
@@ -587,7 +606,7 @@ Trong ...`;
                     </ul>
                     <ul class="kratos-copyright">
                         <div>
-                            <li>&copy; 2023 Rayinaw All rights reserved.</li>
+                            <li>&copy; 2024 Rayinaw All rights reserved.</li>
                             <li>This site has been running for<span id="span_dt">Loading...</span></li>
                         </div>
                         <div>
