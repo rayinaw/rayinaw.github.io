@@ -3,10 +3,10 @@
     <head>
   <!-- 元数据 -->
   <meta charset="utf-8">
-  <link rel="canonical" href="https://rayinaw.github.io/2023/07/17/gobuffalo-soda-cli/">
+  <link rel="canonical" href="https://rayinaw.github.io/2024/09/23/chrome-session-history/">
   <link rel="icon" href="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
   
-  <title>Gobuffalo Soda-cli | Rayinaw</title>
+  <title>Browser&#39;s Session History And XSLeak | Rayinaw</title>
   <meta name="author" content="Rayinaw">
   <meta http-equiv="Cache-Control" content="no-transform">
   <meta http-equiv="Cache-Control" content="no-siteapp">
@@ -17,16 +17,16 @@
   
     <meta name="keywords" content>
   
-  <meta name="description" content="Installhttps:&#x2F;&#x2F;gobuffalo.io&#x2F;documentation&#x2F;database&#x2F;soda&#x2F; Tạo database Cách 1: Sử dụng file database.yml:1234567development:  dialect: postgres  database: myapp_development  user: postgres  password: p">
+  <meta name="description" content="Browser’s Session History And XSLeakBrowser’s session history  A browser’s session history keeps track of the navigations in each tab, to support back&#x2F;forward navigations and session restore. Thi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Gobuffalo Soda-cli">
-<meta property="og:url" content="https://rayinaw.github.io/2023/07/17/gobuffalo-soda-cli/index.html">
+<meta property="og:title" content="Browser&#39;s Session History And XSLeak">
+<meta property="og:url" content="https://rayinaw.github.io/2024/09/23/chrome-session-history/index.html">
 <meta property="og:site_name" content="Rayinaw">
-<meta property="og:description" content="Installhttps:&#x2F;&#x2F;gobuffalo.io&#x2F;documentation&#x2F;database&#x2F;soda&#x2F; Tạo database Cách 1: Sử dụng file database.yml:1234567development:  dialect: postgres  database: myapp_development  user: postgres  password: p">
+<meta property="og:description" content="Browser’s Session History And XSLeakBrowser’s session history  A browser’s session history keeps track of the navigations in each tab, to support back&#x2F;forward navigations and session restore. Thi">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
-<meta property="article:published_time" content="2023-07-17T08:45:07.000Z">
-<meta property="article:modified_time" content="2024-09-05T07:15:35.522Z">
+<meta property="article:published_time" content="2024-09-23T04:22:04.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:22:46.014Z">
 <meta property="article:author" content="Rayinaw">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.pinimg.com/564x/07/87/e7/0787e75ed249720cdb85f6918c609f61.jpg">
@@ -167,15 +167,15 @@
 
             <article itemscope itemtype="https://schema.org/Article">
     
-    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2023/07/17/gobuffalo-soda-cli/">
+    <link itemprop="mainEntityOfPage" href="https://rayinaw.github.io/2024/09/23/chrome-session-history/">
     <div class="kratos-hentry kratos-post-inner clearfix">
         <header class="kratos-entry-header">
             
-                <h1 class="kratos-entry-title text-center" itemprop="name headline">Gobuffalo Soda-cli</h1>
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">Browser's Session History And XSLeak</h1>
             
             
             <ul class="kratos-post-meta text-center">
-                <li><time datetime="2023-07-17T08:45:07.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2023-07-17</time></li>
+                <li><time datetime="2024-09-23T04:22:04.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2024-09-23</time></li>
                 <li itemprop="author" itemscope itemtype="https://schema.org/Person">
                     <i class="fa fa-user"></i> Tác giả <span itemprop="name">Rayinaw</span>
                 </li>
@@ -183,7 +183,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~3.11K
+                        ~5.25K
                     
                     từ
                 </li>
@@ -194,44 +194,79 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1725520535522"></time> trước, và có thể cần cập nhật。</p></div>
+                <div class="text"><p>Bài viết này được chỉnh sửa lần cuối vào <time datetime="1727072566014"></time> trước, và có thể cần cập nhật。</p></div>
             </div>
             
             
             
             <hr>
-            <div itemprop="articleBody"><h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://gobuffalo.io/documentation/database/soda/">https://gobuffalo.io/documentation/database/soda/</a></p>
-<h2 id="Tao-database"><a href="#Tao-database" class="headerlink" title="Tạo database"></a>Tạo database</h2><ul>
-<li>Cách 1: Sử dụng file <code>database.yml</code>:<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">development:</span></span><br><span class="line">  <span class="attr">dialect:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">database:</span> <span class="string">myapp_development</span></span><br><span class="line">  <span class="attr">user:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">password:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">  <span class="attr">pool:</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
-Sau khi tạo file database.yml, ta chạy lệnh <code>soda create -a</code> để tạo database.</li>
-<li>Cách 2: Sử dụng cli để tạo trực tiếp:<ul>
-<li><code>soda create -e test</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="Database-Migrations"><a href="#Database-Migrations" class="headerlink" title="Database Migrations"></a>Database Migrations</h2><p>Tạo một thư mục migrations để quản lý các file <code>.fizz</code> và <code>.sql</code></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">├───cmd</span><br><span class="line">│   └───web</span><br><span class="line">└───db</span><br><span class="line">    └───migrations</span><br></pre></td></tr></table></figure>
+            <div itemprop="articleBody"><h2 id="Browser’s-Session-History-And-XSLeak"><a href="#Browser’s-Session-History-And-XSLeak" class="headerlink" title="Browser’s Session History And XSLeak"></a>Browser’s Session History And XSLeak</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.google.com/search?q=browser%27s+session+history&rlz=1C1VDKB_enVN1049VN1049&sourceid=chrome&ie=UTF-8">Browser’s session history</a></p>
+<blockquote>
+<p>A browser’s session history keeps track of the navigations in each tab, to support back&#x2F;forward navigations and session restore. This is in contrast to “history” (e.g., chrome:&#x2F;&#x2F;history ), which tracks the main frame URLs the user has visited in any tab for the lifetime of a profile.</p>
+</blockquote>
+<h3 id="History-API-usage"><a href="#History-API-usage" class="headerlink" title="History API usage"></a>History API usage</h3><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/API/History_API#concepts_and_usage">https://developer.mozilla.org/en-US/docs/Web/API/History_API#concepts_and_usage</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line">history.<span class="title function_">back</span>();</span><br><span class="line">history.<span class="title function_">go</span>(-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">history.<span class="title function_">forward</span>();</span><br><span class="line">history.<span class="title function_">go</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// ************* //</span></span><br><span class="line"></span><br><span class="line">history.<span class="title function_">go</span>(<span class="number">2</span>)</span><br><span class="line">history.<span class="title function_">go</span>(-<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Refreshing the page</span></span><br><span class="line">history.<span class="title function_">go</span>(<span class="number">0</span>);</span><br><span class="line">history.<span class="title function_">go</span>(); </span><br><span class="line"></span><br><span class="line"><span class="comment">// determine the number of pages in the history stack</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(history.<span class="property">length</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="popstate-event"><a href="#popstate-event" class="headerlink" title="popstate event"></a>popstate event</h4><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event">Popstate</a> là một event của window được kích hoạt mỗi khi người dùng điều hướng session history (back, forward, go).</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;popstate&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">    <span class="string">`location: <span class="subst">$&#123;<span class="variable language_">document</span>.location&#125;</span>, state: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(event.state)&#125;</span>`</span>,</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br><span class="line">history.<span class="title function_">pushState</span>(&#123; <span class="attr">page</span>: <span class="number">1</span> &#125;, <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;?page=1&quot;</span>);</span><br><span class="line">history.<span class="title function_">pushState</span>(&#123; <span class="attr">page</span>: <span class="number">2</span> &#125;, <span class="string">&quot;title 2&quot;</span>, <span class="string">&quot;?page=2&quot;</span>);</span><br><span class="line">history.<span class="title function_">replaceState</span>(&#123; <span class="attr">page</span>: <span class="number">3</span> &#125;, <span class="string">&quot;title 3&quot;</span>, <span class="string">&quot;?page=3&quot;</span>);</span><br><span class="line">history.<span class="title function_">back</span>(); <span class="comment">// Logs &quot;location: http://example.com/example.html?page=1, state: &#123;&quot;page&quot;:1&#125;&quot;</span></span><br><span class="line">history.<span class="title function_">back</span>(); <span class="comment">// Logs &quot;location: http://example.com/example.html, state: null&quot;</span></span><br><span class="line">history.<span class="title function_">go</span>(<span class="number">2</span>); <span class="comment">// Logs &quot;location: http://example.com/example.html?page=3, state: &#123;&quot;page&quot;:3&#125;&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p>Gobuffalo có sử dụng một gói quản lý fizz để dễ dàng hơn trong việc viết các câu lệnh tạo bảng,… Tuy nhiên ta cũng có thể sử dụng sql migration.</p>
-<h3 id="Fizz-migration"><a href="#Fizz-migration" class="headerlink" title="Fizz migration"></a>Fizz migration</h3><p>Tạo một migrations:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">soda generate fizz -p ./db/migrations name_of_migration</span><br></pre></td></tr></table></figure>
+<h4 id="history-pushState"><a href="#history-pushState" class="headerlink" title="history.pushState"></a>history.pushState</h4><p><code>pushState</code> sẽ thêm một entry mới trong session history</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;page 1&#x27;</span>, <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;?page=1&quot;</span>);</span><br><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;page 2&#x27;</span>, <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;?page=2&quot;</span>);</span><br><span class="line">history.<span class="property">state</span></span><br><span class="line"><span class="comment">// page 2</span></span><br><span class="line">history.<span class="property">state</span></span><br><span class="line">history.<span class="title function_">back</span>()</span><br><span class="line"><span class="comment">// page 1</span></span><br></pre></td></tr></table></figure>
 
-<p>Ví dụ:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">soda generate fizz -p ./db/migrations create_users_table</span><br></pre></td></tr></table></figure>
-<p>Hai file <code>20230717051256_create_users_table.down.fizz</code>, <code>20230717051256_create_users_table.up.fizz</code> được tạo ra.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ soda g migration --<span class="built_in">help</span></span><br><span class="line">Generates Up/Down migrations <span class="keyword">for</span> your database using fizz.</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  soda generate fizz [name] [flags]</span><br><span class="line"></span><br><span class="line">Aliases:</span><br><span class="line">  fizz, migration</span><br><span class="line"></span><br><span class="line">Flags:</span><br><span class="line">  -h, --<span class="built_in">help</span>   <span class="built_in">help</span> <span class="keyword">for</span> fizz</span><br><span class="line"></span><br><span class="line">Global Flags:</span><br><span class="line">  -c, --config string   The configuration file you would like to use.</span><br><span class="line">  -d, --debug           Use debug/verbose mode</span><br><span class="line">  -e, --<span class="built_in">env</span> string      The environment you want to run migrations against. Will use <span class="variable">$GO_ENV</span> <span class="keyword">if</span> <span class="built_in">set</span>. (default <span class="string">&quot;development&quot;</span>)</span><br><span class="line">  -p, --path string     Path to the migrations folder (default <span class="string">&quot;./migrations&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>Cần lưu ý là không thể thêm entry khác origin với origin hiện tại:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;page 2&#x27;</span>, <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;https://example.com&quot;</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>VM2110:1 Uncaught DOMException: Failed to execute ‘pushState’ on ‘History’: A history state object with URL ‘<a target="_blank" rel="external nofollow noopener noreferrer" href="https://example.com/&#39;">https://example.com/&#39;</a> cannot be created in a document with origin ‘<a href="http://127.0.0.1:5500&#39;" rel="external nofollow noopener noreferrer" target="_blank">http://127.0.0.1:5500&#39;</a> and URL ‘<a target="_blank" rel="external nofollow noopener noreferrer" href="http://127.0.0.1:5500/index.html?page=1&#39;">http://127.0.0.1:5500/index.html?page=1&#39;</a>. at <anonymous>:1:9</anonymous></p>
+</blockquote>
+<h4 id="history-replaceState"><a href="#history-replaceState" class="headerlink" title="history.replaceState"></a>history.replaceState</h4><p>Thay thế state hiện tại bằng một giá trị được replace:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;page 1&#x27;</span>, <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;?page=1&quot;</span>);</span><br><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;devil page&#x27;</span>, <span class="string">&quot;title 1&quot;</span>, <span class="string">&quot;?page=devil&quot;</span>);</span><br><span class="line">history.<span class="property">state</span></span><br><span class="line"><span class="comment">// page devil</span></span><br><span class="line">history.<span class="property">state</span></span><br><span class="line">history.<span class="title function_">back</span>()</span><br><span class="line"><span class="comment">// page 1</span></span><br><span class="line"></span><br><span class="line">history.<span class="title function_">forward</span>()</span><br><span class="line">history.<span class="property">state</span></span><br><span class="line"><span class="comment">// devil</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="Sql-migration"><a href="#Sql-migration" class="headerlink" title="Sql migration"></a>Sql migration</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">soda generate sql name_of_migration</span><br></pre></td></tr></table></figure>
+<h3 id="XSLeak-voi-Session-History"><a href="#XSLeak-voi-Session-History" class="headerlink" title="XSLeak với Session History"></a>XSLeak với Session History</h3><h4 id="Leak-thong-qua-navigation-voi-thuoc-tinh-history-length"><a href="#Leak-thong-qua-navigation-voi-thuoc-tinh-history-length" class="headerlink" title="Leak thông qua navigation với thuộc tính history.length"></a>Leak thông qua <a target="_blank" rel="external nofollow noopener noreferrer" href="https://xsleaks.dev/docs/attacks/navigations/">navigation</a> với thuộc tính history.length</h4><p>Đầu tiên giả sử cửa sổ đang ở một trang là <a target="_blank" rel="external nofollow noopener noreferrer" href="https://abc.com/">https://abc.com</a>, và bây giờ ta sẽ mở một window với một trang khác origin:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w = <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://example.com&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ soda g sql --<span class="built_in">help</span></span><br><span class="line">Generates Up/Down migrations <span class="keyword">for</span> your database using SQL.</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  soda generate sql [name] [flags]</span><br><span class="line"></span><br><span class="line">Flags:</span><br><span class="line">  -h, --<span class="built_in">help</span>   <span class="built_in">help</span> <span class="keyword">for</span> sql</span><br><span class="line"></span><br><span class="line">Global Flags:</span><br><span class="line">  -c, --config string   The configuration file you would like to use.</span><br><span class="line">  -d, --debug           Use debug/verbose mode</span><br><span class="line">  -e, --<span class="built_in">env</span> string      The environment you want to run migrations against. Will use <span class="variable">$GO_ENV</span> <span class="keyword">if</span> <span class="built_in">set</span>. (default <span class="string">&quot;development&quot;</span>)</span><br><span class="line">  -p, --path string     Path to the migrations folder (default <span class="string">&quot;./migrations&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>Ở cửa sổ mới, vào console rồi pushState như sau:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;?q=abc&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<h3 id="Viet-mot-fizz-file"><a href="#Viet-mot-fizz-file" class="headerlink" title="Viết một fizz file"></a>Viết một fizz file</h3><p>Ví dụ ta tạo một bảng <code>users</code>:</p>
+<p>Quay lại cửa sổ cũ, ta không thể truy xuất history.length:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w.<span class="property">history</span>.<span class="property">length</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>VM5175:1 Uncaught DOMException: Failed to read a named property ‘history’ from ‘Window’: Blocked a frame with origin “<a href="http://127.0.0.1:5500&quot;" rel="external nofollow noopener noreferrer" target="_blank">http://127.0.0.1:5500&quot;</a> from accessing a cross-origin frame. at <code>&lt;anonymous&gt;</code>:1:3</p>
+</blockquote>
+<p>Tuy nhiên, nếu ta set location của cửa sổ mới thành một giá trị thõa mãn same origin với cửa sổ hiện tại thì ta có thể truy xuất được giá trị đó, ta có 2 cách:</p>
 <ul>
-<li>.up.fizz file:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">create_table(&quot;users&quot;) &#123;</span><br><span class="line">  t.Column(&quot;id&quot;, &quot;integer&quot;, &#123;primary: true&#125;)</span><br><span class="line">  t.Column(&quot;first_name&quot;, &quot;string&quot;, &#123;&quot;size&quot;: 255&#125;)</span><br><span class="line">  t.Column(&quot;last_name&quot;, &quot;string&quot;, &#123;&quot;size&quot;: 255&#125;)</span><br><span class="line">  t.Column(&quot;user_active&quot;, &quot;integer&quot;, &#123;&quot;default&quot;: 0&#125;)</span><br><span class="line">  t.Column(&quot;email&quot;, &quot;string&quot;, &#123;&#125;)</span><br><span class="line">  t.Column(&quot;password&quot;, &quot;string&quot;, &#123;&quot;size&quot;: 60&#125;)</span><br><span class="line">  t.Column(&quot;deleted_at&quot;, &quot;timestamp&quot;, &#123;&quot;null&quot;: true&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>.down.fizz file:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop_table(&quot;users&quot;)</span><br></pre></td></tr></table></figure></li>
+<li>Set origin thành <code>about:blank</code></li>
+<li>Set origin thành giá trị của cửa sổ <a target="_blank" rel="external nofollow noopener noreferrer" href="https://abc.com/">https://abc.com</a></li>
 </ul>
-<p>Sau khi set xong, ta chạy lệnh <code>soda migrate up</code> hoặc <code>soda migrate</code> để tạo table. Sau khi chạy thành công ta có thể thấy cấu hình được dump ra từ sql file.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">│   database.yml</span><br><span class="line">│   db.go</span><br><span class="line">│</span><br><span class="line">└───migrations</span><br><span class="line">        20230717051256_create_users_table.down.fizz</span><br><span class="line">        20230717051256_create_users_table.up.fizz</span><br><span class="line">        schema.sql</span><br></pre></td></tr></table></figure></div>
+<p>Thực hiện lại quá trình trên:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w = <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://example.com&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>Ở bên kia push state:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.<span class="title function_">pushState</span>(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;?q=abc&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>Quay trở lại trang abc.com:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">w.<span class="property">location</span>=<span class="string">&#x27;about:blank&#x27;</span></span><br><span class="line"><span class="comment">// Or w.location=&#x27;https://abc.com&#x27;</span></span><br><span class="line">w.<span class="property">history</span>.<span class="property">length</span></span><br><span class="line"><span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+
+<p>Ta đã hiểu được concept cơ bản, bây giờ mình sẽ nói tiếp trong ngữ cảnh cụ thể.</p>
+<p>Giả sử nếu chức năng tìm kiếm của một trang web có chức năng như sau:</p>
+<ul>
+<li>Nếu tìm kiếm một secret thành công nó sẽ redirect ta đến một trang nào đó</li>
+</ul>
+<p>Ví dụ như ta xác định được nếu tìm kiếm thành công thì history.length đã redirect sẽ là 4, còn tìm kiếm sai thì là 3. </p>
+<ul>
+<li>Bây giờ ta chỉ cần search từng kí tự, nếu redirect là 4 thì kí tự đó đúng, còn không thì là sai, cứ thế cho đến khi ta lấy được secret.</li>
+</ul>
+<p>Cụ thể hơn về ngữ cảnh bạn có thể xem thêm ở đây:</p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/aszx87410/ctf-writeups/issues/51">https://github.com/aszx87410/ctf-writeups/issues/51</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://ctf.zeyu2001.com/2021/htx-investigators-challenge-2021#securebank-xss-search">https://ctf.zeyu2001.com/2021/htx-investigators-challenge-2021#securebank-xss-search</a></li>
+</ul>
+<h4 id="Protection"><a href="#Protection" class="headerlink" title="Protection"></a>Protection</h4><p>Thêm header <code>Cross-Origin-Opener-Policy</code>:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="title function_ invoke__">header</span>( <span class="string">&#x27;cross-origin-opener-policy: same-origin-allow-popups&#x27;</span> ); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Additional-trick-set-gia-tri-cua-header-HTTP-referer"><a href="#Additional-trick-set-gia-tri-cua-header-HTTP-referer" class="headerlink" title="Additional trick: set giá trị của header HTTP referer"></a>Additional trick: set giá trị của header HTTP referer</h3><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy#unsafe-url_2">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy#unsafe-url_2</a></p>
+<p>Ta có thể set giá trị của referer với toàn bộ url kể cả path, query, hash,… với meta tag:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;referrer&quot;</span> <span class="attr">content</span>=<span class="string">&quot;unsafe-url&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    history.<span class="title function_">pushState</span>(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;?q=abc&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Khi này giá trị của referrer nếu được bắt từ trang này sẽ là:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://example.com?q=abc</span><br></pre></td></tr></table></figure></div>
         </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -280,7 +315,7 @@ Sau khi tạo file database.yml, ta chạy lệnh <code>soda create -a</code> đ
     <script type="text/javascript">
         $(()=>{
             new QRCode("wechat-qr", {
-                text: "https://rayinaw.github.io/2023/07/17/gobuffalo-soda-cli/",
+                text: "https://rayinaw.github.io/2024/09/23/chrome-session-history/",
                 width: 150,
                 height: 150,
                 correctLevel : QRCode.CorrectLevel.H
@@ -292,11 +327,11 @@ Sau khi tạo file database.yml, ta chạy lệnh <code>soda create -a</code> đ
             const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
             const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
             const twitterBase   = "https://twitter.com/intent/tweet?";
-            const hostUrl       = "https://rayinaw.github.io/2023/07/17/gobuffalo-soda-cli/";
-            const title         = "「Gobuffalo Soda-cli」";
-            const excerpt       = `Installhttps://gobuffalo.io/documentation/database/soda/
-Tạo database
-Cách 1: Sử dụng file database.yml:1234567develo...`;
+            const hostUrl       = "https://rayinaw.github.io/2024/09/23/chrome-session-history/";
+            const title         = "「Browser's Session History And XSLeak」";
+            const excerpt       = `Browser’s Session History And XSLeakBrowser’s session history
+
+A browser’s session history keeps track of the navigat...`;
             let _URL;
             switch (dest) {
                 case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
@@ -318,7 +353,7 @@ Cách 1: Sử dụng file database.yml:1234567develo...`;
                     
                 </div>
                 <div class="pull-date">
-                    <time datetime="2024-09-05T07:15:35.522Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2024-09-05</time>
+                    <time datetime="2024-09-23T06:22:46.014Z" itemprop="dateModified">Lần chỉnh sửa cuối cùng：2024-09-23</time>
                 </div>
             </div>
         </footer>
@@ -327,13 +362,9 @@ Cách 1: Sử dụng file database.yml:1234567develo...`;
         <nav class="navigation post-navigation clearfix" role="navigation">
             
             <div class="nav-previous clearfix">
-                <a title=" Kubernetes learning" href="/2023/06/23/kubernetes-learning/">&lt; Bài đăng cũ hơn</a>
+                <a title=" Học cách viết và hiểu một Kubernetes YAML files" href="/2023/12/10/writing-a-kubenetes-yaml/">&lt; Bài đăng cũ hơn</a>
             </div>
             
-            
-            <div class="nav-next clearfix">
-                <a title=" Học cách viết và hiểu một Kubernetes YAML files" href="/2023/12/10/writing-a-kubenetes-yaml/">Bài đăng mới hơn &gt;</a>
-            </div>
             
         </nav>
     
